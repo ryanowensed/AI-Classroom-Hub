@@ -283,16 +283,81 @@ export default function Resources() {
                     Comprehensive guides and checklists for AI integration. (Coming soon!)
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { title: "AI Integration Checklist", description: "Step-by-step guide for introducing AI to your classroom" },
-                      { title: "District Policy Template", description: "Sample AI use policy for schools and districts" },
-                      { title: "Parent Information Sheet", description: "Explain AI use to families" },
-                      { title: "Student AI Literacy Curriculum", description: "Teach students about AI responsibly" },
-                      { title: "Prompt Engineering Guide", description: "Master the art of crafting effective prompts" },
-                      { title: "Tool Comparison Matrix", description: "Compare features of popular AI tools" }
-                    ].map((guide, index) => (
-                      <Card key={index}>
+                  <div className="mb-8">
+                    <h3 className="text-xl font-semibold mb-4">Free Certifications</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                      <Card className="border-green-200 bg-green-50/30">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-green-900">
+                            <FileText className="h-5 w-5 text-green-600" />
+                            Gemini Certified Educator
+                          </CardTitle>
+                          <CardDescription>For K-12 teachers - teaching innovation and student success</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Button variant="default" className="w-full" asChild>
+                            <a href="https://goo.gle/gfecerts" target="_blank" rel="noopener noreferrer">
+                              Get Certified (Free)
+                            </a>
+                          </Button>
+                          <p className="text-xs text-muted-foreground mt-3">
+                            Multiple choice exam, available in 12 languages. Earn verifiable digital certificate for PD credits.
+                          </p>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-green-200 bg-green-50/30">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-green-900">
+                            <FileText className="h-5 w-5 text-green-600" />
+                            Gemini Certified University Student
+                          </CardTitle>
+                          <CardDescription>For college students - academic excellence and career prep</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Button variant="default" className="w-full" asChild>
+                            <a href="https://goo.gle/gfecerts" target="_blank" rel="noopener noreferrer">
+                              Get Certified (Free)
+                            </a>
+                          </Button>
+                          <p className="text-xs text-muted-foreground mt-3">
+                            Validate core skills in using Gemini and Google AI tools. Completely free with digital certificate.
+                          </p>
+                        </CardContent>
+                      </Card>
+                      <Card className="border-green-200 bg-green-50/30">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-green-900">
+                            <FileText className="h-5 w-5 text-green-600" />
+                            Gemini Certified Student (K12)
+                          </CardTitle>
+                          <CardDescription>For high school students - responsible AI use</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Button variant="default" className="w-full" asChild>
+                            <a href="https://goo.gle/gfecerts" target="_blank" rel="noopener noreferrer">
+                              Get Certified (Free)
+                            </a>
+                          </Button>
+                          <p className="text-xs text-muted-foreground mt-3">
+                            Requires foundational course completion. Free certification for informed, responsible AI use.
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold mb-4">Downloadable Guides</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {[
+                        { title: "AI Integration Checklist", description: "Step-by-step guide for introducing AI to your classroom" },
+                        { title: "District Policy Template", description: "Sample AI use policy for schools and districts" },
+                        { title: "Parent Information Sheet", description: "Explain AI use to families" },
+                        { title: "Student AI Literacy Curriculum", description: "Teach students about AI responsibly" },
+                        { title: "Prompt Engineering Guide", description: "Master the art of crafting effective prompts" },
+                        { title: "Tool Comparison Matrix", description: "Compare features of popular AI tools" }
+                      ].map((guide, index) => (
+                        <Card key={index}>
                         <CardHeader>
                           <CardTitle className="flex items-center gap-2">
                             <FileText className="h-5 w-5 text-primary" />
@@ -305,8 +370,9 @@ export default function Resources() {
                             Download PDF (Coming Soon)
                           </Button>
                         </CardContent>
-                      </Card>
-                    ))}
+                        </Card>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </TabsContent>

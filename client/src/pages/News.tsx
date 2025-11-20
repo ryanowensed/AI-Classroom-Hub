@@ -8,6 +8,62 @@ import { Newspaper, ExternalLink, TrendingUp, AlertCircle, Lightbulb } from "luc
 export default function News() {
   const newsItems = [
     {
+      title: "OpenAI Launches ChatGPT for Teachers",
+      date: "November 19, 2025",
+      category: "Tools",
+      source: "OpenAI",
+      summary: "OpenAI announced ChatGPT for Teachers, a free version of its AI chatbot designed specifically for K-12 educators and school districts. The tool will be free through June 2027 for U.S. teachers.",
+      keyPoints: [
+        "Free to K-12 educators in U.S. through June 2027",
+        "Securely work with student information",
+        "Administrative controls for district leaders",
+        "Initially launching with 150,000 educators"
+      ],
+      link: "https://www.cnbc.com/2025/11/19/openai-chatgpt-for-teachers-k-12-educators.html"
+    },
+    {
+      title: "Google Commits $30 Million to AI Learning Projects",
+      date: "November 11, 2025",
+      category: "Investment",
+      source: "Google Blog",
+      summary: "At the Google AI for Learning Forum in London, Google announced $30 million in new funding for learning projects and unveiled research showing AI's positive impact on student learning outcomes.",
+      keyPoints: [
+        "$30M investment over three years",
+        "Partnership with Estonia's AI Leap initiative",
+        "Research shows 5.5% improvement in problem-solving",
+        "LearnLM had only 0.1% factual error rate"
+      ],
+      link: "https://blog.google/outreach-initiatives/education/ai-learning-commitments/"
+    },
+    {
+      title: "Google Announces Free Gemini Certifications for Educators",
+      date: "November 17, 2025",
+      category: "Professional Development",
+      source: "Google Blog",
+      summary: "Google launched three new free Gemini certifications for educators, university students, and K-12 students, available in 12 languages with verifiable digital certificates.",
+      keyPoints: [
+        "Gemini Certified Educator for teachers",
+        "Gemini Certified University Student",
+        "Gemini Certified Student (K12) for high schoolers",
+        "Completely free, available in 12 languages"
+      ],
+      link: "https://blog.google/outreach-initiatives/education/gemini-certifications-education/"
+    },
+    {
+      title: "Teacher AI Training Rising Fast, But Still Has Long Way to Go",
+      date: "November 18, 2025",
+      category: "Professional Development",
+      source: "EdWeek",
+      summary: "50% of teachers now report having at least one professional development session on AI, up from 42% in 2024 and triple the 13% in 2023, but experts say more comprehensive training is needed.",
+      keyPoints: [
+        "50% of teachers received AI PD in Fall 2025",
+        "Triple the rate from 2023",
+        "School leaders more likely to receive training than teachers",
+        "Need for ongoing, comprehensive PD programs"
+      ],
+      link: "https://www.edweek.org/technology/teacher-ai-training-is-rising-fast-but-still-has-a-long-way-to-go/2025/11"
+    },
+    {
       title: "AI Adoption in Education Jumps to 86%",
       date: "October 2025",
       category: "Trends",
@@ -148,7 +204,9 @@ export default function News() {
       "Policy": "bg-red-500/10 text-red-700 border-red-200",
       "Innovation": "bg-teal-500/10 text-teal-700 border-teal-200",
       "Higher Ed": "bg-indigo-500/10 text-indigo-700 border-indigo-200",
-      "Teacher Wellness": "bg-pink-500/10 text-pink-700 border-pink-200"
+      "Teacher Wellness": "bg-pink-500/10 text-pink-700 border-pink-200",
+      "Investment": "bg-emerald-500/10 text-emerald-700 border-emerald-200",
+      "Professional Development": "bg-violet-500/10 text-violet-700 border-violet-200"
     };
     return colors[category] || "bg-gray-500/10 text-gray-700 border-gray-200";
   };

@@ -50,24 +50,24 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               <div className="space-y-2">
                 <div className="flex justify-center">
-                  <Clock className="h-8 w-8 text-primary" />
-                </div>
-                <div className="text-3xl font-bold">8-10 hrs</div>
-                <div className="text-sm text-muted-foreground">Average time saved per week</div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-center">
                   <Users className="h-8 w-8 text-primary" />
                 </div>
-                <div className="text-3xl font-bold">86%</div>
-                <div className="text-sm text-muted-foreground">Of educators using AI in 2024</div>
+                <div className="text-3xl font-bold">51%</div>
+                <div className="text-sm text-muted-foreground">Of K-12 teachers using AI in 2025</div>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-center">
                   <TrendingUp className="h-8 w-8 text-primary" />
                 </div>
-                <div className="text-3xl font-bold">32%</div>
-                <div className="text-sm text-muted-foreground">Better personalization with AI tutors</div>
+                <div className="text-3xl font-bold">50%</div>
+                <div className="text-sm text-muted-foreground">Of teachers received AI training in 2025</div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-center">
+                  <Clock className="h-8 w-8 text-primary" />
+                </div>
+                <div className="text-3xl font-bold">$30M</div>
+                <div className="text-sm text-muted-foreground">Google's investment in AI learning projects</div>
               </div>
             </div>
           </div>

@@ -103,6 +103,15 @@ export default function Tools() {
       difficulty: "Beginner"
     },
     {
+      name: "ChatGPT for Teachers",
+      description: "OpenAI's specialized version for K-12 educators with secure workspace, student data protection, and district admin controls. Free through June 2027.",
+      category: "Lesson Planning",
+      pricing: "Free",
+      features: ["Secure student data handling", "Personalized teaching support", "District collaboration", "Admin controls", "No data used for training"],
+      link: "https://openai.com/chatgpt/teachers",
+      difficulty: "Beginner"
+    },
+    {
       name: "ChatGPT",
       description: "OpenAI's powerful language model for generating content, answering questions, and assisting with various teaching tasks.",
       category: "General AI",
