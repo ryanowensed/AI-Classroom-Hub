@@ -30,4 +30,9 @@
 - [x] Update Course landing page title and messaging
 - [x] Update CourseModule page references to "library" language
 - [x] Update route names and file references
-- [ ] Save checkpoint after rebranding
+- [x] Save checkpoint after rebranding
+
+## Fix Nested Anchor Error
+
+- [x] Remove nested <a> tags in Header component
+- [ ] Save checkpoint after fix
