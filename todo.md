@@ -35,4 +35,4 @@
 ## Fix Nested Anchor Error
 
 - [x] Remove nested <a> tags in Header component
-- [ ] Save checkpoint after fix
+- [x] Save checkpoint after fix
