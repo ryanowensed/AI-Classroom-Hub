@@ -11,8 +11,10 @@ import News from "./pages/News";
 import Tools from "./pages/Tools";
 import Resources from "./pages/Resources";
 import GettingStarted from "./pages/GettingStarted";
-
+import Course from "./pages/Course";
+import CourseModule from "./pages/CourseModule";
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />
@@ -22,6 +24,8 @@ function Router() {
       <Route path={"/tools"} component={Tools} />
       <Route path={"/resources"} component={Resources} />
       <Route path={"/getting-started"} component={GettingStarted} />
+      <Route path={"/course"} component={Course} />
+      <Route path={"/course/module/:moduleId"} component={CourseModule} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
