@@ -80,19 +80,19 @@ export default function Course() {
             <div className="mx-auto max-w-4xl text-center">
               <Badge className="mb-4" variant="secondary">
                 <Sparkles className="mr-1 h-3 w-3" />
-                Free Course for Educators
+                Free Resource for Educators
               </Badge>
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6">
-                Master AI Prompting for{" "}
-                <span className="text-primary">Your Classroom</span>
+                AI Prompt Library for{" "}
+                <span className="text-primary">Teachers</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-                Stop staring at a blinking cursor. Learn the simplified prompting techniques that actually work in real classrooms. No tech background required—just copy, paste, and teach.
+                Stop staring at a blinking cursor. Browse our collection of proven AI prompts organized by teaching task. No tech background required—just find, copy, and adapt to your classroom needs.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                 <Link href="/course/module/1">
                   <Button size="lg" className="text-base">
-                    Start Learning Free
+                    Browse Prompts
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
@@ -121,9 +121,9 @@ export default function Course() {
         <section className="py-16 bg-muted/30">
           <div className="container">
             <div className="mx-auto max-w-3xl text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Why This Course is Different</h2>
+              <h2 className="text-3xl font-bold mb-4">Why This Library is Different</h2>
               <p className="text-muted-foreground">
-                Most AI courses teach you jargon and theory. We teach you what actually works in a classroom.
+                Most AI resources teach you jargon and theory. We give you practical prompts that actually work in real classrooms.
               </p>
             </div>
 
@@ -177,9 +177,9 @@ export default function Course() {
         <section className="py-16">
           <div className="container">
             <div className="mx-auto max-w-3xl text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Course Curriculum</h2>
+              <h2 className="text-3xl font-bold mb-4">Prompt Categories</h2>
               <p className="text-muted-foreground">
-                Five focused modules that take you from AI beginner to confident prompt writer.
+                Five organized collections covering every teaching task from lesson planning to admin work.
               </p>
             </div>
 

@@ -13,7 +13,7 @@ export default function Header() {
     { name: "In the News", href: "/news" },
     { name: "Tool Directory", href: "/tools" },
     { name: "Resources", href: "/resources" },
-    { name: "Prompting Course", href: "/course" },
+    { name: "Prompt Library", href: "/course" },
   ];
 
   const isActive = (href: string) => location === href;

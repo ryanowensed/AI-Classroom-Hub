@@ -23,3 +23,11 @@
 - [x] Add course link to main site navigation
 - [x] Test all course pages and navigation
 - [x] Save checkpoint after course completion
+
+## Rebrand Course to Prompt Library
+
+- [x] Update navigation link from "Prompting Course" to "Prompt Library"
+- [x] Update Course landing page title and messaging
+- [x] Update CourseModule page references to "library" language
+- [x] Update route names and file references
+- [ ] Save checkpoint after rebranding
