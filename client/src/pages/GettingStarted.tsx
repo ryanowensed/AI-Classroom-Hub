@@ -133,7 +133,7 @@ export default function GettingStarted() {
                 <GraduationCap className="mr-1 h-3 w-3" />
                 Start Your AI Journey
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tight mb-4">
+              <h1 className="heading-display text-4xl mb-4">
                 Getting Started with AI in Your Classroom
               </h1>
               <p className="text-lg text-muted-foreground">
@@ -147,7 +147,7 @@ export default function GettingStarted() {
         <section className="py-16">
           <div className="container">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold mb-8 text-center">Your 6-Step Roadmap</h2>
+              <h2 className="heading-display text-3xl mb-8 text-center">Your 6-Step Roadmap</h2>
               
               <div className="space-y-6">
                 {steps.map((step) => (
@@ -183,7 +183,7 @@ export default function GettingStarted() {
                 <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
                   <CardContent className="pt-6">
                     <Sparkles className="h-12 w-12 text-primary mx-auto mb-4" />
-                    <h3 className="text-xl font-bold mb-2">Ready to Take the First Step?</h3>
+                    <h3 className="heading-display text-xl mb-2">Ready to Take the First Step?</h3>
                     <p className="text-muted-foreground mb-6">
                       Head to our "Try This Today" section for quick, beginner-friendly activities you can do right now.
                     </p>
@@ -206,7 +206,7 @@ export default function GettingStarted() {
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <HelpCircle className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+                <h2 className="heading-display text-3xl mb-4">Frequently Asked Questions</h2>
                 <p className="text-muted-foreground">
                   Common questions from teachers new to AI
                 </p>

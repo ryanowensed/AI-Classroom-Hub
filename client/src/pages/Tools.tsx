@@ -168,9 +168,9 @@ export default function Tools() {
   });
 
   const getPricingColor = (pricing: string) => {
-    if (pricing === "Free") return "text-green-600 bg-green-50 border-green-200";
-    if (pricing === "Freemium") return "text-blue-600 bg-blue-50 border-blue-200";
-    return "text-orange-600 bg-orange-50 border-orange-200";
+    if (pricing === "Free") return "text-accent bg-accent/10 border-accent/20";
+    if (pricing === "Freemium") return "text-primary bg-primary/10 border-primary/20";
+    return "text-muted-foreground bg-muted border-border";
   };
 
   return (
@@ -179,14 +179,14 @@ export default function Tools() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-purple-500/5 via-primary/5 to-background py-16 border-b">
+        <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-background py-16 border-b">
           <div className="container">
             <div className="max-w-3xl">
               <Badge className="mb-4" variant="secondary">
                 <Wrench className="mr-1 h-3 w-3" />
                 Comprehensive Directory
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tight mb-4">
+              <h1 className="heading-display text-4xl mb-4">
                 Tool Directory
               </h1>
               <p className="text-lg text-muted-foreground">

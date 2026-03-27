@@ -199,12 +199,12 @@ export default function CaseStudies() {
                 <div className="text-sm text-muted-foreground">At-risk students improved grades</div>
               </div>
               <div className="space-y-2">
-                <Users className="h-8 w-8 text-orange-600 mx-auto" />
+                <Users className="h-8 w-8 text-primary mx-auto" />
                 <div className="text-2xl font-bold">82K</div>
                 <div className="text-sm text-muted-foreground">AI literacy course participants</div>
               </div>
               <div className="space-y-2">
-                <BookOpen className="h-8 w-8 text-purple-600 mx-auto" />
+                <BookOpen className="h-8 w-8 text-accent mx-auto" />
                 <div className="text-2xl font-bold">8</div>
                 <div className="text-sm text-muted-foreground">Case studies (updated 2026)</div>
               </div>
@@ -221,7 +221,7 @@ export default function CaseStudies() {
                   <CardHeader className="bg-muted/30">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                       <div className="flex-1">
-                        <CardTitle className="text-2xl mb-2">{study.title}</CardTitle>
+                        <CardTitle className="heading-display text-2xl mb-2">{study.title}</CardTitle>
                         <CardDescription className="text-base">
                           {study.school} • {study.teacher}
                         </CardDescription>
@@ -299,7 +299,7 @@ export default function CaseStudies() {
         {/* CTA */}
         <section className="py-16 bg-muted/30 border-t">
           <div className="container text-center">
-            <h2 className="text-2xl font-bold mb-4">Have Your Own Success Story?</h2>
+            <h2 className="heading-display text-2xl mb-4">Have Your Own Success Story?</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               We'd love to hear how AI tools are helping you in your classroom. Share your story to inspire other educators.
             </p>

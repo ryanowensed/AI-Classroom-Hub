@@ -165,7 +165,7 @@ export default function UKResources() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
 
       <main className="flex-1">
@@ -175,22 +175,21 @@ export default function UKResources() {
           <div className="container max-w-4xl mx-auto text-center">
             {/* Union Jack accent + forschools.ai badge */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-              <div className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-border px-4 py-2 rounded-full shadow-sm">
+              <div className="inline-flex items-center gap-2 text-sm font-medium bg-background border border-border px-4 py-2 rounded-full shadow-sm">
                 <span className="text-lg">🇬🇧</span>
                 <span className="text-foreground font-semibold">UK Educators</span>
               </div>
-              <div className="inline-flex items-center gap-2 text-xs font-medium bg-[#E6F1FB] text-[#1D5EFF] border border-[#1D5EFF]/20 px-3 py-1.5 rounded-full">
+              <div className="inline-flex items-center gap-2 text-xs font-medium bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full">
                 <Shield className="h-3 w-3" />
                 Recommended by forschools.ai
               </div>
             </div>
 
             <h1
-              className="text-3xl md:text-5xl leading-tight mb-4 text-foreground"
-              style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400 }}
+              className="heading-display text-3xl md:text-5xl leading-tight mb-4 text-foreground"
             >
               AI Classroom Hub:{" "}
-              <span className="text-[#1D5EFF]">Resources for UK Educators</span>
+              <span className="text-primary">Resources for UK Educators</span>
             </h1>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
               All resources adapted for the UK National Curriculum and UK classroom tools. Prompt templates reference Year groups, Key Stages, and UK exam boards — not US grade levels or Common Core.
@@ -199,7 +198,7 @@ export default function UKResources() {
         </section>
 
         {/* ── QUICK NAVIGATION ── */}
-        <section className="bg-white border-b border-border py-6">
+        <section className="bg-background border-b border-border py-6">
           <div className="container max-w-4xl mx-auto">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
@@ -211,9 +210,9 @@ export default function UKResources() {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[#1D5EFF] border border-border rounded-lg px-4 py-3 hover:border-[#1D5EFF]/40 transition-colors bg-[#F8F9FC]"
+                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary border border-border rounded-lg px-4 py-3 hover:border-primary/40 transition-colors bg-muted/50"
                 >
-                  <span className="text-[#1D5EFF]">{item.icon}</span>
+                  <span className="text-primary">{item.icon}</span>
                   {item.label}
                 </a>
               ))}
@@ -222,14 +221,13 @@ export default function UKResources() {
         </section>
 
         {/* ── UK PROMPT TEMPLATES ── */}
-        <section id="prompts" className="py-16 bg-[#F8F9FC] border-b border-border">
+        <section id="prompts" className="py-16 bg-muted/50 border-b border-border">
           <div className="container max-w-4xl mx-auto">
             <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">Prompt Templates</p>
-              <div className="w-10 h-0.5 bg-[#1D5EFF] mb-4"></div>
+              <div className="w-10 h-0.5 bg-primary mb-4"></div>
               <h2
-                className="text-2xl md:text-3xl text-foreground mb-2"
-                style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400 }}
+                className="heading-display text-2xl md:text-3xl text-foreground mb-2"
               >
                 UK-adapted AI prompts
               </h2>
@@ -240,7 +238,7 @@ export default function UKResources() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {ukPrompts.map((prompt) => (
-                <div key={prompt.title} className="bg-white rounded-xl border border-border p-5 flex flex-col">
+                <div key={prompt.title} className="bg-background rounded-xl border border-border p-5 flex flex-col">
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <h3 className="text-sm font-semibold text-foreground">{prompt.title}</h3>
                     <div className="flex gap-1.5 flex-shrink-0">
@@ -248,12 +246,12 @@ export default function UKResources() {
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground mb-3 font-light">{prompt.subject}</p>
-                  <div className="bg-[#F8F9FC] rounded-lg p-3 flex-1">
+                  <div className="bg-muted/50 rounded-lg p-3 flex-1">
                     <p className="text-xs text-foreground/80 leading-relaxed font-mono whitespace-pre-wrap">{prompt.prompt}</p>
                   </div>
                   <button
                     onClick={() => navigator.clipboard.writeText(prompt.prompt)}
-                    className="mt-3 text-xs text-[#1D5EFF] font-medium hover:underline text-left"
+                    className="mt-3 text-xs text-primary font-medium hover:underline text-left"
                   >
                     Copy prompt →
                   </button>
@@ -263,7 +261,7 @@ export default function UKResources() {
 
             <div className="mt-6 text-center">
               <Link href="/resources">
-                <span className="text-sm text-[#1D5EFF] font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
+                <span className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
                   View all prompt templates in the Resources section <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </Link>
@@ -272,14 +270,13 @@ export default function UKResources() {
         </section>
 
         {/* ── GDPR-SAFE TOOLS ── */}
-        <section id="tools" className="py-16 bg-white border-b border-border">
+        <section id="tools" className="py-16 bg-background border-b border-border">
           <div className="container max-w-4xl mx-auto">
             <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">Tool Recommendations</p>
-              <div className="w-10 h-0.5 bg-[#1D5EFF] mb-4"></div>
+              <div className="w-10 h-0.5 bg-primary mb-4"></div>
               <h2
-                className="text-2xl md:text-3xl text-foreground mb-2"
-                style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400 }}
+                className="heading-display text-2xl md:text-3xl text-foreground mb-2"
               >
                 GDPR-compliant tools for UK schools
               </h2>
@@ -290,13 +287,13 @@ export default function UKResources() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {ukTools.map((tool) => (
-                <div key={tool.name} className="border border-border rounded-xl p-5 hover:border-[#1D5EFF]/40 transition-colors">
+                <div key={tool.name} className="border border-border rounded-xl p-5 hover:border-primary/40 transition-colors">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <h3 className="text-sm font-semibold text-foreground">{tool.name}</h3>
                     <div className="flex gap-1.5 flex-shrink-0 flex-wrap justify-end">
                       <Badge variant="secondary" className="text-[10px] px-2 py-0.5">{tool.pricing}</Badge>
                       {tool.gdpr && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-medium bg-[#E1F5EE] text-[#0F6E56] px-2 py-0.5 rounded-full">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-medium bg-accent/10 text-accent px-2 py-0.5 rounded-full">
                           <Shield className="h-2.5 w-2.5" /> GDPR
                         </span>
                       )}
@@ -306,14 +303,14 @@ export default function UKResources() {
                   <div className="flex items-center justify-between">
                     <div className="flex gap-1 flex-wrap">
                       {tool.keyStages.map((ks) => (
-                        <span key={ks} className="text-[10px] font-medium bg-[#F0F4FF] text-[#1D5EFF] px-2 py-0.5 rounded-full">{ks}</span>
+                        <span key={ks} className="text-[10px] font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">{ks}</span>
                       ))}
                     </div>
                     <a
                       href={tool.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-[#1D5EFF] font-medium hover:underline inline-flex items-center gap-1"
+                      className="text-xs text-primary font-medium hover:underline inline-flex items-center gap-1"
                     >
                       Visit <ExternalLink className="h-3 w-3" />
                     </a>
@@ -324,7 +321,7 @@ export default function UKResources() {
 
             <div className="mt-6 text-center">
               <Link href="/tools">
-                <span className="text-sm text-[#1D5EFF] font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
+                <span className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
                   Browse the full Tool Directory <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </Link>
@@ -333,14 +330,13 @@ export default function UKResources() {
         </section>
 
         {/* ── UK CASE STUDIES ── */}
-        <section id="case-studies" className="py-16 bg-[#F8F9FC] border-b border-border">
+        <section id="case-studies" className="py-16 bg-muted/50 border-b border-border">
           <div className="container max-w-4xl mx-auto">
             <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">Case Studies</p>
-              <div className="w-10 h-0.5 bg-[#1D5EFF] mb-4"></div>
+              <div className="w-10 h-0.5 bg-primary mb-4"></div>
               <h2
-                className="text-2xl md:text-3xl text-foreground mb-2"
-                style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400 }}
+                className="heading-display text-2xl md:text-3xl text-foreground mb-2"
               >
                 UK schools using AI well
               </h2>
@@ -351,13 +347,13 @@ export default function UKResources() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {ukCaseStudies.map((cs) => (
-                <div key={cs.title} className="bg-white rounded-xl border border-border p-5">
+                <div key={cs.title} className="bg-background rounded-xl border border-border p-5">
                   <div className="flex gap-2 mb-3 flex-wrap">
                     <Badge variant="secondary" className="text-[10px] px-2 py-0.5">{cs.keyStage}</Badge>
                     <Badge variant="outline" className="text-[10px] px-2 py-0.5">{cs.subject}</Badge>
                   </div>
                   <h3 className="text-sm font-semibold text-foreground mb-1">{cs.title}</h3>
-                  <p className="text-xs text-[#1D5EFF] font-medium mb-3">{cs.school}</p>
+                  <p className="text-xs text-primary font-medium mb-3">{cs.school}</p>
                   <p className="text-xs text-muted-foreground leading-relaxed font-light mb-3">{cs.result}</p>
                   <p className="text-xs text-muted-foreground">
                     <span className="font-medium text-foreground">Tool used:</span> {cs.tool}
@@ -368,7 +364,7 @@ export default function UKResources() {
 
             <div className="mt-6 text-center">
               <Link href="/case-studies">
-                <span className="text-sm text-[#1D5EFF] font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
+                <span className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
                   Read all case studies <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </Link>
@@ -377,14 +373,13 @@ export default function UKResources() {
         </section>
 
         {/* ── UK POLICY NEWS ── */}
-        <section id="news" className="py-16 bg-white border-b border-border">
+        <section id="news" className="py-16 bg-background border-b border-border">
           <div className="container max-w-4xl mx-auto">
             <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">UK Policy & News</p>
-              <div className="w-10 h-0.5 bg-[#1D5EFF] mb-4"></div>
+              <div className="w-10 h-0.5 bg-primary mb-4"></div>
               <h2
-                className="text-2xl md:text-3xl text-foreground mb-2"
-                style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400 }}
+                className="heading-display text-2xl md:text-3xl text-foreground mb-2"
               >
                 AI in UK education: what's happening
               </h2>
@@ -392,9 +387,9 @@ export default function UKResources() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {ukNews.map((item) => (
-                <div key={item.title} className="border border-border rounded-xl p-5 hover:border-[#1D5EFF]/40 transition-colors">
+                <div key={item.title} className="border border-border rounded-xl p-5 hover:border-primary/40 transition-colors">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[10px] font-semibold bg-[#E6F1FB] text-[#1D5EFF] px-2 py-0.5 rounded-full uppercase tracking-wider">{item.tag}</span>
+                    <span className="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase tracking-wider">{item.tag}</span>
                     <span className="text-xs text-muted-foreground">{item.date}</span>
                   </div>
                   <h3 className="text-sm font-semibold text-foreground mb-2">{item.title}</h3>
@@ -405,7 +400,7 @@ export default function UKResources() {
 
             <div className="mt-6 text-center">
               <Link href="/news">
-                <span className="text-sm text-[#1D5EFF] font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
+                <span className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1 cursor-pointer">
                   Read all AI education news <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </Link>
@@ -414,15 +409,14 @@ export default function UKResources() {
         </section>
 
         {/* ── FORSCHOOLS.AI PARTNERSHIP CALLOUT ── */}
-        <section className="py-12 bg-[#F0F4FF]">
+        <section className="py-12 bg-primary/10">
           <div className="container max-w-3xl mx-auto text-center px-6">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#1D5EFF] bg-white border border-[#1D5EFF]/20 px-4 py-2 rounded-full mb-5">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary bg-background border border-primary/20 px-4 py-2 rounded-full mb-5">
               <Shield className="h-3.5 w-3.5" />
               Suggested by forschools.ai
             </div>
             <h2
-              className="text-2xl md:text-3xl text-foreground mb-3"
-              style={{ fontFamily: "'DM Serif Display', serif", fontWeight: 400 }}
+              className="heading-display text-2xl md:text-3xl text-foreground mb-3"
             >
               Trusted by the UK AI education community
             </h2>
@@ -434,7 +428,7 @@ export default function UKResources() {
                 href="https://theaiclassroomhub.beehiiv.com/subscribe"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#1D5EFF] text-white font-medium text-sm px-6 py-3 rounded-xl hover:bg-[#1D5EFF]/90 transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-medium text-sm px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
               >
                 Subscribe to the newsletter <ArrowRight className="h-4 w-4" />
               </a>
@@ -442,7 +436,7 @@ export default function UKResources() {
                 href="https://forschools.ai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-white text-foreground font-medium text-sm px-6 py-3 rounded-xl border border-border hover:border-[#1D5EFF]/40 transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-background text-foreground font-medium text-sm px-6 py-3 rounded-xl border border-border hover:border-primary/40 transition-colors"
               >
                 Visit forschools.ai <ExternalLink className="h-4 w-4" />
               </a>

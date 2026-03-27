@@ -203,10 +203,10 @@ export default function TryThisToday() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Beginner": return "bg-green-500/10 text-green-700 border-green-200";
-      case "Intermediate": return "bg-yellow-500/10 text-yellow-700 border-yellow-200";
-      case "Advanced": return "bg-red-500/10 text-red-700 border-red-200";
-      default: return "bg-gray-500/10 text-gray-700 border-gray-200";
+      case "Beginner": return "bg-accent/10 text-accent border-accent/20";
+      case "Intermediate": return "bg-primary/10 text-primary border-primary/20";
+      case "Advanced": return "bg-muted text-muted-foreground border-border";
+      default: return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -223,7 +223,7 @@ export default function TryThisToday() {
                 <Zap className="mr-1 h-3 w-3" />
                 Quick Wins
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tight mb-4">
+              <h1 className="heading-display text-4xl mb-4">
                 Try This Today
               </h1>
               <p className="text-lg text-muted-foreground">

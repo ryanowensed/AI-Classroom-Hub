@@ -109,7 +109,7 @@ export default function CourseModule() {
                           <div className="flex items-start gap-2">
                             <div className="flex-shrink-0 mt-0.5">
                               {isCompleted ? (
-                                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                <CheckCircle2 className="h-4 w-4 text-accent" />
                               ) : (
                                 <div className={`h-4 w-4 rounded-full border-2 ${
                                   isActive ? "border-primary-foreground" : "border-muted-foreground"

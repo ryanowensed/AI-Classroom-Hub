@@ -221,18 +221,18 @@ export default function News() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      "Trends": "bg-blue-500/10 text-blue-700 border-blue-200",
-      "Research": "bg-purple-500/10 text-purple-700 border-purple-200",
-      "Tools": "bg-green-500/10 text-green-700 border-green-200",
-      "Concerns": "bg-orange-500/10 text-orange-700 border-orange-200",
-      "Policy": "bg-red-500/10 text-red-700 border-red-200",
-      "Innovation": "bg-teal-500/10 text-teal-700 border-teal-200",
-      "Higher Ed": "bg-indigo-500/10 text-indigo-700 border-indigo-200",
-      "Teacher Wellness": "bg-pink-500/10 text-pink-700 border-pink-200",
-      "Investment": "bg-emerald-500/10 text-emerald-700 border-emerald-200",
-      "Professional Development": "bg-violet-500/10 text-violet-700 border-violet-200"
+      "Trends": "bg-primary/10 text-primary border-primary/20",
+      "Research": "bg-primary/10 text-primary border-primary/20",
+      "Tools": "bg-accent/10 text-accent border-accent/20",
+      "Concerns": "bg-muted text-muted-foreground border-border",
+      "Policy": "bg-primary/10 text-primary border-primary/20",
+      "Innovation": "bg-accent/10 text-accent border-accent/20",
+      "Higher Ed": "bg-primary/10 text-primary border-primary/20",
+      "Teacher Wellness": "bg-accent/10 text-accent border-accent/20",
+      "Investment": "bg-accent/10 text-accent border-accent/20",
+      "Professional Development": "bg-primary/10 text-primary border-primary/20"
     };
-    return colors[category] || "bg-gray-500/10 text-gray-700 border-gray-200";
+    return colors[category] || "bg-muted text-muted-foreground border-border";
   };
 
   const getCategoryIcon = (category: string) => {
@@ -254,14 +254,14 @@ export default function News() {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-orange-500/5 via-primary/5 to-background py-16 border-b">
+        <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-background py-16 border-b">
           <div className="container">
             <div className="max-w-3xl">
               <Badge className="mb-4" variant="secondary">
                 <Newspaper className="mr-1 h-3 w-3" />
                 Latest Updates
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tight mb-4">
+              <h1 className="heading-display text-4xl mb-4">
                 In the News
               </h1>
               <p className="text-lg text-muted-foreground">
@@ -324,7 +324,7 @@ export default function News() {
         {/* Newsletter CTA */}
         <section className="py-16 bg-muted/30 border-t">
           <div className="container text-center">
-            <h2 className="text-2xl font-bold mb-4">Stay Current on AI in Education</h2>
+            <h2 className="heading-display text-2xl mb-4">Stay Current on AI in Education</h2>
             <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
               The AI education landscape changes rapidly. Bookmark this page and check back regularly for the latest news, research, and policy updates.
             </p>

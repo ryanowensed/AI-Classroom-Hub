@@ -60,7 +60,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button variant="outline" className="text-[#1D5EFF] border-[#1D5EFF]/30 hover:bg-[#E6F1FB] hover:border-[#1D5EFF]">
+            <Button variant="outline" className="text-primary border-primary/30 hover:bg-primary/10 hover:border-primary">
               Subscribe
             </Button>
           </a>

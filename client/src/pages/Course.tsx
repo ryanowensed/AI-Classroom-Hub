@@ -25,7 +25,7 @@ export default function Course() {
       lessons: 3,
       duration: "15 min",
       icon: Lightbulb,
-      color: "bg-blue-500"
+      color: "bg-primary"
     },
     {
       id: 2,
@@ -35,7 +35,7 @@ export default function Course() {
       lessons: 3,
       duration: "20 min",
       icon: BookOpen,
-      color: "bg-green-500"
+      color: "bg-accent"
     },
     {
       id: 3,
@@ -45,7 +45,7 @@ export default function Course() {
       lessons: 3,
       duration: "20 min",
       icon: Target,
-      color: "bg-purple-500"
+      color: "bg-primary"
     },
     {
       id: 4,
@@ -55,7 +55,7 @@ export default function Course() {
       lessons: 3,
       duration: "15 min",
       icon: Sparkles,
-      color: "bg-orange-500"
+      color: "bg-primary"
     },
     {
       id: 5,
@@ -65,7 +65,7 @@ export default function Course() {
       lessons: 3,
       duration: "15 min",
       icon: Zap,
-      color: "bg-teal-500"
+      color: "bg-accent"
     }
   ];
 
@@ -158,7 +158,7 @@ export default function Course() {
 
               <Card>
                 <CardHeader>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-500/10 text-orange-600 mb-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary mb-3">
                     <Zap className="h-6 w-6" />
                   </div>
                   <CardTitle className="text-xl">Actionable</CardTitle>
@@ -191,7 +191,7 @@ export default function Course() {
                     <Card className="hover:shadow-lg transition-all cursor-pointer group">
                       <CardHeader>
                         <div className="flex items-start gap-4">
-                          <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${module.color} text-white flex-shrink-0`}>
+                          <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${module.color} text-primary-foreground flex-shrink-0`}>
                             <Icon className="h-6 w-6" />
                           </div>
                           <div className="flex-1">

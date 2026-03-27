@@ -193,7 +193,7 @@ export default function Resources() {
                 <BookOpen className="mr-1 h-3 w-3" />
                 Learning Materials
               </Badge>
-              <h1 className="text-4xl font-bold tracking-tight mb-4">
+              <h1 className="heading-display text-4xl mb-4">
                 Resources
               </h1>
               <p className="text-lg text-muted-foreground">
@@ -228,7 +228,7 @@ export default function Resources() {
 
               <TabsContent value="prompts" className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Prompt Templates</h2>
+                  <h2 className="heading-display text-2xl mb-2">Prompt Templates</h2>
                   <p className="text-muted-foreground mb-8">
                     Copy-paste ready prompts for common teaching tasks. Replace the bracketed sections with your specific details. Updated March 2026.
                   </p>
@@ -271,7 +271,7 @@ export default function Resources() {
 
               <TabsContent value="safety" className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Safety & Ethics Guidelines</h2>
+                  <h2 className="heading-display text-2xl mb-2">Safety & Ethics Guidelines</h2>
                   <p className="text-muted-foreground mb-8">
                     Important considerations for responsible AI use in educational settings — updated to reflect NYC's 2026 AI framework and current best practices.
                   </p>
@@ -299,12 +299,12 @@ export default function Resources() {
                     ))}
                   </div>
 
-                  <Card className="mt-8 border-orange-200 bg-orange-50/50">
+                  <Card className="mt-8 border-primary/20 bg-primary/5">
                     <CardHeader>
-                      <CardTitle className="text-orange-900">Important Reminder</CardTitle>
+                      <CardTitle className="text-foreground">Important Reminder</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-orange-800">
+                      <p className="text-sm text-muted-foreground">
                         Always review AI-generated content before using it with students. AI can make mistakes, include biased information, or generate inappropriate content. Your professional judgment is essential — and in 2026, it is also your professional responsibility.
                       </p>
                     </CardContent>
@@ -321,10 +321,10 @@ export default function Resources() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     {certifications.map((cert, index) => (
-                      <Card key={index} className="border-green-200 bg-green-50/30">
+                      <Card key={index} className="border-accent/20 bg-accent/5">
                         <CardHeader>
-                          <CardTitle className="flex items-center gap-2 text-green-900">
-                            <FileText className="h-5 w-5 text-green-600" />
+                          <CardTitle className="flex items-center gap-2 text-foreground">
+                            <FileText className="h-5 w-5 text-accent" />
                             {cert.title}
                           </CardTitle>
                           <CardDescription>{cert.description}</CardDescription>
@@ -342,15 +342,15 @@ export default function Resources() {
                     ))}
                   </div>
 
-                  <Card className="border-blue-200 bg-blue-50/30">
+                  <Card className="border-primary/20 bg-primary/5">
                     <CardHeader>
-                      <CardTitle className="text-blue-900">NSF AI Professional Development Weeks (2026)</CardTitle>
+                      <CardTitle className="text-foreground">NSF AI Professional Development Weeks (2026)</CardTitle>
                       <CardDescription>
                         The NSF invested $11 million in March 2026 to fund intensive AI PD for K-12 teachers across 10+ states through the Computer Science Teachers Association (CSTA).
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-blue-800 mb-4">
+                      <p className="text-sm text-muted-foreground mb-4">
                         If you are a K-12 teacher in a participating state, you may be eligible for free, intensive AI professional development through this initiative. Check the CSTA website for availability in your region.
                       </p>
                       <Button variant="outline" asChild>
