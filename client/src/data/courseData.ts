@@ -2480,6 +2480,405 @@ Include:
       }
     ]
   }
+,
+  {
+    id: 6,
+    title: "The 2026 Toolkit",
+    subtitle: "New Tools, New Possibilities",
+    description: "Master the latest AI tools reshaping classrooms in 2026: Gemini in Google Classroom, NotebookLM, and AI-powered feedback.",
+    duration: "20 min",
+    icon: "Sparkles",
+    color: "bg-indigo-500",
+    lessons: [
+      {
+        id: 1,
+        title: "Gemini in Google Classroom",
+        duration: "7 min",
+        content: `# Gemini in Google Classroom (2026)
+
+As of January 2026, Gemini is now deeply integrated into Google Classroom for educators using Google Workspace for Education. This is one of the most significant updates for teachers using Google tools.
+
+## What's New in 2026
+
+Google announced at Bett 2026 that Gemini can now:
+- **Draft assignments** directly inside Google Classroom with full context of your classes
+- **Create audio lessons** that students can listen to asynchronously
+- **Tag assignments to standards** automatically using your district's standards library
+- **Summarize student progress** across assignments
+- **Generate rubrics** aligned to your assignment criteria
+
+## Getting Started
+
+### Step 1: Access Gemini in Classroom
+
+\`\`\`
+Sign in to classroom.google.com with your Google Workspace for Education account.
+Look for the Gemini icon (sparkle) in the assignment creation flow.
+\`\`\`
+
+### Step 2: Draft an Assignment
+
+**Prompt:**
+\`\`\`
+I teach [GRADE LEVEL] [SUBJECT]. Help me draft an assignment on [TOPIC].
+- Learning objectives aligned to [STANDARDS]
+- Clear student-facing instructions
+- Suggested due date: [DATE]
+- Extension option for early finishers
+\`\`\`
+
+### Step 3: Create an Audio Lesson
+
+**Prompt:**
+\`\`\`
+Create a 5-minute audio lesson script introducing [TOPIC] for [GRADE LEVEL] students.
+- Start with a hook question
+- Explain the key concept clearly
+- Give 2 real-world examples
+- End with a reflection question
+Tone: conversational and engaging, like a teacher talking directly to students.
+\`\`\`
+
+## Standards Tagging
+
+One of the most time-saving new features: Gemini can automatically suggest which standards your assignment addresses.
+
+**Prompt:**
+\`\`\`
+I'm creating an assignment where students will [DESCRIBE TASK] for [GRADE LEVEL] [SUBJECT].
+Suggest which [STATE] Common Core / NGSS / [OTHER STANDARDS] standards this addresses.
+Format as a list I can use in Google Classroom's standards tagging feature.
+\`\`\`
+
+## Summarizing Student Progress
+
+**Prompt:**
+\`\`\`
+I have [NUMBER] students in my [GRADE LEVEL] [SUBJECT] class. Based on recent assignment scores:
+[PASTE SUMMARY DATA]
+
+Help me:
+1. Identify which students may need additional support
+2. Identify which students are ready for extension
+3. Draft a brief progress summary I can share with parents
+\`\`\`
+
+## Pro Tips
+
+1. **Use Classroom context** — Gemini knows your class roster and recent assignments when you're inside Classroom
+2. **Iterate in the sidebar** — The Gemini sidebar stays open while you edit, so you can refine without switching tabs
+3. **Audio lessons for absent students** — Create audio versions of your key lessons so absent students don't fall behind
+4. **Batch assignment creation** — Ask Gemini to draft a week's worth of assignments at once, then review and post
+
+## Quality Checks
+
+- ✅ Review all AI-generated content before posting to students
+- ✅ Verify standards alignment matches your actual curriculum
+- ✅ Listen to audio lessons before assigning — check pacing and accuracy
+- ✅ Personalize assignments to reflect your class's specific context`,
+        template: `I teach [GRADE LEVEL] [SUBJECT] at [SCHOOL TYPE].
+
+Help me draft a Google Classroom assignment on [TOPIC].
+
+Include:
+- Student-friendly assignment description
+- Learning objectives aligned to [STANDARDS]
+- Specific submission instructions
+- Suggested timeline
+- One extension option
+
+Tone: encouraging and age-appropriate for [GRADE LEVEL] students.`
+      },
+      {
+        id: 2,
+        title: "NotebookLM for Student Study",
+        duration: "7 min",
+        content: `# NotebookLM for Student Study (2026)
+
+NotebookLM has evolved significantly in 2026. It's now one of the most powerful tools for creating personalized study experiences grounded in your own classroom materials.
+
+## What NotebookLM Does
+
+NotebookLM lets you upload your own documents (textbooks, notes, articles, slides) and then:
+- **Chat with the content** — Ask questions and get answers sourced from your materials
+- **Generate study guides** — Auto-create summaries, FAQs, and timelines
+- **Create audio overviews** — AI-generated podcast-style summaries of your content
+- **Build interactive notebooks** — Students can explore content through guided questions
+
+## New in 2026: Customizable Audio Overviews
+
+You can now customize the audio overview format — choose tone, length, focus area, and even add specific questions you want the hosts to address.
+
+**Prompt to customize your audio overview:**
+\`\`\`
+Create an audio overview of this notebook focused on [SPECIFIC TOPIC].
+Audience: [GRADE LEVEL] students preparing for a test on [UNIT].
+Length: approximately [X] minutes.
+Include these key questions: [LIST 3-5 QUESTIONS]
+Tone: conversational and encouraging.
+\`\`\`
+
+## Setting Up a Student Study Notebook
+
+### Step 1: Create the Notebook
+
+1. Go to notebooklm.google.com
+2. Create a new notebook for your unit
+3. Upload your source materials (PDFs, Google Docs, slides, websites)
+
+### Step 2: Write a Student Introduction
+
+**Prompt:**
+\`\`\`
+Write a brief introduction message for a NotebookLM notebook that my [GRADE LEVEL] students will use to study [TOPIC/UNIT].
+
+Include:
+- What materials are in the notebook
+- 5 example questions students can ask
+- How to use the chat responsibly
+- A reminder that AI can make mistakes — always verify with the source
+
+Keep it friendly and appropriate for [GRADE LEVEL] students.
+\`\`\`
+
+### Step 3: Generate Study Materials
+
+**Study Guide Prompt:**
+\`\`\`
+Based on the materials in this notebook, create a comprehensive study guide for [UNIT] covering:
+- Key vocabulary (10-15 terms with definitions)
+- Main concepts (5-7 bullet points each)
+- Common misconceptions to avoid
+- 10 practice questions with answers
+- A one-page visual summary I can print
+\`\`\`
+
+**FAQ Prompt:**
+\`\`\`
+Generate a FAQ document answering the 15 most common questions students ask about [TOPIC].
+Base answers only on the materials in this notebook.
+Format: Question followed by a 2-3 sentence answer.
+\`\`\`
+
+## Teacher Use Cases
+
+### Research Synthesis
+\`\`\`
+I've uploaded 5 articles about [EDUCATIONAL TOPIC]. Summarize the key findings across all sources. Identify areas of agreement and disagreement. Suggest implications for my classroom practice.
+\`\`\`
+
+### Professional Development
+\`\`\`
+I've uploaded materials from a PD workshop on [TOPIC]. Create an action plan for implementing these strategies in my [GRADE LEVEL] [SUBJECT] classroom. Include 3 specific next steps I can take this week.
+\`\`\`
+
+### Curriculum Planning
+\`\`\`
+I've uploaded my state standards for [SUBJECT] and [GRADE LEVEL]. Create a scope and sequence for the year that covers all required standards. Group related standards into logical units.
+\`\`\`
+
+## Pro Tips
+
+1. **Share notebooks with students** — Use the share link to give students access to a read-only version
+2. **Update materials regularly** — Add new articles and resources as the unit progresses
+3. **Use for differentiation** — Create separate notebooks for different reading levels
+4. **Combine with class discussion** — Use the audio overview as a homework assignment, then discuss in class
+
+## Quality Checks
+
+- ✅ Verify all uploaded materials are accurate and current
+- ✅ Test the notebook yourself before sharing with students
+- ✅ Remind students that NotebookLM can still make errors — always check sources
+- ✅ Review AI-generated study guides for accuracy before distributing`,
+        template: `I'm creating a NotebookLM notebook for my [GRADE LEVEL] students studying [TOPIC/UNIT].
+
+I've uploaded: [LIST YOUR SOURCE MATERIALS]
+
+Help me [CHOOSE ONE]:
+- Write a student introduction message
+- Create a comprehensive study guide
+- Generate a FAQ document
+- Draft practice questions with answers
+- Create a vocabulary list with definitions
+
+Audience: [GRADE LEVEL] students
+Purpose: [STUDYING FOR TEST / EXPLORING TOPIC / REVIEW]`
+      },
+      {
+        id: 3,
+        title: "AI-Powered Student Feedback",
+        duration: "6 min",
+        content: `# AI-Powered Student Feedback (2026)
+
+One of the most time-consuming parts of teaching is providing meaningful, individualized feedback on student work. AI can dramatically accelerate this process while maintaining quality.
+
+## The Feedback Formula
+
+**Effective AI feedback prompts include:**
+1. The assignment criteria or rubric
+2. The student's actual work (or a description of it)
+3. The type of feedback you want
+4. The tone and format
+
+## Written Work Feedback
+
+### Formative Feedback on Drafts
+
+**Prompt:**
+\`\`\`
+You are an experienced [GRADE LEVEL] [SUBJECT] teacher providing formative feedback.
+
+Assignment: [DESCRIBE ASSIGNMENT]
+Rubric criteria: [LIST KEY CRITERIA]
+
+Student draft:
+[PASTE STUDENT WORK]
+
+Provide feedback that:
+- Identifies 2-3 specific strengths (with examples from the text)
+- Identifies 2-3 specific areas for improvement (with actionable suggestions)
+- Ends with one encouraging sentence
+- Uses language appropriate for a [GRADE LEVEL] student
+- Does NOT rewrite the student's work for them
+\`\`\`
+
+### Whole-Class Feedback Patterns
+
+After reviewing a set of student work, use AI to identify patterns:
+
+**Prompt:**
+\`\`\`
+I've reviewed [NUMBER] student essays on [TOPIC]. Here are the common issues I noticed:
+[LIST PATTERNS YOU OBSERVED]
+
+Help me:
+1. Draft a whole-class feedback message addressing these patterns
+2. Create a mini-lesson targeting the most common issue
+3. Write 3 model examples showing strong vs. weak versions of the most common error
+\`\`\`
+
+### Rubric-Based Scoring Comments
+
+**Prompt:**
+\`\`\`
+Using this rubric: [PASTE RUBRIC]
+
+I scored this student's work as follows:
+- [CRITERION 1]: [SCORE]
+- [CRITERION 2]: [SCORE]
+- [CRITERION 3]: [SCORE]
+
+Write a brief (3-4 sentence) comment explaining these scores in student-friendly language. Be specific and constructive.
+\`\`\`
+
+## Math and Problem-Solving Feedback
+
+**Prompt:**
+\`\`\`
+A [GRADE LEVEL] student solved this problem: [PROBLEM]
+
+Their work: [DESCRIBE OR PASTE STUDENT WORK]
+Their answer: [STUDENT ANSWER]
+Correct answer: [CORRECT ANSWER]
+
+Provide feedback that:
+- Acknowledges what they did correctly
+- Identifies exactly where their reasoning went wrong
+- Asks a guiding question (don't give the answer away)
+- Suggests a strategy to try
+\`\`\`
+
+## Feedback for English Language Learners
+
+**Prompt:**
+\`\`\`
+Provide feedback on this writing sample from an ELL student at [PROFICIENCY LEVEL] level.
+
+Focus on:
+- Content and ideas (most important)
+- 1-2 language patterns to work on (not every error)
+- Positive reinforcement of language growth
+
+Avoid: correcting every grammar error, which can be discouraging.
+
+Student work: [PASTE WORK]
+\`\`\`
+
+## Peer Feedback Prompts for Students
+
+Teach students to use AI to structure their peer feedback:
+
+**Student Prompt Template:**
+\`\`\`
+I'm giving feedback on my classmate's [ASSIGNMENT TYPE] about [TOPIC].
+
+Our rubric says good work should: [LIST CRITERIA]
+
+My classmate's work: [PASTE OR DESCRIBE]
+
+Help me write peer feedback that:
+- Starts with something specific I liked
+- Asks one genuine question about their work
+- Suggests one specific improvement
+- Is kind and encouraging
+\`\`\`
+
+## Time-Saving Feedback Workflows
+
+### Batch Feedback
+\`\`\`
+I need to write brief (2-3 sentence) feedback comments for 25 students on their [ASSIGNMENT].
+Here are my notes on each student's work:
+[PASTE YOUR NOTES]
+
+For each student, write a personalized comment based on my notes. Keep each under 50 words.
+\`\`\`
+
+### Progress Report Comments
+\`\`\`
+Write a progress report comment for a [GRADE LEVEL] student in [SUBJECT].
+
+Strengths: [LIST]
+Areas for growth: [LIST]
+Recent achievement: [DESCRIBE]
+
+Tone: professional, positive, and specific. Under 75 words.
+\`\`\`
+
+## Quality Checks
+
+- ✅ Always personalize AI-generated feedback with student's name and specific details
+- ✅ Verify feedback is accurate and reflects the actual student work
+- ✅ Ensure tone is appropriate for the student's age and situation
+- ✅ Never share student work with AI tools without checking your district's privacy policy
+- ✅ Use AI feedback as a starting point — add your professional judgment
+
+## Important: Privacy First
+
+⚠️ Before pasting student work into any AI tool:
+- Check your district's AI use policy
+- Anonymize student names and identifying information
+- Use only district-approved tools for student data
+- When in doubt, describe the work patterns rather than pasting actual student text`,
+        template: `You are an experienced [GRADE LEVEL] [SUBJECT] teacher.
+
+Provide [TYPE: formative/summative/peer] feedback on this student's [ASSIGNMENT TYPE].
+
+Assignment criteria:
+[LIST KEY CRITERIA OR PASTE RUBRIC]
+
+Student work:
+[PASTE OR DESCRIBE STUDENT WORK]
+
+Feedback should:
+- Be specific and reference the student's actual work
+- Include 2 strengths and 2 areas for growth
+- Use [GRADE LEVEL]-appropriate language
+- Be actionable (student knows exactly what to do next)
+- Stay under [NUMBER] words`
+      }
+    ]
+  }
 ];
 
 export function getModuleById(id: number): Module | undefined {
