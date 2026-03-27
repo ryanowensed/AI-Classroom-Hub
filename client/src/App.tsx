@@ -13,6 +13,8 @@ import Resources from "./pages/Resources";
 import GettingStarted from "./pages/GettingStarted";
 import Course from "./pages/Course";
 import CourseModule from "./pages/CourseModule";
+import Advertise from "./pages/Advertise";
+import UKResources from "./pages/UKResources";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -26,6 +28,8 @@ function Router() {
       <Route path={"/getting-started"} component={GettingStarted} />
       <Route path={"/course"} component={Course} />
       <Route path={"/course/module/:moduleId"} component={CourseModule} />
+      <Route path={"/advertise"} component={Advertise} />
+      <Route path={"/uk"} component={UKResources} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

@@ -14,6 +14,7 @@ export default function Header() {
     { name: "Tool Directory", href: "/tools" },
     { name: "Resources", href: "/resources" },
     { name: "Prompt Library", href: "/course" },
+    { name: "🇬🇧 UK", href: "/uk" },
   ];
 
   const isActive = (href: string) => location === href;
@@ -54,6 +55,15 @@ export default function Header() {
           <Button variant="ghost" size="icon">
             <Search className="h-5 w-5" />
           </Button>
+          <a
+            href="https://theaiclassroomhub.beehiiv.com/subscribe"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="outline" className="text-[#1D5EFF] border-[#1D5EFF]/30 hover:bg-[#E6F1FB] hover:border-[#1D5EFF]">
+              Subscribe
+            </Button>
+          </a>
           <Link href="/getting-started">
             <Button variant="default">Get Started</Button>
           </Link>
