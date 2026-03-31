@@ -1,11 +1,8 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
-  Download,
-  CheckCircle2,
   BookOpen,
   Users,
   Clock,
@@ -14,12 +11,10 @@ import {
   GraduationCap,
   Heart,
   Sparkles,
-  ArrowRight,
   Star,
+  CheckCircle2,
+  Mail,
 } from "lucide-react";
-
-const PDF_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/108617926/Vj4ZbBZiPJ9UioW4mLEdBA/10_AI_Prompts_Teachers_Can_Use_Tomorrow_64adbf54.pdf";
 
 const PROMPTS_PREVIEW = [
   {
@@ -126,18 +121,15 @@ const TESTIMONIALS = [
 ];
 
 export default function FreePrompts() {
-  const [downloaded, setDownloaded] = useState(false);
-
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = PDF_URL;
-    link.download = "10_AI_Prompts_Teachers_Can_Use_Tomorrow.pdf";
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setDownloaded(true);
-  };
+  // Load Beehiiv embed script once on mount
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://subscribe-forms.beehiiv.com/embed.js"]')) {
+      const script = document.createElement("script");
+      script.src = "https://subscribe-forms.beehiiv.com/embed.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -175,43 +167,19 @@ export default function FreePrompts() {
                   and a pro tip to make it even better. No tech skills required.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button
-                    size="lg"
-                    onClick={handleDownload}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground text-base font-semibold px-8"
-                  >
-                    {downloaded ? (
-                      <>
-                        <CheckCircle2 className="mr-2 h-5 w-5" />
-                        Downloaded!
-                      </>
-                    ) : (
-                      <>
-                        <Download className="mr-2 h-5 w-5" />
-                        Download Free PDF
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-background/30 text-background hover:bg-background/10 text-base"
-                    asChild
-                  >
-                    <a
-                      href="https://theaiclassroomhub.beehiiv.com/subscribe"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Subscribe to Newsletter
-                    </a>
-                  </Button>
+                {/* Trust signals */}
+                <div className="flex flex-wrap gap-4">
+                  {[
+                    { icon: <FileText className="h-4 w-4" />, label: "12-page PDF" },
+                    { icon: <Clock className="h-4 w-4" />, label: "3+ hrs saved / week" },
+                    { icon: <GraduationCap className="h-4 w-4" />, label: "K–12 all grades" },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center gap-2 text-background/60 text-sm">
+                      <span className="text-primary">{item.icon}</span>
+                      {item.label}
+                    </div>
+                  ))}
                 </div>
-
-                <p className="text-background/40 text-xs mt-4">
-                  Free forever. No email required for the PDF download.
-                </p>
               </div>
 
               {/* Right: PDF mockup card */}
@@ -263,7 +231,7 @@ export default function FreePrompts() {
                 { icon: <FileText className="h-5 w-5" />, val: "10", label: "Ready-to-copy prompts" },
                 { icon: <Clock className="h-5 w-5" />, val: "3+ hrs", label: "Time saved per week" },
                 { icon: <GraduationCap className="h-5 w-5" />, val: "K–12", label: "All grade levels" },
-                { icon: <Sparkles className="h-5 w-5" />, val: "Free", label: "No sign-up required" },
+                { icon: <Mail className="h-5 w-5" />, val: "Free", label: "Enter email to download" },
               ].map((s) => (
                 <div key={s.label} className="space-y-1">
                   <div className="flex justify-center text-primary">{s.icon}</div>
@@ -283,7 +251,6 @@ export default function FreePrompts() {
                 What's inside
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                Ten prompts across the tasks that take up most of your planning time.
                 Each one is tested, practical, and ready to use today.
               </p>
             </div>
@@ -346,52 +313,52 @@ export default function FreePrompts() {
           </div>
         </section>
 
-        {/* ── Download CTA ─────────────────────────────────────────────── */}
-        <section className="py-20">
-          <div className="container max-w-2xl text-center">
+        {/* ── Opt-in form (Beehiiv embed) ───────────────────────────────── */}
+        <section id="get-the-pdf" className="py-20 bg-background">
+          <div className="container max-w-3xl text-center">
+            {/* Icon */}
             <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Download className="h-8 w-8 text-primary" />
-            </div>
-            <h2 className="heading-display text-3xl font-normal text-foreground mb-4">
-              Ready to save time this week?
-            </h2>
-            <p className="text-muted-foreground mb-8 text-lg">
-              Download the PDF and have all 10 prompts ready to use in your
-              classroom tomorrow. Free, forever.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                size="lg"
-                onClick={handleDownload}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-base font-semibold px-10"
-              >
-                {downloaded ? (
-                  <>
-                    <CheckCircle2 className="mr-2 h-5 w-5" />
-                    Downloaded — enjoy!
-                  </>
-                ) : (
-                  <>
-                    <Download className="mr-2 h-5 w-5" />
-                    Download Free PDF
-                  </>
-                )}
-              </Button>
+              <Mail className="h-8 w-8 text-primary" />
             </div>
 
-            <div className="mt-12 pt-10 border-t">
-              <p className="text-muted-foreground text-sm mb-4">
-                Want a new prompt every week? Join the free newsletter.
-              </p>
-              <a
-                href="https://theaiclassroomhub.beehiiv.com/subscribe"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
-              >
-                Subscribe to AI Classroom Hub
-                <ArrowRight className="h-4 w-4" />
-              </a>
+            <h2 className="heading-display text-3xl font-normal text-foreground mb-3">
+              Get your free copy
+            </h2>
+            <p className="text-muted-foreground mb-2 text-lg max-w-xl mx-auto">
+              Enter your email below. We'll send you the PDF link instantly — plus a free weekly tip every week.
+            </p>
+            <p className="text-muted-foreground/60 text-sm mb-10">
+              No spam, ever. Unsubscribe anytime.
+            </p>
+
+            {/* Beehiiv embed form */}
+            <div className="rounded-2xl overflow-hidden border border-border">
+              <iframe
+                src="https://subscribe-forms.beehiiv.com/4ce10849-0bda-4649-85b9-5a8503ae0f0f"
+                className="beehiiv-embed"
+                data-test-id="beehiiv-embed"
+                frameBorder={0}
+                scrolling="no"
+                style={{
+                  width: "100%",
+                  height: "377px",
+                  margin: 0,
+                  borderRadius: 0,
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  maxWidth: "100%",
+                }}
+              />
+            </div>
+
+            {/* Trust signals below form */}
+            <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2">
+              {["Free forever", "No spam, ever", "Unsubscribe anytime", "Join educators in 12+ countries"].map((t) => (
+                <span key={t} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span className="w-1 h-1 rounded-full bg-primary/50 inline-block" />
+                  {t}
+                </span>
+              ))}
             </div>
           </div>
         </section>

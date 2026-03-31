@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,21 +7,20 @@ import Footer from "@/components/Footer";
 import { Link } from "wouter";
 import {
   Sparkles, BookOpen, Newspaper, Wrench, GraduationCap,
-  ArrowRight, Clock, Users, TrendingUp, Mail, CheckCircle2,
+  ArrowRight, Clock, Users, TrendingUp,
   BookMarked
 } from "lucide-react";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      window.open(`https://theaiclassroomhub.beehiiv.com/subscribe?email=${encodeURIComponent(email)}`, "_blank");
-      setSubscribed(true);
+  // Load Beehiiv embed script once on mount
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://subscribe-forms.beehiiv.com/embed.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://subscribe-forms.beehiiv.com/embed.js';
+      script.async = true;
+      document.head.appendChild(script);
     }
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -150,40 +149,24 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right: form */}
-                <div className="bg-muted/40 rounded-2xl p-8 border border-border">
-                  {subscribed ? (
-                    <div className="text-center py-4">
-                      <CheckCircle2 className="h-12 w-12 text-accent mx-auto mb-3" />
-                      <p className="font-semibold text-lg mb-1">You're in!</p>
-                      <p className="text-sm text-muted-foreground">Check your inbox to confirm your subscription.</p>
-                    </div>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium mb-3 text-foreground">Join educators in 12+ countries</p>
-                      <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Your school email address"
-                          className="w-full px-4 py-3 text-sm border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors placeholder:text-muted-foreground/60"
-                        />
-                        <Button type="submit" className="w-full">
-                          Subscribe free →
-                        </Button>
-                      </form>
-                      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5">
-                        {["Free forever", "No spam, ever", "Unsubscribe anytime"].map((t) => (
-                          <span key={t} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                            <span className="w-1 h-1 rounded-full bg-primary/50 inline-block"></span>
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </>
-                  )}
+                {/* Right: Beehiiv embed form */}
+                <div className="rounded-2xl overflow-hidden border border-border">
+                  <iframe
+                    src="https://subscribe-forms.beehiiv.com/4ce10849-0bda-4649-85b9-5a8503ae0f0f"
+                    className="beehiiv-embed"
+                    data-test-id="beehiiv-embed"
+                    frameBorder={0}
+                    scrolling="no"
+                    style={{
+                      width: '100%',
+                      height: '401px',
+                      margin: 0,
+                      borderRadius: 0,
+                      backgroundColor: 'transparent',
+                      boxShadow: 'none',
+                      maxWidth: '100%',
+                    }}
+                  />
                 </div>
               </div>
             </div>
