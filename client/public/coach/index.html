@@ -1070,7 +1070,8 @@
     //   (POST with JSON body: { api_key: "YOUR_API_KEY", email: "..." })
     //
     // Replace the string below with your actual endpoint:
-    const FORM_ENDPOINT = "REPLACE_WITH_BEEHIIV_OR_CONVERTKIT_ENDPOINT";
+    const FORM_ENDPOINT = "https://api.beehiiv.com/v2/publications/pub_ab25b333-94e9-4301-9480-d002e742e755/subscriptions";
+    const PDF_URL = "/coach/AI-Learning-Coach-3-Prompts.pdf";
 
     // =============================================
     // EMAIL VALIDATION
@@ -1119,17 +1120,24 @@
           const response = await fetch(FORM_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
+            body: JSON.stringify({ email: email, reactivate_existing: true, utm_source: 'coach-landing-page' })
           });
 
           if (!response.ok) {
             throw new Error('Server error: ' + response.status);
           }
 
-          // Success — replace form with confirmation
+          // Success — trigger PDF download then show confirmation
+          const dlLink = document.createElement('a');
+          dlLink.href = PDF_URL;
+          dlLink.download = 'AI-Learning-Coach-3-Prompts.pdf';
+          document.body.appendChild(dlLink);
+          dlLink.click();
+          document.body.removeChild(dlLink);
+
           form.hidden = true;
           confirmEl.classList.add('visible');
-          statusEl.textContent = 'Success! Check your inbox for the PDF.';
+          statusEl.textContent = 'Your PDF is downloading now.';
 
         } catch (err) {
           // Error state
