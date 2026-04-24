@@ -1,6 +1,12 @@
 // api/subscribe.js
 // Vercel serverless function — proxies subscription requests to Beehiiv API
 // keeping the API key server-side and out of the browser.
+//
+// Accepts POST body: { email, utm_source?, reactivate_existing? }
+// utm_source defaults to 'website' if not provided.
+// Known values:
+//   'homepage'           — theaiclassroomhub.com main subscribe form
+//   'coach-landing-page' — theaiclassroomhub.com/coach lead magnet form
 
 export default async function handler(req, res) {
   // Only allow POST
@@ -13,7 +19,11 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const { email } = req.body || {};
+  const {
+    email,
+    utm_source = 'website',
+    reactivate_existing = true,
+  } = req.body || {};
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
     return res.status(400).json({ error: 'Invalid email address' });
@@ -38,8 +48,8 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           email: email.trim(),
-          reactivate_existing: true,
-          utm_source: 'coach-landing-page',
+          reactivate_existing,
+          utm_source,
         }),
       }
     );
