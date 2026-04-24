@@ -1,69 +1,351 @@
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Link } from "wouter";
 
-/* ── Shared inline style constants (mirrors /coach design tokens) ── */
-const ink    = "#34322d";
-const muted  = "#6b6862";
-const accent = "#0081f2";
-const border = "#e5e3dd";
-const bg     = "#f8f8f7";
+/* ─── Design tokens (exact match to /coach) ─────────────────────────── */
+const T = {
+  bg:          "#f8f8f7",
+  ink:         "#34322d",
+  muted:       "#6b6862",
+  accent:      "#0081f2",
+  accentHover: "#0066c2",
+  border:      "#e5e3dd",
+  serif:       "'DM Serif Display', Georgia, serif",
+  sans:        "'DM Sans', system-ui, sans-serif",
+};
 
-const serif = "'DM Serif Display', Georgia, serif";
-const sans  = "'DM Sans', system-ui, sans-serif";
+/* ─── Shared style objects ───────────────────────────────────────────── */
+const divider: React.CSSProperties = {
+  border: "none",
+  borderTop: `1px solid ${T.border}`,
+  margin: 0,
+};
 
-export default function Home() {
-  // Load Beehiiv embed script once on mount
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://subscribe-forms.beehiiv.com/embed.js"]')) {
-      const script = document.createElement("script");
-      script.src = "https://subscribe-forms.beehiiv.com/embed.js";
-      script.async = true;
-      document.head.appendChild(script);
+const section: React.CSSProperties = {
+  paddingTop: "96px",
+  paddingBottom: "96px",
+};
+
+const container: React.CSSProperties = {
+  width: "100%",
+  maxWidth: "680px",
+  marginLeft: "auto",
+  marginRight: "auto",
+  paddingLeft: "24px",
+  paddingRight: "24px",
+};
+
+const h2Style: React.CSSProperties = {
+  fontFamily: T.serif,
+  fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+  lineHeight: 1.1,
+  letterSpacing: "-0.01em",
+  color: T.ink,
+  marginBottom: "8px",
+};
+
+/* ─── Email form component (mirrors /coach form exactly) ─────────────── */
+function SubscribeForm({ id }: { id: "hero" | "final" }) {
+  const [email, setEmail]       = useState("");
+  const [status, setStatus]     = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const inputRef                = useRef<HTMLInputElement>(null);
+
+  const isValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrorMsg("");
+    if (!isValid(email)) {
+      setErrorMsg("Please enter a valid email address.");
+      inputRef.current?.focus();
+      return;
     }
-  }, []);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), reactivate_existing: true, utm_source: "homepage" }),
+      });
+      if (!res.ok) throw new Error("Server error: " + res.status);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+      setErrorMsg("Something went wrong. Try again, or email hello@theaiclassroomhub.com and I'll send it manually.");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div aria-live="polite">
+        <p style={{ fontFamily: T.serif, fontSize: "clamp(1.5rem, 4vw, 2.25rem)", lineHeight: 1.1, color: T.ink, marginBottom: "16px" }}>
+          Check your inbox.
+        </p>
+        <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.55, color: T.ink, marginBottom: "8px" }}>
+          You're on the list. The next Sunday issue of AI Classroom Hub lands this weekend.
+        </p>
+        <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.55, color: T.ink, marginBottom: "8px" }}>
+          Pull up a chair.
+        </p>
+        <p style={{ fontFamily: T.sans, fontStyle: "italic", color: T.muted, fontSize: "1rem", marginTop: "16px" }}>
+          — Ryan
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: bg }}>
+    <form onSubmit={handleSubmit} noValidate>
+      <label
+        htmlFor={`${id}-email`}
+        style={{
+          display: "block",
+          fontFamily: T.sans,
+          fontSize: "0.9375rem",
+          fontWeight: 500,
+          color: T.ink,
+          marginBottom: "10px",
+        }}
+      >
+        Get the free weekly newsletter.
+      </label>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          alignItems: "stretch",
+          flexWrap: "wrap",
+        }}
+      >
+        <input
+          ref={inputRef}
+          id={`${id}-email`}
+          type="email"
+          name="email"
+          placeholder="your@school.edu"
+          required
+          autoComplete="email"
+          spellCheck={false}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{
+            flex: 1,
+            minWidth: "200px",
+            fontFamily: T.sans,
+            fontSize: "1rem",
+            color: T.ink,
+            background: "#fff",
+            border: `1px solid ${T.border}`,
+            borderRadius: "4px",
+            padding: "13px 16px",
+            outline: "none",
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = T.accent;
+            e.currentTarget.style.outline = `2px solid ${T.accent}`;
+            e.currentTarget.style.outlineOffset = "2px";
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = T.border;
+            e.currentTarget.style.outline = "none";
+          }}
+        />
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          style={{
+            fontFamily: T.sans,
+            fontSize: "0.9375rem",
+            fontWeight: 700,
+            color: "#fff",
+            backgroundColor: status === "sending" ? "#6b6862" : T.accent,
+            border: "none",
+            borderRadius: "4px",
+            padding: "14px 28px",
+            cursor: status === "sending" ? "not-allowed" : "pointer",
+            whiteSpace: "nowrap",
+            lineHeight: 1.3,
+            transition: "background-color 0.15s ease",
+            opacity: status === "sending" ? 0.65 : 1,
+          }}
+          onMouseEnter={(e) => {
+            if (status !== "sending") (e.currentTarget as HTMLButtonElement).style.backgroundColor = T.accentHover;
+          }}
+          onMouseLeave={(e) => {
+            if (status !== "sending") (e.currentTarget as HTMLButtonElement).style.backgroundColor = T.accent;
+          }}
+        >
+          {status === "sending" ? "Sending…" : "Subscribe free."}
+        </button>
+      </div>
+
+      {errorMsg && (
+        <p role="alert" style={{ marginTop: "10px", color: "#c0392b", fontFamily: T.sans, fontSize: "0.875rem" }}>
+          {errorMsg}
+        </p>
+      )}
+
+      <p style={{ marginTop: "12px", color: T.muted, fontFamily: T.sans, fontSize: "0.8125rem", lineHeight: 1.5 }}>
+        Free every Sunday. Unsubscribe any time.
+      </p>
+    </form>
+  );
+}
+
+/* ─── Fade-in hook (mirrors /coach IntersectionObserver) ─────────────── */
+function useFadeIn() {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    el.style.opacity = "0";
+    el.style.transform = "translateY(16px)";
+    el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+            obs.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return ref;
+}
+
+/* ─── FAQ item ───────────────────────────────────────────────────────── */
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      style={{
+        borderBottom: `1px solid ${T.border}`,
+      }}
+    >
+      <button
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "16px",
+          width: "100%",
+          padding: "22px 0",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: T.sans,
+          fontSize: "1rem",
+          fontWeight: 500,
+          color: T.ink,
+          lineHeight: 1.4,
+          textAlign: "left",
+        }}
+      >
+        {q}
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          style={{
+            flexShrink: 0,
+            width: "18px",
+            height: "18px",
+            color: T.muted,
+            transform: open ? "rotate(180deg)" : "none",
+            transition: "transform 0.2s ease",
+          }}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+      {open && (
+        <p
+          style={{
+            padding: "0 0 22px 0",
+            fontFamily: T.sans,
+            fontSize: "0.9375rem",
+            color: T.muted,
+            lineHeight: 1.6,
+            margin: 0,
+          }}
+        >
+          {a}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/* ─── Page ───────────────────────────────────────────────────────────── */
+export default function Home() {
+  const patternRef    = useFadeIn() as React.RefObject<HTMLElement>;
+  const insideRef     = useFadeIn() as React.RefObject<HTMLElement>;
+  const whoRef        = useFadeIn() as React.RefObject<HTMLElement>;
+  const proofRef      = useFadeIn() as React.RefObject<HTMLElement>;
+  const faqRef        = useFadeIn() as React.RefObject<HTMLElement>;
+  const finalCtaRef   = useFadeIn() as React.RefObject<HTMLElement>;
+
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: T.bg }}>
       <Header />
 
-      <main style={{ flex: 1 }}>
+      <main id="main-content" tabIndex={-1} style={{ flex: 1, outline: "none" }}>
 
         {/* ══════════════════════════════════════════
-            HERO — editorial, left-aligned, serif h1
+            HERO
         ══════════════════════════════════════════ */}
-        <section style={{ paddingTop: "72px", paddingBottom: "72px" }}>
-          <div className="container">
+        <section
+          aria-labelledby="hero-heading"
+          style={{ paddingTop: "72px", paddingBottom: "72px" }}
+        >
+          <div style={container}>
             <h1
+              id="hero-heading"
               style={{
-                fontFamily: serif,
+                fontFamily: T.serif,
                 fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
                 lineHeight: 1.07,
                 letterSpacing: "-0.01em",
-                color: ink,
+                color: T.ink,
                 marginBottom: "28px",
               }}
             >
               The practical AI resource for K–12 teachers.
             </h1>
+
             <p
               style={{
-                fontFamily: sans,
+                fontFamily: T.sans,
                 fontSize: "clamp(1rem, 2.5vw, 1.25rem)",
                 lineHeight: 1.5,
-                color: ink,
+                color: T.ink,
                 marginBottom: "20px",
                 maxWidth: "600px",
               }}
             >
               Real tools, real teacher stories, and actionable tips — delivered every week. No jargon. No hype. Just what works on Monday.
             </p>
+
             <p
               style={{
-                fontFamily: sans,
+                fontFamily: T.sans,
                 fontSize: "0.9375rem",
-                color: muted,
+                color: T.muted,
                 fontWeight: 500,
                 marginBottom: "36px",
               }}
@@ -71,312 +353,220 @@ export default function Home() {
               Written by Ryan David. 20+ years in the classroom.
             </p>
 
-            {/* Newsletter CTA form */}
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  fontFamily: sans,
-                  fontSize: "0.9375rem",
-                  fontWeight: 500,
-                  color: ink,
-                  marginBottom: "10px",
-                }}
-              >
-                Get the free weekly newsletter.
-              </label>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                  alignItems: "stretch",
-                }}
-              >
-                <iframe
-                  src="https://subscribe-forms.beehiiv.com/4ce10849-0bda-4649-85b9-5a8503ae0f0f"
-                  data-test-id="beehiiv-embed"
-                  frameBorder={0}
-                  scrolling="no"
-                  style={{
-                    width: "100%",
-                    maxWidth: "520px",
-                    height: "80px",
-                    margin: 0,
-                    borderRadius: "4px",
-                    backgroundColor: "transparent",
-                    boxShadow: "none",
-                  }}
-                />
-              </div>
-              <p
-                style={{
-                  marginTop: "12px",
-                  color: muted,
-                  fontFamily: sans,
-                  fontSize: "0.8125rem",
-                  lineHeight: 1.5,
-                }}
-              >
-                Free every Sunday. Unsubscribe any time.
-              </p>
-            </div>
+            <SubscribeForm id="hero" />
           </div>
         </section>
 
-        <hr style={{ border: "none", borderTop: `1px solid ${border}`, margin: 0 }} />
+        <hr style={divider} />
 
         {/* ══════════════════════════════════════════
-            WHAT'S INSIDE — section cards as editorial list
+            PATTERN INTERRUPT
         ══════════════════════════════════════════ */}
-        <section style={{ paddingTop: "96px", paddingBottom: "96px" }}>
-          <div className="container">
-            <h2
+        <section
+          ref={patternRef as React.RefObject<HTMLElement>}
+          aria-labelledby="pattern-heading"
+          style={section}
+        >
+          <div style={container}>
+            <h2 id="pattern-heading" style={h2Style}>
+              The AI tips you've been reading look like this.
+            </h2>
+
+            <div
+              role="list"
+              aria-label="Example generic AI tips"
+              style={{ margin: "28px 0", display: "flex", flexDirection: "column", gap: 0 }}
+            >
+              {[
+                '"Use ChatGPT to save time on lesson planning."',
+                '"Try AI for differentiation."',
+                '"Prompt engineering is the future of teaching."',
+              ].map((line, i) => (
+                <div
+                  key={i}
+                  role="listitem"
+                  style={{
+                    borderLeft: `2px solid ${T.border}`,
+                    padding: "10px 18px",
+                    fontFamily: T.sans,
+                    fontSize: "0.9375rem",
+                    color: T.muted,
+                    letterSpacing: "-0.01em",
+                    lineHeight: 1.4,
+                    borderTop: i > 0 ? `1px solid ${T.bg}` : undefined,
+                  }}
+                >
+                  {line}
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "28px" }}>
+              <p style={{ fontFamily: T.sans, lineHeight: 1.55, color: T.ink }}>
+                They're fine. They're not wrong. They just don't change your Monday.
+              </p>
+              <p style={{ fontFamily: T.sans, lineHeight: 1.55, color: T.ink }}>
+                You read the tip. You nod. You close the tab. And then you go back to planning the same way you always have. That's not you failing at AI. That's the tip failing you.
+              </p>
+            </div>
+
+            <blockquote
+              aria-label="Key insight"
               style={{
-                fontFamily: serif,
-                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.01em",
-                color: ink,
-                marginBottom: "8px",
+                position: "relative",
+                margin: "40px 0",
+                paddingLeft: "28px",
               }}
             >
+              <span
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: "-2px",
+                  color: T.accent,
+                  fontFamily: T.serif,
+                  fontSize: "2rem",
+                  lineHeight: 1,
+                }}
+              >
+                /
+              </span>
+              <p
+                style={{
+                  fontFamily: T.sans,
+                  fontStyle: "italic",
+                  fontSize: "clamp(1.125rem, 3vw, 1.375rem)",
+                  lineHeight: 1.45,
+                  color: T.ink,
+                }}
+              >
+                AI Classroom Hub is different. One practical tip, one tool, one real teacher story — every Sunday. Classroom-ready by Monday.
+              </p>
+            </blockquote>
+          </div>
+        </section>
+
+        <hr style={divider} />
+
+        {/* ══════════════════════════════════════════
+            WHAT'S IN EVERY ISSUE
+        ══════════════════════════════════════════ */}
+        <section
+          ref={insideRef as React.RefObject<HTMLElement>}
+          aria-labelledby="inside-heading"
+          style={section}
+        >
+          <div style={container}>
+            <h2 id="inside-heading" style={h2Style}>
               What's in every issue.
             </h2>
 
-            <ul style={{ listStyle: "none", padding: 0, margin: "8px 0 0 0" }}>
+            <ul
+              aria-label="Contents of every AI Classroom Hub issue"
+              style={{ listStyle: "none", padding: 0, margin: "8px 0 0 0" }}
+            >
               {[
                 {
                   num: "1.",
                   label: "Try This Today",
                   desc: "One quick, actionable AI tip you can implement in your classroom right now — no setup required.",
-                  href: "/try-this-today",
                 },
                 {
                   num: "2.",
                   label: "Tool of the Week",
                   desc: "A focused look at one AI tool teachers are actually using — what it does, how to start, and whether it's worth your time.",
-                  href: "/tools",
                 },
                 {
                   num: "3.",
-                  label: "Case Studies",
-                  desc: "Real teacher success stories with specific examples and measurable results — not hypotheticals.",
-                  href: "/case-studies",
+                  label: "Case Study",
+                  desc: "A real teacher success story with specific examples and measurable results — not hypotheticals.",
                 },
                 {
                   num: "4.",
                   label: "In the News",
                   desc: "The AI education developments, research findings, and tool launches that actually matter for your classroom.",
-                  href: "/news",
                 },
-              ].map((item) => (
+              ].map((item, i, arr) => (
                 <li
                   key={item.label}
                   style={{
                     padding: "28px 0",
-                    borderBottom: `1px solid ${border}`,
-                    borderTop: "none",
+                    borderBottom: `1px solid ${T.border}`,
+                    borderTop: i === 0 ? `1px solid ${T.border}` : undefined,
                   }}
                 >
                   <p
                     style={{
-                      fontFamily: sans,
+                      fontFamily: T.sans,
                       fontWeight: 700,
                       fontSize: "1rem",
-                      color: ink,
+                      color: T.ink,
                       marginBottom: "6px",
                       lineHeight: 1.3,
                     }}
                   >
-                    <span style={{ color: accent, fontWeight: 700, marginRight: "6px" }}>
+                    <span style={{ color: T.accent, fontWeight: 700, marginRight: "6px" }} aria-hidden="true">
                       {item.num}
                     </span>
                     {item.label}
                   </p>
                   <p
                     style={{
-                      fontFamily: sans,
+                      fontFamily: T.sans,
                       fontSize: "0.9375rem",
-                      color: muted,
+                      color: T.muted,
                       lineHeight: 1.55,
-                      marginBottom: "10px",
                     }}
                   >
                     {item.desc}
                   </p>
-                  <Link href={item.href}>
-                    <span
-                      style={{
-                        fontFamily: sans,
-                        fontSize: "0.875rem",
-                        fontWeight: 500,
-                        color: accent,
-                        textDecoration: "underline",
-                        textUnderlineOffset: "3px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Browse →
-                    </span>
-                  </Link>
                 </li>
               ))}
             </ul>
           </div>
         </section>
 
-        <hr style={{ border: "none", borderTop: `1px solid ${border}`, margin: 0 }} />
+        <hr style={divider} />
 
         {/* ══════════════════════════════════════════
-            RECENT ISSUES
+            WHO MADE THIS
         ══════════════════════════════════════════ */}
-        <section style={{ paddingTop: "96px", paddingBottom: "96px" }}>
-          <div className="container">
-            <h2
+        <section
+          ref={whoRef as React.RefObject<HTMLElement>}
+          aria-labelledby="who-heading"
+          style={section}
+        >
+          <div style={container}>
+            <h2 id="who-heading" style={h2Style}>
+              Who made this.
+            </h2>
+            <p
               style={{
-                fontFamily: serif,
-                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.01em",
-                color: ink,
-                marginBottom: "8px",
+                fontFamily: T.sans,
+                fontSize: "1.0625rem",
+                lineHeight: 1.6,
+                color: T.ink,
+                marginTop: "8px",
               }}
             >
-              Recent issues.
-            </h2>
-
-            <div style={{ marginTop: "8px" }}>
-              {[
-                {
-                  tag: "March 2026",
-                  title: "Claude Projects for lesson planning — a practical setup guide",
-                  date: "March 20, 2026",
-                  bullets: [
-                    "Set up a Claude Project with your course materials",
-                    "5 prompts for differentiated discussion questions",
-                    "Special ed teacher cuts IEP prep by 90%",
-                  ],
-                },
-                {
-                  tag: "March 2026",
-                  title: "Google Classroom + Gemini: what's actually new in 2026",
-                  date: "March 13, 2026",
-                  bullets: [
-                    "Audio lessons built directly in Classroom",
-                    "Standards tagging for assignments: a walkthrough",
-                    "Tool spotlight: NotebookLM for student review",
-                  ],
-                },
-              ].map((issue) => (
-                <a
-                  key={issue.title}
-                  href="https://theaiclassroomhub.beehiiv.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: "none", display: "block" }}
-                >
-                  <div
-                    style={{
-                      padding: "28px 0",
-                      borderBottom: `1px solid ${border}`,
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontFamily: sans,
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.08em",
-                        color: muted,
-                        marginBottom: "6px",
-                      }}
-                    >
-                      {issue.tag}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: sans,
-                        fontSize: "1rem",
-                        fontWeight: 500,
-                        color: ink,
-                        lineHeight: 1.4,
-                        marginBottom: "4px",
-                      }}
-                    >
-                      {issue.title}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: sans,
-                        fontSize: "0.8125rem",
-                        color: muted,
-                        marginBottom: "12px",
-                      }}
-                    >
-                      {issue.date}
-                    </p>
-                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
-                      {issue.bullets.map((b) => (
-                        <li
-                          key={b}
-                          style={{
-                            fontFamily: sans,
-                            fontSize: "0.875rem",
-                            color: muted,
-                            display: "flex",
-                            alignItems: "flex-start",
-                            gap: "8px",
-                          }}
-                        >
-                          <span style={{ color: accent, marginTop: "2px", flexShrink: 0 }}>/</span>
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </a>
-              ))}
-            </div>
-
-            <div style={{ marginTop: "24px" }}>
-              <a
-                href="https://theaiclassroomhub.beehiiv.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontFamily: sans,
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: accent,
-                  textDecoration: "underline",
-                  textUnderlineOffset: "3px",
-                }}
-              >
-                Browse all past issues →
-              </a>
-            </div>
+              Ryan David has spent 20+ years in K-12 classrooms and currently serves as Director of Operations and Director of Technology for a K-8 school. He writes AI Classroom Hub, a weekly Sunday read for teachers who teach with AI. He is not selling a course. He is not selling a certification. He is writing to the teachers he used to be.
+            </p>
           </div>
         </section>
 
-        <hr style={{ border: "none", borderTop: `1px solid ${border}`, margin: 0 }} />
+        <hr style={divider} />
 
         {/* ══════════════════════════════════════════
-            TESTIMONIALS
+            SOCIAL PROOF
         ══════════════════════════════════════════ */}
-        <section style={{ paddingTop: "96px", paddingBottom: "96px" }}>
-          <div className="container">
-            <h2
-              style={{
-                fontFamily: serif,
-                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.01em",
-                color: ink,
-                marginBottom: "8px",
-              }}
-            >
+        <section
+          ref={proofRef as React.RefObject<HTMLElement>}
+          aria-labelledby="proof-heading"
+          style={section}
+        >
+          <div style={container}>
+            <h2 id="proof-heading" style={h2Style}>
               What educators are saying.
             </h2>
 
@@ -394,36 +584,37 @@ export default function Home() {
                   quote: "I shared it with my whole department. Three of us now use the prompt templates every single week.",
                   attr: "Al Rabanera — Math Teacher, Fullerton CA",
                 },
-              ].map((t) => (
+              ].map((t, i) => (
                 <blockquote
                   key={t.attr}
                   style={{
                     position: "relative",
                     padding: "28px 0 28px 28px",
-                    borderBottom: `1px solid ${border}`,
+                    borderBottom: `1px solid ${T.border}`,
+                    borderTop: i === 0 ? `1px solid ${T.border}` : undefined,
                     margin: 0,
                   }}
                 >
                   <span
+                    aria-hidden="true"
                     style={{
                       position: "absolute",
                       left: 0,
                       top: "26px",
-                      color: accent,
-                      fontFamily: serif,
+                      color: T.accent,
+                      fontFamily: T.serif,
                       fontSize: "1.5rem",
                       lineHeight: 1,
                     }}
-                    aria-hidden="true"
                   >
                     /
                   </span>
                   <p
                     style={{
-                      fontFamily: sans,
+                      fontFamily: T.sans,
                       fontSize: "1.0625rem",
                       lineHeight: 1.55,
-                      color: ink,
+                      color: T.ink,
                       marginBottom: "10px",
                     }}
                   >
@@ -431,9 +622,9 @@ export default function Home() {
                   </p>
                   <cite
                     style={{
-                      fontFamily: sans,
+                      fontFamily: T.sans,
                       fontSize: "0.8125rem",
-                      color: muted,
+                      color: T.muted,
                       fontWeight: 500,
                       fontStyle: "normal",
                     }}
@@ -446,200 +637,83 @@ export default function Home() {
           </div>
         </section>
 
-        <hr style={{ border: "none", borderTop: `1px solid ${border}`, margin: 0 }} />
+        <hr style={divider} />
 
         {/* ══════════════════════════════════════════
-            TOOL SPOTLIGHT
+            FAQ
         ══════════════════════════════════════════ */}
-        <section style={{ paddingTop: "96px", paddingBottom: "96px" }}>
-          <div className="container">
-            <h2
-              style={{
-                fontFamily: serif,
-                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.01em",
-                color: ink,
-                marginBottom: "8px",
-              }}
-            >
-              Tools teachers are using right now.
+        <section
+          ref={faqRef as React.RefObject<HTMLElement>}
+          aria-labelledby="faq-heading"
+          style={section}
+        >
+          <div style={container}>
+            <h2 id="faq-heading" style={h2Style}>
+              Questions teachers are asking.
             </h2>
 
-            <ul style={{ listStyle: "none", padding: 0, margin: "8px 0 0 0" }}>
+            <div style={{ marginTop: "8px" }}>
               {[
                 {
-                  name: "Brisk Teaching",
-                  tag: "Lesson Planning",
-                  desc: "Chrome extension with 40+ tools for quizzes, lesson plans, writing feedback, and custom learning activities. Free to start.",
-                  href: "/tools",
+                  q: "Do I need to know anything about AI to get value from this?",
+                  a: "No. Every issue is written for classroom teachers, not tech people. If you can send an email, you can use the tips in AI Classroom Hub.",
                 },
                 {
-                  name: "NotebookLM",
-                  tag: "Content Creation",
-                  desc: "Upload your teaching materials and get AI-generated study guides, questions, and even podcast summaries. Free.",
-                  href: "/tools",
+                  q: "What grade levels is this for?",
+                  a: "K-12 and higher ed. The tools, tips, and case studies span grade bands — from elementary to high school — and are labeled so you can find what's relevant to you.",
                 },
                 {
-                  name: "Diffit",
-                  tag: "Differentiation",
-                  desc: "Creates reading passages at multiple levels with comprehension questions in under 20 seconds. Free.",
-                  href: "/tools",
+                  q: "Which AI tools do you cover?",
+                  a: "ChatGPT, Claude, Gemini, Copilot, Brisk Teaching, NotebookLM, Diffit, and many more. We focus on free or freemium tools that work without a district budget.",
                 },
-              ].map((tool) => (
-                <li
-                  key={tool.name}
-                  style={{
-                    padding: "28px 0",
-                    borderBottom: `1px solid ${border}`,
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "6px" }}>
-                    <p
-                      style={{
-                        fontFamily: sans,
-                        fontWeight: 700,
-                        fontSize: "1rem",
-                        color: ink,
-                        lineHeight: 1.3,
-                        margin: 0,
-                      }}
-                    >
-                      {tool.name}
-                    </p>
-                    <span
-                      style={{
-                        fontFamily: sans,
-                        fontSize: "0.75rem",
-                        fontWeight: 600,
-                        color: accent,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.06em",
-                      }}
-                    >
-                      {tool.tag}
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: sans,
-                      fontSize: "0.9375rem",
-                      color: muted,
-                      lineHeight: 1.55,
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {tool.desc}
-                  </p>
-                  <Link href={tool.href}>
-                    <span
-                      style={{
-                        fontFamily: sans,
-                        fontSize: "0.875rem",
-                        fontWeight: 500,
-                        color: accent,
-                        textDecoration: "underline",
-                        textUnderlineOffset: "3px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Learn more →
-                    </span>
-                  </Link>
-                </li>
+                {
+                  q: "How is this different from other AI newsletters?",
+                  a: "It's written by a teacher who is still in schools — not a consultant or content marketer. Every tip is tested in real classrooms before it lands in your inbox.",
+                },
+                {
+                  q: "Is any of this going to get me in trouble with my district's AI policy?",
+                  a: "The newsletter covers tools and strategies, not student data. Follow your district's AI guidance the same way you would with any other tool — review outputs, use judgment, and keep student information private.",
+                },
+              ].map((item) => (
+                <FaqItem key={item.q} q={item.q} a={item.a} />
               ))}
-            </ul>
-
-            <div style={{ marginTop: "24px" }}>
-              <Link href="/tools">
-                <span
-                  style={{
-                    fontFamily: sans,
-                    fontSize: "0.875rem",
-                    fontWeight: 500,
-                    color: accent,
-                    textDecoration: "underline",
-                    textUnderlineOffset: "3px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Browse all tools →
-                </span>
-              </Link>
             </div>
           </div>
         </section>
 
-        <hr style={{ border: "none", borderTop: `1px solid ${border}`, margin: 0 }} />
+        <hr style={divider} />
 
         {/* ══════════════════════════════════════════
             FINAL CTA
         ══════════════════════════════════════════ */}
-        <section style={{ paddingTop: "96px", paddingBottom: "96px" }}>
-          <div className="container">
-            <h2
-              style={{
-                fontFamily: serif,
-                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.01em",
-                color: ink,
-                marginBottom: "24px",
-              }}
-            >
+        <section
+          ref={finalCtaRef as React.RefObject<HTMLElement>}
+          aria-labelledby="final-cta-heading"
+          style={section}
+        >
+          <div style={container}>
+            <h2 id="final-cta-heading" style={h2Style}>
               One more time.
             </h2>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "18px", marginBottom: "36px" }}>
-              <p style={{ fontFamily: sans, fontSize: "1.0625rem", lineHeight: 1.6, color: ink }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "18px",
+                marginBottom: "36px",
+                marginTop: "8px",
+              }}
+            >
+              <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.6, color: T.ink }}>
                 The practical AI resource for K–12 teachers. Real tools, real stories, actionable tips — every Sunday.
               </p>
-              <p style={{ fontFamily: sans, fontSize: "1.0625rem", lineHeight: 1.6, color: ink }}>
+              <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.6, color: T.ink }}>
                 Free. No jargon. No hype. Built for the teachers who are already in the classroom doing the work.
               </p>
             </div>
 
-            {/* Final subscribe form */}
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  fontFamily: sans,
-                  fontSize: "0.9375rem",
-                  fontWeight: 500,
-                  color: ink,
-                  marginBottom: "10px",
-                }}
-              >
-                Get the free weekly newsletter.
-              </label>
-              <iframe
-                src="https://subscribe-forms.beehiiv.com/4ce10849-0bda-4649-85b9-5a8503ae0f0f"
-                data-test-id="beehiiv-embed"
-                frameBorder={0}
-                scrolling="no"
-                style={{
-                  width: "100%",
-                  maxWidth: "520px",
-                  height: "80px",
-                  margin: 0,
-                  borderRadius: "4px",
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                }}
-              />
-              <p
-                style={{
-                  marginTop: "12px",
-                  color: muted,
-                  fontFamily: sans,
-                  fontSize: "0.8125rem",
-                  lineHeight: 1.5,
-                }}
-              >
-                Free every Sunday. Unsubscribe any time.
-              </p>
-            </div>
+            <SubscribeForm id="final" />
           </div>
         </section>
 

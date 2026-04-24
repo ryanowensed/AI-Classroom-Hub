@@ -1,10 +1,32 @@
-import { Link } from "wouter";
-
+/**
+ * Footer — matches /coach design exactly:
+ *   - border-top #e5e3dd, bg #f8f8f7
+ *   - 680px container
+ *   - Three lines: copyright, privacy note, link row
+ */
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const linkStyle: React.CSSProperties = {
+    fontFamily: "'DM Sans', system-ui, sans-serif",
+    fontSize: "0.8125rem",
+    color: "#6b6862",
+    textDecoration: "none",
+  };
+
+  const handleLinkEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.color = "#34322d";
+    e.currentTarget.style.textDecoration = "underline";
+    e.currentTarget.style.textUnderlineOffset = "3px";
+  };
+  const handleLinkLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.color = "#6b6862";
+    e.currentTarget.style.textDecoration = "none";
+  };
+
   return (
     <footer
+      aria-label="Site footer"
       style={{
         borderTop: "1px solid #e5e3dd",
         paddingTop: "40px",
@@ -12,95 +34,68 @@ export default function Footer() {
         backgroundColor: "#f8f8f7",
       }}
     >
-      <div className="container">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-          }}
-        >
-          {/* Brand line */}
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "680px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: "24px",
+          paddingRight: "24px",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {/* Line 1: copyright */}
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: "0.8125rem",
               color: "#6b6862",
               lineHeight: 1.5,
+              margin: 0,
             }}
           >
             &copy; {currentYear} AI Classroom Hub. Published by{" "}
             <a
               href="https://theaiclassroomhub.com"
-              style={{ color: "#6b6862", textDecoration: "underline", textUnderlineOffset: "3px" }}
+              style={{ ...linkStyle, textDecoration: "underline", textUnderlineOffset: "3px" }}
             >
               theaiclassroomhub.com
             </a>
             . Built by a teacher, for teachers.
           </p>
 
-          {/* Privacy line */}
+          {/* Line 2: privacy note */}
           <p
             style={{
-              fontFamily: "'DM Sans', sans-serif",
+              fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: "0.8125rem",
               color: "#6b6862",
               lineHeight: 1.5,
+              margin: 0,
             }}
           >
             Your email is only used to send you the AI Classroom Hub newsletter. Unsubscribe any time, one click.
           </p>
 
-          {/* Link row */}
-          <div
-            style={{
-              display: "flex",
-              gap: "16px",
-              flexWrap: "wrap",
-              alignItems: "center",
-            }}
-          >
+          {/* Line 3: link row */}
+          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
             {[
-              { label: "Try This Today", href: "/try-this-today", internal: true },
-              { label: "Tool Directory", href: "/tools", internal: true },
-              { label: "Case Studies", href: "/case-studies", internal: true },
-              { label: "Prompt Library", href: "/course", internal: true },
-              { label: "Advertise", href: "/advertise", internal: true },
-              { label: "Contact", href: "mailto:hello@theaiclassroomhub.com", internal: false },
-              { label: "Privacy", href: "#", internal: false },
+              { label: "Privacy", href: "#" },
+              { label: "Archive", href: "https://theaiclassroomhub.beehiiv.com" },
+              { label: "Contact", href: "mailto:hello@theaiclassroomhub.com" },
             ].map((item, i, arr) => (
               <span key={item.label} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                {item.internal ? (
-                  <Link href={item.href}>
-                    <span
-                      style={{
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: "0.8125rem",
-                        color: "#6b6862",
-                        textDecoration: "none",
-                        cursor: "pointer",
-                      }}
-                      onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#34322d"; (e.target as HTMLElement).style.textDecoration = "underline"; }}
-                      onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#6b6862"; (e.target as HTMLElement).style.textDecoration = "none"; }}
-                    >
-                      {item.label}
-                    </span>
-                  </Link>
-                ) : (
-                  <a
-                    href={item.href}
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "0.8125rem",
-                      color: "#6b6862",
-                      textDecoration: "none",
-                    }}
-                    onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#34322d"; (e.target as HTMLElement).style.textDecoration = "underline"; }}
-                    onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#6b6862"; (e.target as HTMLElement).style.textDecoration = "none"; }}
-                  >
-                    {item.label}
-                  </a>
-                )}
+                <a
+                  href={item.href}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  style={linkStyle}
+                  onMouseEnter={handleLinkEnter}
+                  onMouseLeave={handleLinkLeave}
+                >
+                  {item.label}
+                </a>
                 {i < arr.length - 1 && (
                   <span style={{ color: "#e5e3dd", fontSize: "0.8125rem" }}>&middot;</span>
                 )}
