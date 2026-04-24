@@ -3,6 +3,7 @@
  *   - border-top #e5e3dd, bg #f8f8f7
  *   - 680px container
  *   - Three lines: copyright, privacy note, link row
+ *   - Publication name: Office Hours /AI
  */
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -45,6 +46,7 @@ export default function Footer() {
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+
           {/* Line 1: copyright */}
           <p
             style={{
@@ -55,7 +57,9 @@ export default function Footer() {
               margin: 0,
             }}
           >
-            &copy; {currentYear} AI Classroom Hub. Published by{" "}
+            &copy; {currentYear} Office Hours{" "}
+            <span style={{ color: "#0081f2" }}>/</span>
+            AI. Published by{" "}
             <a
               href="https://theaiclassroomhub.com"
               style={{ ...linkStyle, textDecoration: "underline", textUnderlineOffset: "3px" }}
@@ -75,21 +79,21 @@ export default function Footer() {
               margin: 0,
             }}
           >
-            Your email is only used to send you the AI Classroom Hub newsletter. Unsubscribe any time, one click.
+            Your email is only used to send you Office Hours{" "}
+            <span style={{ color: "#0081f2" }}>/</span>
+            AI every Sunday. Unsubscribe any time, one click.
           </p>
 
           {/* Line 3: link row */}
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center" }}>
             {[
-              { label: "Privacy", href: "#" },
-              { label: "Archive", href: "https://theaiclassroomhub.beehiiv.com" },
-              { label: "Contact", href: "mailto:hello@theaiclassroomhub.com" },
+              { label: "Privacy", href: "/privacy" },
+              { label: "Archive", href: "/archive" },
+              { label: "Contact", href: "mailto:ryan@aiclassroomhub.com" },
             ].map((item, i, arr) => (
               <span key={item.label} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                 <a
                   href={item.href}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   style={linkStyle}
                   onMouseEnter={handleLinkEnter}
                   onMouseLeave={handleLinkLeave}
@@ -102,6 +106,7 @@ export default function Footer() {
               </span>
             ))}
           </div>
+
         </div>
       </div>
     </footer>

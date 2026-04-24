@@ -44,7 +44,19 @@ const h2Style: React.CSSProperties = {
   marginBottom: "8px",
 };
 
-/* ─── Email form component (mirrors /coach form exactly) ─────────────── */
+/* ─── Accent slash helper ────────────────────────────────────────────── */
+function Slash() {
+  return (
+    <span
+      aria-hidden="true"
+      style={{ color: T.accent }}
+    >
+      /
+    </span>
+  );
+}
+
+/* ─── Email form component ───────────────────────────────────────────── */
 function SubscribeForm({ id }: { id: "hero" | "final" }) {
   const [email, setEmail]       = useState("");
   const [status, setStatus]     = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -72,7 +84,7 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
       setStatus("success");
     } catch {
       setStatus("error");
-      setErrorMsg("Something went wrong. Try again, or email hello@theaiclassroomhub.com and I'll send it manually.");
+      setErrorMsg("Something went wrong. Try again, or email ryan@aiclassroomhub.com and I'll add you manually.");
     }
   }
 
@@ -83,7 +95,7 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
           Check your inbox.
         </p>
         <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.55, color: T.ink, marginBottom: "8px" }}>
-          You're on the list. The next Sunday issue of AI Classroom Hub lands this weekend.
+          Office Hours <Slash />AI is on its way. First issue lands this Sunday.
         </p>
         <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.55, color: T.ink, marginBottom: "8px" }}>
           Pull up a chair.
@@ -97,6 +109,7 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
+      {/* Form label — the exact phrase requested */}
       <label
         htmlFor={`${id}-email`}
         style={{
@@ -108,7 +121,7 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
           marginBottom: "10px",
         }}
       >
-        Get the free weekly newsletter.
+        Office Hours <Slash />AI — Free Sunday Publication.
       </label>
 
       <div
@@ -194,7 +207,7 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
   );
 }
 
-/* ─── Fade-in hook (mirrors /coach IntersectionObserver) ─────────────── */
+/* ─── Fade-in hook ───────────────────────────────────────────────────── */
 function useFadeIn() {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -223,14 +236,10 @@ function useFadeIn() {
 }
 
 /* ─── FAQ item ───────────────────────────────────────────────────────── */
-function FaqItem({ q, a }: { q: string; a: string }) {
+function FaqItem({ q, a }: { q: string; a: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div
-      style={{
-        borderBottom: `1px solid ${T.border}`,
-      }}
-    >
+    <div style={{ borderBottom: `1px solid ${T.border}` }}>
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
@@ -293,12 +302,12 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 /* ─── Page ───────────────────────────────────────────────────────────── */
 export default function Home() {
-  const patternRef    = useFadeIn() as React.RefObject<HTMLElement>;
-  const insideRef     = useFadeIn() as React.RefObject<HTMLElement>;
-  const whoRef        = useFadeIn() as React.RefObject<HTMLElement>;
-  const proofRef      = useFadeIn() as React.RefObject<HTMLElement>;
-  const faqRef        = useFadeIn() as React.RefObject<HTMLElement>;
-  const finalCtaRef   = useFadeIn() as React.RefObject<HTMLElement>;
+  const patternRef  = useFadeIn() as React.RefObject<HTMLElement>;
+  const insideRef   = useFadeIn() as React.RefObject<HTMLElement>;
+  const whoRef      = useFadeIn() as React.RefObject<HTMLElement>;
+  const proofRef    = useFadeIn() as React.RefObject<HTMLElement>;
+  const faqRef      = useFadeIn() as React.RefObject<HTMLElement>;
+  const finalCtaRef = useFadeIn() as React.RefObject<HTMLElement>;
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: T.bg }}>
@@ -309,10 +318,7 @@ export default function Home() {
         {/* ══════════════════════════════════════════
             HERO
         ══════════════════════════════════════════ */}
-        <section
-          aria-labelledby="hero-heading"
-          style={{ paddingTop: "72px", paddingBottom: "72px" }}
-        >
+        <section aria-labelledby="hero-heading" style={{ paddingTop: "72px", paddingBottom: "72px" }}>
           <div style={container}>
             <h1
               id="hero-heading"
@@ -325,7 +331,7 @@ export default function Home() {
                 marginBottom: "28px",
               }}
             >
-              The practical AI resource for K–12 teachers.
+              The Sunday read for teachers who teach with AI.
             </h1>
 
             <p
@@ -338,7 +344,7 @@ export default function Home() {
                 maxWidth: "600px",
               }}
             >
-              Real tools, real teacher stories, and actionable tips — delivered every week. No jargon. No hype. Just what works on Monday.
+              One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday.
             </p>
 
             <p
@@ -350,7 +356,7 @@ export default function Home() {
                 marginBottom: "36px",
               }}
             >
-              Written by Ryan David. 20+ years in the classroom.
+              Written by Ryan David. 20+ years in K-12 classrooms.
             </p>
 
             <SubscribeForm id="hero" />
@@ -363,7 +369,7 @@ export default function Home() {
             PATTERN INTERRUPT
         ══════════════════════════════════════════ */}
         <section
-          ref={patternRef as React.RefObject<HTMLElement>}
+          ref={patternRef}
           aria-labelledby="pattern-heading"
           style={section}
         >
@@ -412,11 +418,7 @@ export default function Home() {
 
             <blockquote
               aria-label="Key insight"
-              style={{
-                position: "relative",
-                margin: "40px 0",
-                paddingLeft: "28px",
-              }}
+              style={{ position: "relative", margin: "40px 0", paddingLeft: "28px" }}
             >
               <span
                 aria-hidden="true"
@@ -441,7 +443,7 @@ export default function Home() {
                   color: T.ink,
                 }}
               >
-                AI Classroom Hub is different. One practical tip, one tool, one real teacher story — every Sunday. Classroom-ready by Monday.
+                Office Hours <Slash />AI is different. One practical tip, one tool, one real teacher story — every Sunday. Classroom-ready by Monday.
               </p>
             </blockquote>
           </div>
@@ -453,7 +455,7 @@ export default function Home() {
             WHAT'S IN EVERY ISSUE
         ══════════════════════════════════════════ */}
         <section
-          ref={insideRef as React.RefObject<HTMLElement>}
+          ref={insideRef}
           aria-labelledby="inside-heading"
           style={section}
         >
@@ -463,7 +465,7 @@ export default function Home() {
             </h2>
 
             <ul
-              aria-label="Contents of every AI Classroom Hub issue"
+              aria-label="Contents of every Office Hours /AI issue"
               style={{ listStyle: "none", padding: 0, margin: "8px 0 0 0" }}
             >
               {[
@@ -487,7 +489,7 @@ export default function Home() {
                   label: "In the News",
                   desc: "The AI education developments, research findings, and tool launches that actually matter for your classroom.",
                 },
-              ].map((item, i, arr) => (
+              ].map((item, i) => (
                 <li
                   key={item.label}
                   style={{
@@ -511,14 +513,7 @@ export default function Home() {
                     </span>
                     {item.label}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: T.sans,
-                      fontSize: "0.9375rem",
-                      color: T.muted,
-                      lineHeight: 1.55,
-                    }}
-                  >
+                  <p style={{ fontFamily: T.sans, fontSize: "0.9375rem", color: T.muted, lineHeight: 1.55 }}>
                     {item.desc}
                   </p>
                 </li>
@@ -533,7 +528,7 @@ export default function Home() {
             WHO MADE THIS
         ══════════════════════════════════════════ */}
         <section
-          ref={whoRef as React.RefObject<HTMLElement>}
+          ref={whoRef}
           aria-labelledby="who-heading"
           style={section}
         >
@@ -550,7 +545,7 @@ export default function Home() {
                 marginTop: "8px",
               }}
             >
-              Ryan David has spent 20+ years in K-12 classrooms and currently serves as Director of Operations and Director of Technology for a K-8 school. He writes AI Classroom Hub, a weekly Sunday read for teachers who teach with AI. He is not selling a course. He is not selling a certification. He is writing to the teachers he used to be.
+              Ryan David has spent 20+ years in K-12 classrooms and currently serves as Director of Operations and Director of Technology for a K-8 school. He writes Office Hours <Slash />AI, a free Sunday publication for teachers who teach with AI. He is not selling a course. He is not selling a certification. He is writing to the teachers he used to be.
             </p>
           </div>
         </section>
@@ -561,13 +556,13 @@ export default function Home() {
             SOCIAL PROOF
         ══════════════════════════════════════════ */}
         <section
-          ref={proofRef as React.RefObject<HTMLElement>}
+          ref={proofRef}
           aria-labelledby="proof-heading"
           style={section}
         >
           <div style={container}>
             <h2 id="proof-heading" style={h2Style}>
-              What educators are saying.
+              What readers are saying.
             </h2>
 
             <div style={{ marginTop: "8px" }}>
@@ -609,15 +604,7 @@ export default function Home() {
                   >
                     /
                   </span>
-                  <p
-                    style={{
-                      fontFamily: T.sans,
-                      fontSize: "1.0625rem",
-                      lineHeight: 1.55,
-                      color: T.ink,
-                      marginBottom: "10px",
-                    }}
-                  >
+                  <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.55, color: T.ink, marginBottom: "10px" }}>
                     "{t.quote}"
                   </p>
                   <cite
@@ -643,7 +630,7 @@ export default function Home() {
             FAQ
         ══════════════════════════════════════════ */}
         <section
-          ref={faqRef as React.RefObject<HTMLElement>}
+          ref={faqRef}
           aria-labelledby="faq-heading"
           style={section}
         >
@@ -656,7 +643,7 @@ export default function Home() {
               {[
                 {
                   q: "Do I need to know anything about AI to get value from this?",
-                  a: "No. Every issue is written for classroom teachers, not tech people. If you can send an email, you can use the tips in AI Classroom Hub.",
+                  a: <>No. Every issue of Office Hours <Slash />AI is written for classroom teachers, not tech people. If you can send an email, you can use the tips inside.</>,
                 },
                 {
                   q: "What grade levels is this for?",
@@ -667,12 +654,12 @@ export default function Home() {
                   a: "ChatGPT, Claude, Gemini, Copilot, Brisk Teaching, NotebookLM, Diffit, and many more. We focus on free or freemium tools that work without a district budget.",
                 },
                 {
-                  q: "How is this different from other AI newsletters?",
+                  q: "How is Office Hours /AI different from other AI newsletters?",
                   a: "It's written by a teacher who is still in schools — not a consultant or content marketer. Every tip is tested in real classrooms before it lands in your inbox.",
                 },
                 {
                   q: "Is any of this going to get me in trouble with my district's AI policy?",
-                  a: "The newsletter covers tools and strategies, not student data. Follow your district's AI guidance the same way you would with any other tool — review outputs, use judgment, and keep student information private.",
+                  a: "Office Hours /AI covers tools and strategies, not student data. Follow your district's AI guidance the same way you would with any other tool — review outputs, use judgment, and keep student information private.",
                 },
               ].map((item) => (
                 <FaqItem key={item.q} q={item.q} a={item.a} />
@@ -687,7 +674,7 @@ export default function Home() {
             FINAL CTA
         ══════════════════════════════════════════ */}
         <section
-          ref={finalCtaRef as React.RefObject<HTMLElement>}
+          ref={finalCtaRef}
           aria-labelledby="final-cta-heading"
           style={section}
         >
@@ -706,10 +693,10 @@ export default function Home() {
               }}
             >
               <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.6, color: T.ink }}>
-                The practical AI resource for K–12 teachers. Real tools, real stories, actionable tips — every Sunday.
+                The Sunday read for teachers who teach with AI. One practical tip, one tool, one real classroom story — every week.
               </p>
               <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.6, color: T.ink }}>
-                Free. No jargon. No hype. Built for the teachers who are already in the classroom doing the work.
+                Office Hours <Slash />AI is free. No jargon. No hype. Built for the teachers who are already in the classroom doing the work.
               </p>
             </div>
 

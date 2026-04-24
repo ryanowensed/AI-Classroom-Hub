@@ -3,9 +3,8 @@ import { Link } from "wouter";
 /**
  * Header — matches /coach design exactly:
  *   - bg #f8f8f7, border-bottom #e5e3dd
- *   - DM Serif Display wordmark (left)
- *   - Single muted nav link (right): "Subscribe →"
- *   - No hamburger, no nav links, no buttons
+ *   - DM Serif Display wordmark "Office Hours /AI" (left) — slash in accent blue
+ *   - Single muted nav link (right): "Read the Sunday issue →"
  */
 export default function Header() {
   return (
@@ -34,10 +33,10 @@ export default function Header() {
           paddingBottom: "24px",
         }}
       >
-        {/* Wordmark */}
+        {/* Wordmark — "Office Hours /AI" with accent slash */}
         <Link href="/">
           <a
-            aria-label="AI Classroom Hub — home"
+            aria-label="Office Hours /AI — home"
             style={{
               fontFamily: "'DM Serif Display', Georgia, serif",
               fontSize: "1.125rem",
@@ -47,15 +46,26 @@ export default function Header() {
               cursor: "pointer",
             }}
           >
-            AI Classroom Hub
+            Office Hours{" "}
+            <span
+              aria-hidden="true"
+              style={{
+                color: "#0081f2",
+                fontSize: "1.25em",
+                lineHeight: 1,
+                display: "inline-block",
+                transform: "translateY(0.02em)",
+              }}
+            >
+              /
+            </span>
+            AI
           </a>
         </Link>
 
         {/* Single nav link */}
         <a
-          href="https://theaiclassroomhub.beehiiv.com/subscribe"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/archive"
           style={{
             fontFamily: "'DM Sans', system-ui, sans-serif",
             fontSize: "0.875rem",
