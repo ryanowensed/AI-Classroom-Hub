@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Menu, X, Search } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -20,94 +19,150 @@ export default function Header() {
   const isActive = (href: string) => location === href;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <nav className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-8">
+    <header
+      style={{
+        borderBottom: "1px solid #e5e3dd",
+        backgroundColor: "#f8f8f7",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+      }}
+    >
+      {/* ── Primary nav bar: wordmark + subscribe link ── */}
+      <div className="container">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingTop: "20px",
+            paddingBottom: "20px",
+          }}
+        >
+          {/* Wordmark */}
           <Link href="/">
-            <div className="flex items-center gap-2 text-xl font-bold text-primary hover:opacity-80 transition-opacity cursor-pointer">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <span className="text-lg font-bold">AI</span>
-              </div>
-              <span className="hidden sm:inline">AI Classroom Hub</span>
-            </div>
+            <span
+              style={{
+                fontFamily: "'DM Serif Display', Georgia, serif",
+                fontSize: "1.125rem",
+                color: "#34322d",
+                textDecoration: "none",
+                letterSpacing: "-0.01em",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              AI Classroom Hub
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:gap-6">
-            {navigation.map((item) => (
-              <Link key={item.name} href={item.href}>
-                <span
-                  className={`text-sm font-medium transition-colors hover:text-primary cursor-pointer ${
-                    isActive(item.href)
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {item.name}
-                </span>
-              </Link>
-            ))}
+          {/* Desktop: subscribe link */}
+          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+            <div className="hidden lg:flex" style={{ gap: "1.5rem", alignItems: "center" }}>
+              {navigation.map((item) => (
+                <Link key={item.name} href={item.href}>
+                  <span
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.8125rem",
+                      fontWeight: 500,
+                      color: isActive(item.href) ? "#0081f2" : "#6b6862",
+                      textDecoration: "none",
+                      cursor: "pointer",
+                      transition: "color 0.15s ease",
+                      whiteSpace: "nowrap",
+                    }}
+                    onMouseEnter={(e) => { if (!isActive(item.href)) (e.target as HTMLElement).style.color = "#34322d"; }}
+                    onMouseLeave={(e) => { if (!isActive(item.href)) (e.target as HTMLElement).style.color = "#6b6862"; }}
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+            <a
+              href="https://theaiclassroomhub.beehiiv.com/subscribe"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                color: "#6b6862",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#34322d"; }}
+              onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#6b6862"; }}
+            >
+              Subscribe →
+            </a>
+
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#6b6862",
+                cursor: "pointer",
+                padding: "4px",
+                display: "flex",
+                alignItems: "center",
+              }}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
-
-        {/* Desktop Actions */}
-        <div className="hidden lg:flex lg:items-center lg:gap-4">
-          <Button variant="ghost" size="icon">
-            <Search className="h-5 w-5" />
-          </Button>
-          <a
-            href="https://theaiclassroomhub.beehiiv.com/subscribe"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="outline" className="text-primary border-primary/30 hover:bg-primary/10 hover:border-primary">
-              Subscribe
-            </Button>
-          </a>
-          <Link href="/getting-started">
-            <Button variant="default">Get Started</Button>
-          </Link>
-        </div>
-
-        {/* Mobile menu button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </Button>
-      </nav>
+      </div>
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t">
-          <div className="container space-y-1 py-4">
+        <div
+          style={{
+            borderTop: "1px solid #e5e3dd",
+            backgroundColor: "#f8f8f7",
+          }}
+        >
+          <div
+            className="container"
+            style={{ paddingTop: "1rem", paddingBottom: "1.5rem" }}
+          >
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
                 <div
-                  className={`block px-3 py-2 text-base font-medium rounded-md transition-colors cursor-pointer ${
-                    isActive(item.href)
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
+                  style={{
+                    display: "block",
+                    padding: "10px 0",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "0.9375rem",
+                    fontWeight: 500,
+                    color: isActive(item.href) ? "#0081f2" : "#6b6862",
+                    borderBottom: "1px solid #e5e3dd",
+                    cursor: "pointer",
+                  }}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
                 </div>
               </Link>
             ))}
-            <div className="pt-4 border-t mt-4">
-              <Link href="/getting-started">
-                <Button className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  Get Started
-                </Button>
-              </Link>
+            <div style={{ paddingTop: "1rem" }}>
+              <a
+                href="https://theaiclassroomhub.beehiiv.com/subscribe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-coach"
+                style={{ width: "100%", justifyContent: "center" }}
+              >
+                Subscribe to the newsletter
+              </a>
             </div>
           </div>
         </div>
@@ -115,4 +170,3 @@ export default function Header() {
     </header>
   );
 }
-

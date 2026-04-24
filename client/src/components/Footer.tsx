@@ -1,100 +1,112 @@
 import { Link } from "wouter";
-import { ArrowRight } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-muted/30">
-      <div className="container py-12">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
-
-          {/* Brand */}
-          <div className="space-y-3 md:col-span-1">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <span className="text-xs font-bold">AI</span>
-              </div>
-              <span className="font-semibold text-foreground">AI Classroom Hub</span>
-            </div>
-            <p className="text-sm text-muted-foreground font-light leading-relaxed">
-              Practical AI resources for K–12 and higher ed teachers. No jargon. No hype.
-            </p>
+    <footer
+      style={{
+        borderTop: "1px solid #e5e3dd",
+        paddingTop: "40px",
+        paddingBottom: "48px",
+        backgroundColor: "#f8f8f7",
+      }}
+    >
+      <div className="container">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          {/* Brand line */}
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.8125rem",
+              color: "#6b6862",
+              lineHeight: 1.5,
+            }}
+          >
+            &copy; {currentYear} AI Classroom Hub. Published by{" "}
             <a
-              href="https://theaiclassroomhub.beehiiv.com/subscribe"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+              href="https://theaiclassroomhub.com"
+              style={{ color: "#6b6862", textDecoration: "underline", textUnderlineOffset: "3px" }}
             >
-              Subscribe to the newsletter <ArrowRight className="h-3 w-3" />
+              theaiclassroomhub.com
             </a>
-          </div>
+            . Built by a teacher, for teachers.
+          </p>
 
-          {/* Explore */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-foreground">Explore</h4>
-            <ul className="space-y-2 text-sm">
-              {[
-                { label: "Try This Today", href: "/try-this-today" },
-                { label: "Case Studies", href: "/case-studies" },
-                { label: "Tool Directory", href: "/tools" },
-                { label: "In the News", href: "/news" },
-              ].map((item) => (
-                <li key={item.label}>
+          {/* Privacy line */}
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "0.8125rem",
+              color: "#6b6862",
+              lineHeight: 1.5,
+            }}
+          >
+            Your email is only used to send you the AI Classroom Hub newsletter. Unsubscribe any time, one click.
+          </p>
+
+          {/* Link row */}
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            {[
+              { label: "Try This Today", href: "/try-this-today", internal: true },
+              { label: "Tool Directory", href: "/tools", internal: true },
+              { label: "Case Studies", href: "/case-studies", internal: true },
+              { label: "Prompt Library", href: "/course", internal: true },
+              { label: "Advertise", href: "/advertise", internal: true },
+              { label: "Contact", href: "mailto:hello@theaiclassroomhub.com", internal: false },
+              { label: "Privacy", href: "#", internal: false },
+            ].map((item, i, arr) => (
+              <span key={item.label} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                {item.internal ? (
                   <Link href={item.href}>
-                    <span className="text-muted-foreground hover:text-primary transition-colors cursor-pointer">{item.label}</span>
+                    <span
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: "0.8125rem",
+                        color: "#6b6862",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                      }}
+                      onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#34322d"; (e.target as HTMLElement).style.textDecoration = "underline"; }}
+                      onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#6b6862"; (e.target as HTMLElement).style.textDecoration = "none"; }}
+                    >
+                      {item.label}
+                    </span>
                   </Link>
-                </li>
-              ))}
-            </ul>
+                ) : (
+                  <a
+                    href={item.href}
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: "0.8125rem",
+                      color: "#6b6862",
+                      textDecoration: "none",
+                    }}
+                    onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "#34322d"; (e.target as HTMLElement).style.textDecoration = "underline"; }}
+                    onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "#6b6862"; (e.target as HTMLElement).style.textDecoration = "none"; }}
+                  >
+                    {item.label}
+                  </a>
+                )}
+                {i < arr.length - 1 && (
+                  <span style={{ color: "#e5e3dd", fontSize: "0.8125rem" }}>&middot;</span>
+                )}
+              </span>
+            ))}
           </div>
-
-          {/* Resources */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-foreground">Resources</h4>
-            <ul className="space-y-2 text-sm">
-              {[
-                { label: "Getting Started", href: "/getting-started" },
-                { label: "Prompt Library", href: "/course" },
-                { label: "All Resources", href: "/resources" },
-                { label: "🇬🇧 UK Educators", href: "/uk" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <Link href={item.href}>
-                    <span className="text-muted-foreground hover:text-primary transition-colors cursor-pointer">{item.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Work with us */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-foreground">Work With Us</h4>
-            <ul className="space-y-2 text-sm">
-              {[
-                { label: "Advertise / Sponsor", href: "/advertise" },
-                { label: "Contact", href: "mailto:hello@theaiclassroomhub.com" },
-                { label: "Privacy Policy", href: "#" },
-                { label: "Terms of Service", href: "#" },
-              ].map((item) => (
-                <li key={item.label}>
-                  {item.href.startsWith("mailto") || item.href === "#" ? (
-                    <a href={item.href} className="text-muted-foreground hover:text-primary transition-colors">{item.label}</a>
-                  ) : (
-                    <Link href={item.href}>
-                      <span className="text-muted-foreground hover:text-primary transition-colors cursor-pointer">{item.label}</span>
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-10 border-t pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>© {currentYear} AI Classroom Hub. All rights reserved.</p>
-          <p className="font-light">Helping educators navigate AI — one classroom at a time.</p>
         </div>
       </div>
     </footer>
