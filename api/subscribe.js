@@ -22,6 +22,7 @@ export default async function handler(req, res) {
   const {
     email,
     utm_source = 'website',
+    utm_medium = 'organic',
     reactivate_existing = true,
   } = req.body || {};
 
@@ -50,6 +51,8 @@ export default async function handler(req, res) {
           email: email.trim(),
           reactivate_existing,
           utm_source,
+          utm_medium,
+          sending_platform: 'site',
         }),
       }
     );
