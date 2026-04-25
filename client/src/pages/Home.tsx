@@ -62,7 +62,6 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
   const [status, setStatus]     = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const inputRef                = useRef<HTMLInputElement>(null);
-  const BEEHIIV_URL             = "https://theaiclassroomhub.beehiiv.com";
 
   const isValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
@@ -83,10 +82,6 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
       });
       if (!res.ok) throw new Error("Server error: " + res.status);
       setStatus("success");
-      // Redirect to Beehiiv publication after a brief confirmation pause
-      setTimeout(() => {
-        window.location.href = BEEHIIV_URL;
-      }, 2000);
     } catch {
       setStatus("error");
       setErrorMsg("Something went wrong. Try again, or email ryan@aiclassroomhub.com and I'll add you manually.");
@@ -100,16 +95,10 @@ function SubscribeForm({ id }: { id: "hero" | "final" }) {
           You're in.
         </p>
         <p style={{ fontFamily: T.sans, fontSize: "1.0625rem", lineHeight: 1.55, color: T.ink, marginBottom: "8px" }}>
-          Taking you to Office Hours <Slash />AI now…
+          Office Hours <Slash />AI arrives this Sunday. Check your inbox for a confirmation.
         </p>
         <p style={{ fontFamily: T.sans, fontSize: "0.875rem", color: T.muted, marginTop: "12px" }}>
-          Not redirecting?{" "}
-          <a
-            href="https://theaiclassroomhub.beehiiv.com"
-            style={{ color: T.accent, textDecoration: "underline" }}
-          >
-            Click here.
-          </a>
+          Free every Sunday. Unsubscribe any time.
         </p>
       </div>
     );
