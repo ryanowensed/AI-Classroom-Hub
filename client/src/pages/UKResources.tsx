@@ -425,12 +425,10 @@ export default function UKResources() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href="https://theaiclassroomhub.beehiiv.com/subscribe"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/"
                 className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-medium text-sm px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors"
               >
-                Subscribe to the newsletter <ArrowRight className="h-4 w-4" />
+                Subscribe to Office Hours /AI <ArrowRight className="h-4 w-4" />
               </a>
               <a
                 href="https://forschools.ai"

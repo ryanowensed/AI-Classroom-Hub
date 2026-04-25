@@ -42,7 +42,7 @@ export default function Advertise() {
                 </div>
                 <div className="text-sm font-semibold text-foreground mb-1">📬 Subscriber Base</div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Active educators — real school emails, not casual browsers. Verified through Beehiiv's double opt-in.
+                  Active educators — real school emails, not casual browsers. Verified through double opt-in.
                 </p>
               </div>
 

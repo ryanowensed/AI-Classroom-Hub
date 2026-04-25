@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -120,16 +120,70 @@ const TESTIMONIALS = [
   },
 ];
 
-export default function FreePrompts() {
-  // Load Beehiiv embed script once on mount
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://subscribe-forms.beehiiv.com/embed.js"]')) {
-      const script = document.createElement("script");
-      script.src = "https://subscribe-forms.beehiiv.com/embed.js";
-      script.async = true;
-      document.head.appendChild(script);
+function FreePromptsSubscribeForm() {
+  const [email, setEmail]   = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errMsg, setErrMsg] = useState("");
+  const inputRef            = useRef<HTMLInputElement>(null);
+
+  const isValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrMsg("");
+    if (!isValid(email)) {
+      setErrMsg("Please enter a valid email address.");
+      inputRef.current?.focus();
+      return;
     }
-  }, []);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), utm_source: "free-prompts" }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+      setErrMsg("Something went wrong. Please try again.");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div className="text-center py-8">
+        <p className="text-2xl font-semibold text-foreground mb-2">You're in.</p>
+        <p className="text-muted-foreground">Office Hours /AI arrives this Sunday. Check your inbox for a confirmation.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <input
+        ref={inputRef}
+        type="email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        placeholder="your@school.edu"
+        required
+        className="flex-1 border border-border rounded-lg px-4 py-3 text-sm text-foreground bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+      />
+      <button
+        type="submit"
+        disabled={status === "sending"}
+        className="bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg text-sm hover:bg-primary/90 disabled:opacity-60 transition-colors whitespace-nowrap"
+      >
+        {status === "sending" ? "Sending…" : "Get the free PDF"}
+      </button>
+      {errMsg && <p className="text-sm text-destructive mt-2 w-full">{errMsg}</p>}
+    </form>
+  );
+}
+
+export default function FreePrompts() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -313,10 +367,9 @@ export default function FreePrompts() {
           </div>
         </section>
 
-        {/* ── Opt-in form (Beehiiv embed) ───────────────────────────────── */}
+        {/* ── Opt-in form ───────────────────────────────────────────────── */}
         <section id="get-the-pdf" className="py-20 bg-background">
           <div className="container max-w-3xl text-center">
-            {/* Icon */}
             <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Mail className="h-8 w-8 text-primary" />
             </div>
@@ -325,33 +378,14 @@ export default function FreePrompts() {
               Get your free copy
             </h2>
             <p className="text-muted-foreground mb-2 text-lg max-w-xl mx-auto">
-              Enter your email below. We'll send you the PDF link instantly — plus a free weekly tip every week.
+              Enter your email below. We'll send you the PDF link instantly — plus a free weekly tip every Sunday.
             </p>
             <p className="text-muted-foreground/60 text-sm mb-10">
               No spam, ever. Unsubscribe anytime.
             </p>
 
-            {/* Beehiiv embed form */}
-            <div className="rounded-2xl overflow-hidden border border-border">
-              <iframe
-                src="https://subscribe-forms.beehiiv.com/4ce10849-0bda-4649-85b9-5a8503ae0f0f"
-                className="beehiiv-embed"
-                data-test-id="beehiiv-embed"
-                frameBorder={0}
-                scrolling="no"
-                style={{
-                  width: "100%",
-                  height: "377px",
-                  margin: 0,
-                  borderRadius: 0,
-                  backgroundColor: "transparent",
-                  boxShadow: "none",
-                  maxWidth: "100%",
-                }}
-              />
-            </div>
+            <FreePromptsSubscribeForm />
 
-            {/* Trust signals below form */}
             <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2">
               {["Free forever", "No spam, ever", "Unsubscribe anytime", "Join educators in 12+ countries"].map((t) => (
                 <span key={t} className="flex items-center gap-1.5 text-xs text-muted-foreground">

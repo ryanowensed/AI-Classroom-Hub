@@ -1061,15 +1061,10 @@
     // FORM ENDPOINT CONFIGURATION
     // =============================================
     //
-    // Beehiiv format:
-    //   https://api.beehiiv.com/v2/publications/YOUR_PUB_ID/subscriptions
-    //   (POST with JSON body: { email: "...", reactivate_existing: true, utm_source: "landing-page" })
+    // Resend Audiences API via /api/subscribe serverless function
+    // POST with JSON body: { email: "...", utm_source: "coach-landing-page" }
     //
-    // ConvertKit format:
-    //   https://api.convertkit.com/v3/forms/YOUR_FORM_ID/subscribe
-    //   (POST with JSON body: { api_key: "YOUR_API_KEY", email: "..." })
-    //
-    // Replace the string below with your actual endpoint:
+    // Endpoint:
     const FORM_ENDPOINT = "/api/subscribe";
     const PDF_URL = "/coach/AI-Learning-Coach-3-Prompts.pdf";
 
