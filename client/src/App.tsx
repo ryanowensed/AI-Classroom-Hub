@@ -15,8 +15,9 @@ import PromptLibrary from "./pages/PromptLibrary";
 import ToolDirectory from "./pages/ToolDirectory";
 import Newsletter from "./pages/Newsletter";
 import About from "./pages/About";
-
+import PolicyTemplates from "./pages/PolicyTemplates";
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/tool-directory" component={ToolDirectory} />
       <Route path="/newsletter" component={Newsletter} />
       <Route path="/about" component={About} />
+      <Route path="/policy-templates" component={PolicyTemplates} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

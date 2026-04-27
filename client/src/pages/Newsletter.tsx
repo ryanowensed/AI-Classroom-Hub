@@ -4,8 +4,8 @@
 
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import { Check, ArrowRight, BookOpen, Wrench, Users, Newspaper } from "lucide-react";
-import { toast } from "sonner";
+import SubscribeForm from "@/components/SubscribeForm";
+import { Check, BookOpen, Wrench, Users, Newspaper } from "lucide-react";
 
 const issues = [
   {
@@ -42,15 +42,7 @@ const whatIsInside = [
 ];
 
 export default function Newsletter() {
-  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
-    toast.success("You're subscribed! Your first issue arrives Sunday morning.");
-  };
 
   return (
     <Layout>
@@ -78,22 +70,15 @@ export default function Newsletter() {
             </p>
 
             {!submitted ? (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  type="email"
+              <div className="max-w-md mx-auto">
+                <SubscribeForm
+                  audience="office-hours"
                   placeholder="your@school.edu"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="flex-1 px-4 py-3 rounded-lg text-sm bg-white text-gray-800 placeholder-gray-400 border-0 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  buttonText="Subscribe Free"
+                  inputClassName="bg-white text-gray-800 placeholder-gray-400 border-0 focus:ring-white/50 py-3"
+                  buttonClassName="bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white whitespace-nowrap"
                 />
-                <button
-                  type="submit"
-                  className="flex items-center justify-center gap-2 bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors whitespace-nowrap"
-                >
-                  Subscribe Free <ArrowRight size={14} />
-                </button>
-              </form>
+              </div>
             ) : (
               <div className="flex items-center justify-center gap-3 bg-white/15 border border-white/25 rounded-xl px-6 py-4 max-w-md mx-auto">
                 <div className="w-8 h-8 rounded-full bg-green-400 flex items-center justify-center">

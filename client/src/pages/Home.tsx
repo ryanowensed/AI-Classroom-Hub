@@ -8,6 +8,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/Layout";
+import SubscribeForm from "@/components/SubscribeForm";
 import { ArrowRight, BookOpen, FileText, Wrench, Shield, TrendingUp, Users, Clock, AlertTriangle } from "lucide-react";
 
 const branches = [
@@ -403,18 +404,14 @@ export default function Home() {
             <p className="text-white/85 leading-relaxed mb-8">
               One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday. Written by Ryan David. Free every week.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-              <input
-                type="email"
+            <div className="max-w-md mx-auto">
+              <SubscribeForm
+                audience="office-hours"
                 placeholder="your@school.edu"
-                className="flex-1 px-4 py-3 rounded-lg text-sm bg-white/95 text-gray-800 placeholder-gray-400 border-0 focus:outline-none focus:ring-2 focus:ring-white/50"
+                buttonText="Subscribe Free"
+                inputClassName="bg-white/95 text-gray-800 placeholder-gray-400 border-0 py-3"
+                buttonClassName="bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white whitespace-nowrap"
               />
-              <Link
-                href="/newsletter"
-                className="bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors whitespace-nowrap"
-              >
-                Subscribe Free
-              </Link>
             </div>
             <p className="text-white/50 text-xs mt-3">Free every Sunday. Unsubscribe any time.</p>
           </div>
