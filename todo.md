@@ -30,7 +30,7 @@
 - [x] Subscribe forms on Homepage and Newsletter page wired to Resend
 - [x] "Office Hours /AI" audience (Resend ID: 1152c5e0)
 - [x] "General" audience (Resend ID: 804dc86a)
-- [x] Vitest tests for newsletter subscription endpoint (6 tests passing)
+- [x] Vitest tests for newsletter subscription endpoint (8 tests passing)
 
 ## About
 - [x] About page
@@ -38,7 +38,7 @@
 ## Infrastructure
 - [x] Full-stack upgrade (tRPC + Express + DB)
 - [x] TypeScript clean (0 errors)
-- [x] All tests passing (6/6)
+- [x] All tests passing (8/8)
 
 ## Pending / Future
 - [ ] Connect Policy Template "Download PDF" to actual PDF generation
@@ -50,10 +50,17 @@
 - [ ] Add Google Analytics / site analytics
 
 ## Policy Template Email Gate
-- [ ] Create "Policy Templates" audience in Resend
-- [ ] Add backend tRPC endpoint for policy template email capture
-- [ ] Build email gate modal component (name + email form)
-- [ ] Add blurred/truncated preview to locked templates
-- [ ] Session unlock: once opted in, all templates stay unlocked
-- [ ] Wire gate to new Resend "Policy Templates" audience
-- [ ] Vitest test for policy template subscribe endpoint
+- [x] Create "Policy Templates" audience in Resend (ID: 9c361cc8)
+- [x] Add backend tRPC endpoint for policy template email capture
+- [x] Build email gate modal component (name + email form)
+- [x] Add blurred/truncated preview to locked templates
+- [x] Session unlock: once opted in, all templates stay unlocked
+- [x] Wire gate to new Resend "Policy Templates" audience
+- [x] Vitest tests for subscribePolicyTemplates endpoint (2 tests)
+
+## Policy Template Confirmation Download
+- [x] Pass triggered template into email gate modal
+- [x] Show confirmation state after email submit with template title
+- [x] One-time download button in confirmation state for the specific template
+- [x] Copy-to-clipboard button in confirmation state
+- [x] "View all templates" link to dismiss modal and return to unlocked library

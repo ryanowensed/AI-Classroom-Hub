@@ -501,7 +501,7 @@ function PolicyCard({
 }: {
   policy: PolicyTemplate;
   unlocked: boolean;
-  onRequestUnlock: () => void;
+  onRequestUnlock: (policy: PolicyTemplate) => void;
 }) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -509,7 +509,7 @@ function PolicyCard({
 
   const handleCopy = () => {
     if (!unlocked) {
-      onRequestUnlock();
+      onRequestUnlock(policy);
       return;
     }
     navigator.clipboard.writeText(policy.template);
@@ -522,7 +522,7 @@ function PolicyCard({
 
   const handleDownload = () => {
     if (!unlocked) {
-      onRequestUnlock();
+      onRequestUnlock(policy);
       return;
     }
     const blob = new Blob([policy.template], { type: "text/plain" });
@@ -601,7 +601,7 @@ function PolicyCard({
           <button
             onClick={() => {
               if (!unlocked) {
-                onRequestUnlock();
+                onRequestUnlock(policy);
                 return;
               }
               setExpanded(!expanded);
@@ -633,7 +633,7 @@ function PolicyCard({
               </div>
               <div className="absolute inset-0 flex items-center justify-center bg-white/60 rounded-lg">
                 <button
-                  onClick={onRequestUnlock}
+                  onClick={() => onRequestUnlock(policy)}
                   className="flex items-center gap-2 bg-[#E8533A] text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-[#d44530] transition-colors shadow-sm"
                 >
                   <Lock className="w-3 h-3" />
@@ -693,23 +693,37 @@ function PolicyCard({
 // ─── Email Gate Modal ────────────────────────────────────────────────────────
 function EmailGateModal({
   open,
+  triggeredTemplate,
   onUnlocked,
   onClose,
 }: {
   open: boolean;
+  triggeredTemplate: PolicyTemplate | null;
   onUnlocked: () => void;
   onClose: () => void;
 }) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<{ firstName?: string; email?: string }>({});
+  const [confirmed, setConfirmed] = useState(false);
+  const [downloadUsed, setDownloadUsed] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Reset confirmation state when modal opens fresh
+  useEffect(() => {
+    if (open && !confirmed) {
+      setFirstName("");
+      setEmail("");
+      setErrors({});
+      setDownloadUsed(false);
+      setCopied(false);
+    }
+  }, [open]);
 
   const subscribeMutation = trpc.newsletter.subscribePolicyTemplates.useMutation({
     onSuccess: () => {
       sessionStorage.setItem(SESSION_KEY, "true");
-      toast.success("Templates unlocked!", {
-        description: "All 6 policy templates are now available to copy and download.",
-      });
+      setConfirmed(true);
       onUnlocked();
     },
     onError: (err) => {
@@ -737,79 +751,171 @@ function EmailGateModal({
     subscribeMutation.mutate({ firstName: firstName.trim(), email: email.trim() });
   };
 
+  const handleDownload = () => {
+    if (!triggeredTemplate) return;
+    const blob = new Blob([triggeredTemplate.template], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${triggeredTemplate.id}-template.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setDownloadUsed(true);
+    toast.success("Template downloaded!", {
+      description: "Open in any text editor or word processor to customize.",
+    });
+  };
+
+  const handleCopy = () => {
+    if (!triggeredTemplate) return;
+    navigator.clipboard.writeText(triggeredTemplate.template);
+    setCopied(true);
+    toast.success("Template copied!", {
+      description: "Paste into a document and customize the bracketed fields.",
+    });
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  const handleClose = () => {
+    setConfirmed(false);
+    setDownloadUsed(false);
+    setCopied(false);
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-10 h-10 rounded-lg bg-[#E8533A]/10 flex items-center justify-center">
-              <Mail className="w-5 h-5 text-[#E8533A]" />
+        {!confirmed ? (
+          /* ─── Step 1: Email capture form ─────────────────────────────────────────────────────────────── */
+          <>
+            <DialogHeader>
+              <div className="flex items-center gap-3 mb-1">
+                <div className="w-10 h-10 rounded-lg bg-[#E8533A]/10 flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-[#E8533A]" />
+                </div>
+                <DialogTitle className="font-display text-[#0F2A4A] text-xl">
+                  Access the Policy Library
+                </DialogTitle>
+              </div>
+              <DialogDescription className="text-gray-600 leading-relaxed">
+                {triggeredTemplate ? (
+                  <>
+                    You’re one step away from{" "}
+                    <span className="font-semibold text-[#0F2A4A]">{triggeredTemplate.title}</span>.
+                    {" "}Enter your name and email for free access to all 6 templates.
+                  </>
+                ) : (
+                  "Get free access to all 6 AI policy templates — ready to customize for your school or district."
+                )}
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                  First Name
+                </label>
+                <Input
+                  placeholder="e.g. Sarah"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className={errors.firstName ? "border-red-400" : ""}
+                  disabled={subscribeMutation.isPending}
+                />
+                {errors.firstName && (
+                  <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                  Work Email
+                </label>
+                <Input
+                  type="email"
+                  placeholder="you@school.edu"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={errors.email ? "border-red-400" : ""}
+                  disabled={subscribeMutation.isPending}
+                />
+                {errors.email && (
+                  <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+                )}
+              </div>
+
+              <p className="text-xs text-gray-400 leading-relaxed">
+                By unlocking, you’ll also receive occasional updates from the AI Classroom Hub when new templates are added. Unsubscribe anytime.
+              </p>
+
+              <div className="flex gap-3 pt-1">
+                <Button
+                  type="submit"
+                  disabled={subscribeMutation.isPending}
+                  className="flex-1 bg-[#E8533A] hover:bg-[#d44530] text-white font-semibold"
+                >
+                  {subscribeMutation.isPending ? "Unlocking…" : "Unlock Free Access →"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleClose}
+                  disabled={subscribeMutation.isPending}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </>
+        ) : (
+          /* ─── Step 2: Confirmation + one-time download ─────────────────────────────────────────────── */
+          <div className="text-center py-2">
+            {/* Success icon */}
+            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-7 h-7 text-green-600" />
             </div>
-            <DialogTitle className="font-display text-[#0F2A4A] text-xl">
-              Access the Policy Library
+
+            <DialogTitle className="font-display text-[#0F2A4A] text-xl mb-2">
+              You’re in, {firstName}!
             </DialogTitle>
-          </div>
-          <DialogDescription className="text-gray-600 leading-relaxed">
-            Get free access to all 6 AI policy templates — ready to customize for your school or district. Enter your name and email to unlock.
-          </DialogDescription>
-        </DialogHeader>
+            <p className="text-gray-600 text-sm leading-relaxed mb-1">
+              All 6 policy templates are now unlocked for this session.
+            </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
-          <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              First Name
-            </label>
-            <Input
-              placeholder="e.g. Sarah"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className={errors.firstName ? "border-red-400" : ""}
-              disabled={subscribeMutation.isPending}
-            />
-            {errors.firstName && (
-              <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>
+            {triggeredTemplate && (
+              <div className="mt-5 mb-5 text-left bg-gray-50 border border-gray-200 rounded-xl p-4">
+                <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Your requested template</p>
+                <p className="font-semibold text-[#0F2A4A] text-sm mb-3 leading-snug">{triggeredTemplate.title}</p>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleDownload}
+                    disabled={downloadUsed}
+                    className="flex-1 bg-[#2563EB] hover:bg-blue-700 text-white text-sm font-semibold"
+                  >
+                    <Download className="w-4 h-4 mr-1.5" />
+                    {downloadUsed ? "Downloaded ✓" : "Download .txt"}
+                  </Button>
+                  <Button
+                    onClick={handleCopy}
+                    variant="outline"
+                    className="flex-1 text-sm font-semibold"
+                  >
+                    <Copy className="w-4 h-4 mr-1.5" />
+                    {copied ? "Copied!" : "Copy Text"}
+                  </Button>
+                </div>
+              </div>
             )}
-          </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
-              Work Email
-            </label>
-            <Input
-              type="email"
-              placeholder="you@school.edu"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={errors.email ? "border-red-400" : ""}
-              disabled={subscribeMutation.isPending}
-            />
-            {errors.email && (
-              <p className="text-xs text-red-500 mt-1">{errors.email}</p>
-            )}
-          </div>
-
-          <p className="text-xs text-gray-400 leading-relaxed">
-            By unlocking, you'll also receive occasional updates from the AI Classroom Hub when new templates are added. Unsubscribe anytime.
-          </p>
-
-          <div className="flex gap-3 pt-1">
-            <Button
-              type="submit"
-              disabled={subscribeMutation.isPending}
-              className="flex-1 bg-[#E8533A] hover:bg-[#d44530] text-white font-semibold"
+            <button
+              onClick={handleClose}
+              className="text-sm text-[#2563EB] hover:text-blue-800 hover:underline transition-colors font-medium"
             >
-              {subscribeMutation.isPending ? "Unlocking…" : "Unlock Free Access →"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              disabled={subscribeMutation.isPending}
-            >
-              Cancel
-            </Button>
+              View all 6 templates →
+            </button>
           </div>
-        </form>
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -821,6 +927,7 @@ export default function PolicyTemplates() {
   const [activeAudience, setActiveAudience] = useState("All");
   const [unlocked, setUnlocked] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
+  const [triggeredTemplate, setTriggeredTemplate] = useState<PolicyTemplate | null>(null);
 
   // Check session storage on mount — if the visitor already unlocked this session, skip the gate
   useEffect(() => {
@@ -842,7 +949,12 @@ export default function PolicyTemplates() {
 
   const handleUnlocked = () => {
     setUnlocked(true);
+    // Keep gate open — it will show the confirmation state
+  };
+
+  const handleGateClose = () => {
     setGateOpen(false);
+    setTriggeredTemplate(null);
   };
 
   return (
@@ -995,7 +1107,10 @@ export default function PolicyTemplates() {
                 key={policy.id}
                 policy={policy}
                 unlocked={unlocked}
-                onRequestUnlock={() => setGateOpen(true)}
+                onRequestUnlock={(policy) => {
+                  setTriggeredTemplate(policy);
+                  setGateOpen(true);
+                }}
               />
             ))}
           </div>
@@ -1042,8 +1157,9 @@ export default function PolicyTemplates() {
       {/* Email Gate Modal */}
       <EmailGateModal
         open={gateOpen}
+        triggeredTemplate={triggeredTemplate}
         onUnlocked={handleUnlocked}
-        onClose={() => setGateOpen(false)}
+        onClose={handleGateClose}
       />
     </Layout>
   );
