@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
+import HubWordmark from "@/components/HubWordmark";
 import { Menu, X, ChevronDown, BookOpen, Layers, GraduationCap, Users, School, Brain, FileText, Wrench, Newspaper, Info, ArrowRight } from "lucide-react";
 
 const branches = [
@@ -103,11 +104,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0">
-              <img
-                src="/manus-storage/logo-horizontal_db516804.png"
-                alt="AI Classroom Hub"
-                className="h-9 w-auto"
-              />
+              <HubWordmark variant="light" size="sm" showTagline={false} />
             </Link>
 
             {/* Desktop Nav */}
@@ -273,11 +270,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
             {/* Brand */}
             <div className="md:col-span-1">
-              <img
-                src="/manus-storage/logo-horizontal_db516804.png"
-                alt="AI Classroom Hub"
-                className="h-10 w-auto mb-4 brightness-0 invert"
-              />
+              <HubWordmark variant="dark" size="md" showTagline={true} className="mb-4" />
               <p className="text-sm text-blue-200 leading-relaxed">
                 The trusted compass for AI in K-12 education. Practical tools, vetted resources, and honest guidance for teachers and administrators.
               </p>

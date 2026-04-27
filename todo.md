@@ -64,3 +64,12 @@
 - [x] One-time download button in confirmation state for the specific template
 - [x] Copy-to-clipboard button in confirmation state
 - [x] "View all templates" link to dismiss modal and return to unlocked library
+
+## Brand Refresh — Wordmark & Logo
+- [x] Remove "K-12 AI RESOURCE HUB — APRIL 2026" badge pill from homepage hero
+- [x] Add Playfair Display font to index.html
+- [x] Build HubWordmark CSS component matching Office Hours /AI design language
+- [x] Replace nav logo image with new CSS wordmark
+- [x] Replace footer logo image with white version of CSS wordmark
+- [x] Generate new ACH monogram favicon
+- [x] Update favicon in index.html (already /favicon.png)

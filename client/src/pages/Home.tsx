@@ -129,10 +129,6 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center py-16">
             {/* Left: Headline + Branch Cards */}
             <div>
-              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
-                <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-                <span className="text-xs font-semibold font-display text-white/90 tracking-wide uppercase">K-12 AI Resource Hub — April 2026</span>
-              </div>
 
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold font-display text-white leading-[1.1] mb-5">
                 The trusted compass for AI in K-12 education.
