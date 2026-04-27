@@ -115,3 +115,44 @@ describe("newsletter.subscribeGeneral", () => {
     expect(result.success).toBe(true);
   });
 });
+
+describe("newsletter.subscribePolicyTemplates", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", mockFetch);
+    process.env.RESEND_API_KEY = "re_test_key";
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("returns success and targets the Policy Templates audience", async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      text: async () => JSON.stringify({ id: "contact_789" }),
+    });
+
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.newsletter.subscribePolicyTemplates({
+      email: "principal@school.edu",
+      firstName: "Maria",
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.message).toContain("unlocked");
+    // Verify the correct Policy Templates audience ID was used in the fetch call
+    const fetchCall = mockFetch.mock.calls[0];
+    expect(fetchCall[0]).toContain("9c361cc8-4134-4fe8-b511-11b03b47ae6a");
+  });
+
+  it("throws when firstName is empty", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    await expect(
+      caller.newsletter.subscribePolicyTemplates({ email: "test@school.edu", firstName: "" })
+    ).rejects.toThrow();
+  });
+});

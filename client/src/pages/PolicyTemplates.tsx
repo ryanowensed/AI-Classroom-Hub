@@ -3,12 +3,43 @@
   Philosophy: Precision Navigation Hub
   Color: Coral (#E8533A) — policy/governance accent
   Purpose: Provide 2026-current, customizable AI policy templates for schools and districts
+  Email Gate: Visitors must provide name + email to unlock template access.
+              Email is captured into the Resend "Policy Templates" audience.
+              Unlock state is stored in sessionStorage so it persists across page navigation
+              within the same browser session.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { toast } from "sonner";
-import { Copy, Download, CheckCircle, AlertTriangle, Shield, BookOpen, Users, FileText, Scale, GraduationCap } from "lucide-react";
+import {
+  Copy,
+  Download,
+  CheckCircle,
+  AlertTriangle,
+  Shield,
+  BookOpen,
+  Users,
+  FileText,
+  Scale,
+  GraduationCap,
+  Lock,
+  Unlock,
+  Mail,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { trpc } from "@/lib/trpc";
+
+// ─── Session storage key ────────────────────────────────────────────────────
+const SESSION_KEY = "policy_templates_unlocked";
 
 interface PolicyTemplate {
   id: string;
@@ -29,7 +60,8 @@ const templates: PolicyTemplate[] = [
     category: "Acceptable Use",
     audience: "Students",
     urgency: "Critical",
-    description: "A complete, grade-differentiated AUP covering approved tools, academic integrity expectations, and consequences. Aligned with FERPA, COPPA, and 2026 state guidance.",
+    description:
+      "A complete, grade-differentiated AUP covering approved tools, academic integrity expectations, and consequences. Aligned with FERPA, COPPA, and 2026 state guidance.",
     lastUpdated: "April 2026",
     basedOn: "NYC DOE March 2026 AI Guidance + California AI Integration Framework Jan. 2026",
     template: `[SCHOOL/DISTRICT NAME] STUDENT AI ACCEPTABLE USE POLICY
@@ -122,7 +154,7 @@ How I used it: _______________________________________________
 What I changed or added from the AI output: ___________________
 I can explain and defend all content in this submission: ☐ Yes
 
-Student Signature: _________________________ Date: ___________`
+Student Signature: _________________________ Date: ___________`,
   },
   {
     id: "teacher-ai-use",
@@ -130,7 +162,8 @@ Student Signature: _________________________ Date: ___________`
     category: "Staff Guidelines",
     audience: "Teachers",
     urgency: "High",
-    description: "Clear guidance for teachers on approved AI uses, data privacy obligations, and professional responsibilities when using AI for lesson planning, assessment, and communication.",
+    description:
+      "Clear guidance for teachers on approved AI uses, data privacy obligations, and professional responsibilities when using AI for lesson planning, assessment, and communication.",
     lastUpdated: "April 2026",
     basedOn: "RAND 2026 Survey + CoSN AI District Leaders Action Summit May 2026",
     template: `[SCHOOL/DISTRICT NAME] TEACHER AI USE GUIDELINES
@@ -198,11 +231,11 @@ Teachers are expected to:
 SECTION 5: APPROVED TOOLS LIST (2026)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The following tools have been reviewed and approved for teacher use:
-[DISTRICT TO COMPLETE — Suggested starting point: MagicSchool AI, Diffit, Brisk Teaching, Khanmigo, Canva Magic Studio]
+[DISTRICT TECHNOLOGY DEPARTMENT to maintain and update this list quarterly]
 
-For the full approved vendor list, visit: [DISTRICT INTRANET LINK]
-To request a new tool review: [SUBMISSION LINK OR EMAIL]`
+Current approved tools include: [LIST TOOLS]
+Last updated: [DATE]
+Contact [NAME/EMAIL] to request a new tool review.`,
   },
   {
     id: "district-governance",
@@ -210,446 +243,236 @@ To request a new tool review: [SUBMISSION LINK OR EMAIL]`
     category: "Governance",
     audience: "Administrators",
     urgency: "Critical",
-    description: "A complete governance framework for district-level AI strategy, based on the CoSN 2026 adaptive governance model. Covers oversight structure, tool approval process, and policy review cycle.",
+    description:
+      "A board-ready governance framework covering AI oversight structure, procurement criteria, equity considerations, and annual review cycles. Based on CoSN 2026 Adaptive Governance model.",
     lastUpdated: "April 2026",
-    basedOn: "CoSN AI District Leaders Action Summit 2026 + NYC DOE 30-Page AI Guidance March 2026",
+    basedOn: "CoSN AI District Leaders Action Summit 2026 + Stanford HAI K-12 AI Policy Brief",
     template: `[DISTRICT NAME] ARTIFICIAL INTELLIGENCE GOVERNANCE FRAMEWORK
-Adopted: [DATE] | Version: 1.0 | Next Review: [DATE + 1 YEAR]
+Adopted: [DATE] | Annual Review: [MONTH] each year
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 1: GOVERNANCE PHILOSOPHY
+SECTION 1: GOVERNANCE STRUCTURE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[District Name] adopts an adaptive governance model for artificial intelligence — one that establishes clear principles and oversight structures while remaining flexible enough to respond to a technology that evolves monthly, not annually. Effective AI governance is a leadership responsibility, not solely an IT function.
+AI Oversight Committee
+• Composition: Superintendent (chair), CTO/Director of Technology, Curriculum Director, Principal representative, Teacher representative, Parent representative, Student representative (grades 9–12 districts)
+• Meeting frequency: Quarterly, with emergency sessions as needed
+• Responsibilities: Tool approval, policy review, incident response, annual reporting to the Board
 
-Core Governance Principles:
-1. Student safety and privacy are non-negotiable and supersede all efficiency considerations.
-2. AI adoption decisions start with clearly defined educational problems, not available products.
-3. Equity is a primary lens: AI tools must not widen gaps between well-resourced and under-resourced students.
-4. Transparency: staff, students, and families have the right to know when AI is used in educational decisions.
-5. Human judgment remains authoritative for all high-stakes decisions affecting students.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 2: AI OVERSIGHT COMMITTEE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Composition (recommended):
-• Superintendent or designee (Chair)
-• Chief Technology Officer / Director of Technology
-• Curriculum and Instruction Director
-• School Principals (rotating, 1–2 per year)
-• Special Education Director
-• School Counselor or Student Services representative
-• Parent/Guardian representative (appointed annually)
-• Student representative (Grades 9–12 districts)
-• Legal counsel (advisory, as needed)
-
-Meeting Frequency: Quarterly minimum; monthly during active policy development or major tool rollouts.
-
-Responsibilities:
-• Review and approve all AI tool additions to the district approved list
-• Monitor state and federal AI legislation and update policies accordingly
-• Review annual AI use data and equity impact reports
-• Approve budget allocations for AI tools and professional development
-• Communicate AI strategy updates to the Board of Education
+AI Coordinator Role
+• Designated staff member responsible for day-to-day AI implementation oversight
+• Reports to: [TITLE]
+• Responsibilities: Vendor DPA management, staff PD coordination, incident logging, quarterly committee reporting
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 3: AI TOOL APPROVAL PROCESS
+SECTION 2: AI TOOL PROCUREMENT CRITERIA
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Stage 1 — Request (Any staff member):
-Submit AI Tool Review Request form including: tool name, URL, proposed use case, grade levels, and cost.
+All AI tools must meet the following criteria before district approval:
 
-Stage 2 — Privacy Review (Technology Department, 5–10 business days):
-• Verify FERPA/COPPA compliance
-• Review vendor privacy policy and Terms of Service
-• Confirm or request Data Processing Agreement (DPA)
-• Check Common Sense Privacy rating (target: 75+)
+REQUIRED (all tools):
+☐ Signed Data Processing Agreement (DPA) with the district
+☐ FERPA compliance documentation
+☐ Clear data retention and deletion policy
+☐ Transparency about training data sources
+☐ Opt-out of student data use for model training
 
-Stage 3 — Instructional Review (Curriculum & Instruction, 5–10 business days):
-• Evaluate alignment with curriculum standards
-• Assess age-appropriateness and accessibility
-• Review bias and equity considerations
-• Pilot feasibility assessment
+REQUIRED (tools used with students under 13):
+☐ COPPA compliance documentation
+☐ Verifiable age-gating mechanism
+☐ No behavioral advertising
 
-Stage 4 — AI Oversight Committee Approval:
-• Committee votes on approval at next scheduled meeting
-• Approved tools added to district list with use parameters
-• Staff notified via [COMMUNICATION CHANNEL]
-
-Stage 5 — Annual Review:
-All approved tools reviewed annually for continued compliance, updated privacy policies, and ongoing educational value.
+PREFERRED:
+☐ SOC 2 Type II certification
+☐ Accessibility compliance (WCAG 2.1 AA)
+☐ Evidence of efficacy (peer-reviewed or independent research)
+☐ Transparent bias testing and mitigation documentation
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 4: PROFESSIONAL DEVELOPMENT REQUIREMENTS
+SECTION 3: EQUITY COMMITMENTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-All instructional staff: [X] hours of AI professional development per school year
-New staff: AI orientation module completed within first 30 days
-Administrators: [X] hours including governance and leadership modules
-Annual all-staff: AI policy update session (minimum 1 hour)
-
-PD must address: responsible use, data privacy, academic integrity, grade-appropriate tool use, and equity considerations.
+[District Name] commits to:
+• Ensuring AI tools do not create or amplify disparities in educational access or outcomes
+• Conducting annual equity audits of AI tool usage patterns across demographic groups
+• Providing device and connectivity access to all students before deploying AI-dependent instruction
+• Monitoring AI-generated content for bias, stereotyping, or culturally insensitive material
+• Ensuring AI professional development is accessible to all staff, including part-time and paraprofessional staff
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 5: POLICY REVIEW CYCLE
+SECTION 4: ANNUAL REVIEW CYCLE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Given the pace of AI development, this framework is reviewed annually at minimum. The AI Oversight Committee may initiate an emergency review in response to:
-• Significant changes in state or federal law
-• A major AI tool privacy breach or safety incident
-• Substantial changes in the AI landscape that affect student safety or equity
-• Board of Education direction
-
-All policy revisions are communicated to staff, students, and families within 30 days of adoption.`
+Each [MONTH], the AI Oversight Committee will:
+1. Review all approved tools against updated procurement criteria
+2. Audit incident log and identify systemic issues
+3. Survey staff and students on AI tool effectiveness and concerns
+4. Update the Approved Tools List
+5. Present findings and recommendations to the Board of Education
+6. Publish a public-facing AI Annual Report on the district website`,
   },
   {
     id: "academic-integrity",
     title: "AI Academic Integrity Policy",
     category: "Academic Integrity",
-    audience: "All Staff",
+    audience: "Students",
     urgency: "Critical",
-    description: "A standalone academic integrity policy addressing AI specifically — covering what constitutes AI misuse, why detection tools are unreliable, and how to shift to process-based assessment.",
+    description:
+      "A standalone academic integrity policy specifically addressing AI, including a tiered disclosure framework, consequences matrix, and guidance on the difference between AI assistance and AI misconduct.",
     lastUpdated: "April 2026",
-    basedOn: "ICAI January 2026 Report + Stanford HAI 2026 AI Index",
+    basedOn: "ISTE AI in Education Framework 2026 + Harvard Graduate School of Education AI Integrity Guidelines",
     template: `[SCHOOL/DISTRICT NAME] AI ACADEMIC INTEGRITY POLICY
-Effective Date: [DATE] | Applies To: All Students, Grades [RANGE]
+Effective Date: [DATE]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 1: STATEMENT OF PRINCIPLE
+SECTION 1: PHILOSOPHY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Academic integrity means that the work a student submits honestly represents their own learning, thinking, and effort. AI tools do not change this principle — they change the context in which it must be applied.
-
-[School/District Name] recognizes that AI tools are increasingly present in students' lives and will be present in their professional futures. Our goal is not to eliminate AI use but to ensure that AI is used in ways that support genuine learning rather than replace it.
+[School/District Name] believes that AI tools, used responsibly, can enhance learning. We also believe that authentic intellectual effort — the struggle to understand, to create, and to communicate — is the core of education. This policy exists not to prohibit AI, but to ensure that AI enhances rather than replaces student learning.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 2: DEFINING AI MISUSE
+SECTION 2: THE AI USE SPECTRUM
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-AI use constitutes academic dishonesty when ALL of the following are true:
-1. The teacher has not explicitly authorized AI use for that assignment.
-2. The student submits AI-generated content as their own original work.
-3. The student does not disclose the AI use.
+LEVEL 1 — AI-FREE: No AI tools permitted. Student work must be entirely original.
+Examples: In-class essays, standardized test preparation, skill-building assessments.
 
-AI use is NOT academic dishonesty when:
-• The teacher has explicitly authorized AI use and the student discloses it.
-• The student uses AI as a brainstorming, feedback, or research tool and produces original work.
-• The student uses AI to check grammar or spelling (unless the assignment explicitly prohibits this).
+LEVEL 2 — AI-ASSISTED (with disclosure): AI may be used as a research or brainstorming tool. All AI use must be disclosed. Student must substantially transform AI output with their own thinking.
+Examples: Research papers (brainstorming phase), creative writing (idea generation), coding (debugging assistance).
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 3: ON AI DETECTION TOOLS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[School/District Name] policy on AI detection tools:
-
-Current AI detection tools (including Turnitin AI, GPTZero, and similar platforms) have documented false positive rates of 15–32%, meaning they incorrectly flag original student writing as AI-generated at significant rates. Research has shown that:
-• Non-native English speakers are flagged at disproportionately higher rates.
-• Students with certain writing styles or disabilities are more likely to be falsely flagged.
-• Detection accuracy degrades as AI models are updated.
-
-Therefore: AI detection tool output is NOT sufficient evidence of academic dishonesty on its own. Concerns about AI misuse must be addressed through:
-1. A private, non-accusatory conversation with the student.
-2. A request for the student to explain, expand, or defend their work verbally.
-3. Review of the student's process documentation (drafts, notes, browser history if applicable).
-4. Administrator involvement if the conversation does not resolve the concern.
+LEVEL 3 — AI-INTEGRATED (explicit permission): AI is a core part of the assignment. Students are evaluated on their ability to prompt, evaluate, and improve AI output.
+Examples: AI prompt engineering projects, comparative analysis of AI responses, AI-assisted multimedia projects.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 4: PROCESS-BASED ASSESSMENT FRAMEWORK
+SECTION 3: DISCLOSURE REQUIREMENTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The most effective response to AI-related academic integrity concerns is to design assignments that make AI misuse difficult and learning visible. Teachers are encouraged to:
-
-• Require process documentation: drafts, outlines, revision history, or research notes.
-• Include in-class components: brief oral defenses, in-class writing samples, or presentations.
-• Design for specificity: assignments that require personal experience, local context, or class-specific knowledge that AI cannot provide.
-• Use the AI Disclosure Statement: normalize disclosure so students who use AI appropriately are not penalized.
+For all Level 2 and Level 3 assignments, students must complete the AI Disclosure Statement:
+• Tool(s) used and purpose
+• Specific prompts or queries submitted (can be summarized)
+• How the student modified, verified, or built upon AI output
+• Student's attestation that they can explain and defend all submitted content
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 5: CONSEQUENCES
+SECTION 4: CONSEQUENCES MATRIX
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[Align with district disciplinary matrix — suggested framework:]
+Undisclosed AI use on a Level 1 assignment:
+→ First offense: Zero on assignment, parent notification, mandatory meeting with teacher
+→ Second offense: Zero on assignment, administrative referral, parent conference
+→ Third offense: [DISTRICT PROCESS], potential course failure, notation in record
 
-Level 1 (First incident, minor): Teacher-student conference; opportunity to redo assignment; parent notification.
-Level 2 (Repeat or significant): Administrative referral; zero on assignment; parent conference; academic integrity notation.
-Level 3 (Egregious or repeated): [District disciplinary process]; potential course failure; permanent academic record notation.
+Undisclosed AI use on a Level 2 assignment:
+→ First offense: Assignment revision required with full disclosure; grade reduction
+→ Second offense: Zero on assignment, parent notification
 
-Note: Consequences should be educational, not purely punitive. The goal is to help students understand why academic integrity matters — not simply to punish.`
+Note: AI detection software results alone are never sufficient evidence of misconduct. All determinations require a conversation with the student.`,
   },
   {
     id: "data-privacy",
-    title: "AI Tool Data Privacy & Vendor Vetting Checklist",
+    title: "Student Data Privacy & AI Vendor Policy",
     category: "Data Privacy",
     audience: "Administrators",
     urgency: "High",
-    description: "A practical checklist for evaluating AI tool privacy compliance before district adoption. Covers FERPA, COPPA, state privacy laws, and vendor contract requirements.",
+    description:
+      "A comprehensive data privacy policy governing AI vendor relationships, DPA requirements, incident response procedures, and parent notification obligations under FERPA and state privacy laws.",
     lastUpdated: "April 2026",
-    basedOn: "FERPA/COPPA Requirements + Common Sense Privacy 2026 + State AI Legislation Tracker",
-    template: `[DISTRICT NAME] AI TOOL DATA PRIVACY & VENDOR VETTING CHECKLIST
-Completed By: _________________ | Date: _____________ | Tool Name: _________________
+    basedOn: "FERPA 2026 Guidance + Student Data Privacy Consortium (SDPC) Model Terms",
+    template: `[DISTRICT NAME] STUDENT DATA PRIVACY AND AI VENDOR POLICY
+Effective Date: [DATE]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 1: BASIC INFORMATION
+SECTION 1: SCOPE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Tool Name: _______________________________________________
-Vendor/Company: _________________________________________
-Website: ________________________________________________
-Proposed Use: ___________________________________________
-Grade Levels: ____________________________________________
-Cost: ___________________________________________________
-Requested By: ___________________________________________
+This policy governs all AI tools and vendors that collect, process, or store student education records as defined by FERPA (20 U.S.C. § 1232g) and applicable state student privacy laws.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 2: FERPA COMPLIANCE (Required for any tool that accesses student records)
+SECTION 2: DATA PROCESSING AGREEMENT REQUIREMENTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-☐ Vendor explicitly states FERPA compliance in documentation
-☐ Vendor will sign a Data Processing Agreement (DPA) with the district
-☐ Student data is not sold to third parties
-☐ Student data is not used to train AI models without explicit consent
-☐ Data deletion process is documented and accessible
-☐ Breach notification procedures are specified (required: within 72 hours)
+All AI vendors with access to student data must execute a Data Processing Agreement (DPA) that includes:
 
-FERPA Notes: ____________________________________________
+1. PURPOSE LIMITATION: Vendor may only process student data for the specific educational purpose for which it was shared. Vendor may not use student data for advertising, product development, or model training without explicit written consent.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 3: COPPA COMPLIANCE (Required for tools used with students under 13)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. DATA MINIMIZATION: Vendor collects only the minimum data necessary for the stated educational purpose.
 
-☐ Tool is designed for users under 13 OR requires parental consent
-☐ No behavioral advertising to users under 13
-☐ Personal information collection is limited to what is necessary for the educational service
-☐ Parental access and deletion rights are documented
-☐ Vendor has a verifiable COPPA compliance statement
+3. RETENTION AND DELETION: Vendor must delete all student data within [30/60/90] days of contract termination, and provide written certification of deletion.
 
-COPPA Notes: ____________________________________________
+4. BREACH NOTIFICATION: Vendor must notify [DISTRICT CONTACT] within 72 hours of discovering any unauthorized access to student data.
+
+5. SUBPROCESSOR DISCLOSURE: Vendor must disclose all subprocessors with access to student data and ensure equivalent protections apply.
+
+6. AI TRAINING PROHIBITION: Student data may not be used to train, fine-tune, or improve AI models without explicit, informed, opt-in consent from parents/guardians (or students 18+).
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 4: STATE-SPECIFIC REQUIREMENTS
+SECTION 3: INCIDENT RESPONSE PROCEDURE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-State: [YOUR STATE]
-Applicable state student privacy laws: [e.g., CA AB 1584, NY Ed Law 2-d, TX SB 820]
+Upon learning of a potential data breach involving student data:
 
-☐ Vendor complies with applicable state student data privacy laws
-☐ Vendor is listed on state-approved vendor list (if applicable)
-☐ Data storage location complies with state requirements
-☐ AI-specific state requirements addressed: [LIST STATE AI LAWS IF APPLICABLE]
-
-State Compliance Notes: __________________________________
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 5: AI-SPECIFIC PRIVACY CONSIDERATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-☐ Student inputs are NOT used to train the AI model
-☐ Conversation/interaction data is not retained beyond the session (or retention period is specified and acceptable)
-☐ AI outputs are not shared with third parties
-☐ Vendor has a published AI ethics or responsible AI statement
-☐ Bias and fairness testing documentation is available
-☐ Human oversight mechanisms are documented for high-stakes uses
-
-AI-Specific Notes: _______________________________________
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 6: COMMON SENSE PRIVACY RATING
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Common Sense Privacy Score: _______ / 100
-(Check at: commonsense.org/education/privacy/ratings)
-
-Score Guidance:
-• 90–100: Approve with standard DPA
-• 75–89: Approve with enhanced DPA; monitor annually
-• 50–74: Requires AI Oversight Committee review before approval
-• Below 50: Do not approve without significant vendor remediation
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PART 7: FINAL RECOMMENDATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-☐ APPROVE — All requirements met. Add to approved vendor list.
-☐ APPROVE WITH CONDITIONS — Conditions: _____________________
-☐ PENDING — Additional information needed from vendor: _________
-☐ DO NOT APPROVE — Reason: ________________________________
-
-Reviewed By: _________________________ Title: _______________
-Signature: ___________________________ Date: ________________
-AI Oversight Committee Action: ______________________________`
+Hour 0–4: AI Coordinator notifies Superintendent and District Counsel
+Hour 4–24: Assess scope; determine if FERPA breach notification is required
+Hour 24–72: If breach confirmed, notify affected families per FERPA requirements
+Day 3–30: Conduct root cause analysis; implement remediation; report to Board`,
   },
   {
-    id: "parent-notification",
-    title: "Parent/Guardian AI Notification & Consent",
+    id: "family-communication",
+    title: "Family AI Communication Template",
     category: "Family Communication",
     audience: "Families",
     urgency: "Standard",
-    description: "A clear, jargon-free letter explaining how AI is used in your school, what data is collected, and how families can opt out. Designed to build trust and transparency.",
+    description:
+      "A parent/guardian communication template explaining the school's AI approach, what tools students will use, privacy protections in place, and how families can support responsible AI use at home.",
     lastUpdated: "April 2026",
-    basedOn: "NYC DOE Parent Communication Standards + FERPA Parental Rights",
-    template: `[SCHOOL NAME] — NOTICE OF AI TOOL USE IN YOUR CHILD'S EDUCATION
-School Year: [YEAR] | Sent: [DATE]
+    basedOn: "Common Sense Media Parent AI Guide 2026 + NAEYC Family Engagement Framework",
+    template: `Dear [School Name] Families,
 
-Dear [School Name] Families,
+Subject: How We Are Using Artificial Intelligence at [School Name] — What You Need to Know
 
-We want to keep you informed about how we use technology — including artificial intelligence (AI) tools — to support your child's education. This letter explains what AI tools we use, how they work, what information they collect, and your rights as a parent or guardian.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WHAT IS AI AND HOW DO WE USE IT?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Artificial intelligence (AI) tools are computer programs that can generate text, answer questions, provide feedback, and assist with learning tasks. At [School Name], we use AI tools to:
-
-• Help teachers create lesson materials and differentiated resources
-• Provide students with personalized reading and math practice
-• Support students with writing feedback and research skills
-• Help students with disabilities access content more effectively
-
-We do NOT use AI to:
-• Make decisions about your child's grades, placement, or discipline without human review
-• Replace teacher instruction or the teacher-student relationship
-• Collect or sell your child's personal information
+As AI tools become increasingly present in education and daily life, [School Name] is committed to helping your student develop the skills to use AI responsibly, critically, and ethically. We want to share what this looks like in our classrooms and how we are protecting your child's privacy.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WHICH AI TOOLS DOES YOUR CHILD USE?
+WHAT AI TOOLS YOUR CHILD MAY USE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[COMPLETE THIS SECTION WITH YOUR APPROVED TOOLS]
+[LIST APPROVED TOOLS BY GRADE LEVEL]
 
-Tool Name | Purpose | Grade Levels | Privacy Rating
-[Tool 1] | [Purpose] | [Grades] | [Rating]
-[Tool 2] | [Purpose] | [Grades] | [Rating]
-
-All tools used at [School Name] have been reviewed for compliance with federal student privacy laws (FERPA and COPPA) and have signed agreements with our district to protect your child's information.
+All tools used in our classrooms have been reviewed for student privacy compliance and have signed Data Processing Agreements with our district. Your child's data is never used to train AI models.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-YOUR RIGHTS AS A PARENT OR GUARDIAN
+HOW WE TEACH RESPONSIBLE AI USE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Under federal law (FERPA) and [State] law, you have the right to:
-• Review any educational records related to your child, including records of AI tool use
-• Request that your child not use specific AI tools (subject to available alternatives)
-• Ask questions about how AI tools are used in your child's classroom
-• Receive this information in your home language upon request
-
-To exercise any of these rights or to ask questions, please contact:
-[PRINCIPAL NAME], [SCHOOL NAME]
-[EMAIL] | [PHONE]
+We teach students to:
+• Always verify information AI provides — AI can be wrong
+• Never share personal information with AI tools
+• Disclose when they have used AI in their schoolwork
+• Think critically about AI-generated content, including images and text
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WHAT WE TEACH STUDENTS ABOUT AI
+HOW YOU CAN SUPPORT AT HOME
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-We believe students need to learn how to use AI responsibly — not just how to use it. At [School Name], students learn:
-• What AI can and cannot do reliably
-• How to verify information AI provides
-• When AI use is appropriate and when it is not
-• How to protect their personal information online
+• Ask your child what AI tools they are using and what they are learning about AI
+• Remind your child that AI tools are not always accurate — encourage them to check sources
+• Review our Student AI Acceptable Use Policy with your child (available at [LINK])
+• Contact [TEACHER/PRINCIPAL NAME] at [EMAIL] with any questions or concerns
 
-We are committed to preparing your child for a world where AI is present — while ensuring that their education develops the critical thinking, creativity, and communication skills that AI cannot replace.
-
-If you have questions about our AI use, please reach out. We welcome the conversation.
+We are committed to preparing your child for a world where AI literacy is as essential as reading and writing. Thank you for your partnership.
 
 Sincerely,
 [PRINCIPAL NAME]
 [SCHOOL NAME]
-[DATE]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RETURN SLIP (Optional — for schools requiring acknowledgment)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Student Name: _________________________ Grade: _______
-
-☐ I have read and understand the AI use notification.
-☐ I have questions and would like to be contacted. Best number/email: ___________
-☐ I request that my child not use the following tools: _________________________
-
-Parent/Guardian Signature: __________________ Date: __________`
+[DATE]`,
   },
-  {
-    id: "ai-pd-framework",
-    title: "Staff AI Professional Development Framework",
-    category: "Professional Development",
-    audience: "Administrators",
-    urgency: "High",
-    description: "A structured PD framework for building district-wide AI competency. Addresses the fact that only 34% of teachers have received formal AI training. Includes tiered pathways and competency benchmarks.",
-    lastUpdated: "April 2026",
-    basedOn: "RAND 2026 PD Gap Data + ISTE AI Competency Framework 2026",
-    template: `[DISTRICT NAME] STAFF AI PROFESSIONAL DEVELOPMENT FRAMEWORK
-School Year: [YEAR] | Approved By: [NAME/TITLE] | Date: [DATE]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 1: RATIONALE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-As of January 2026, 68% of teachers use AI tools at least weekly — yet only 34% have received any formal AI training from their district (RAND Corporation, 2026). This gap between adoption and preparation creates risk for students, teachers, and the district. This framework establishes a structured, tiered pathway to build AI competency across all staff.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 2: COMPETENCY FRAMEWORK (Three Tiers)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-TIER 1 — AI FOUNDATIONS (Required: All Staff)
-Target: Every staff member understands what AI is, how it works at a basic level, and what the district's policies are.
-
-Modules (Total: [X] hours):
-• Module 1: What Is AI? (1 hr) — How generative AI works, what it can and cannot do, common misconceptions
-• Module 2: District AI Policy Overview (1 hr) — Acceptable use, data privacy, academic integrity
-• Module 3: Data Privacy Basics (1 hr) — What not to put in AI tools, FERPA/COPPA basics, student safety
-• Module 4: AI and Equity (1 hr) — Bias in AI systems, equitable access, avoiding AI-driven gaps
-
-Completion Requirement: All staff by [DATE]
-Assessment: Brief knowledge check (pass/fail, unlimited retakes)
-
-TIER 2 — AI IN PRACTICE (Required: All Instructional Staff)
-Target: Teachers can use approved AI tools effectively and responsibly in their instructional practice.
-
-Modules (Total: [X] hours):
-• Module 5: AI for Lesson Planning (2 hrs) — Hands-on with approved tools; prompt writing basics
-• Module 6: AI for Differentiation (2 hrs) — Generating tiered materials, ELL supports, IEP applications
-• Module 7: AI for Assessment and Feedback (1.5 hrs) — Rubric generation, feedback drafts, process-based assessment
-• Module 8: Teaching Students to Use AI Responsibly (1.5 hrs) — Classroom protocols, disclosure, critical evaluation
-
-Completion Requirement: All instructional staff by [DATE]
-Assessment: Submission of one AI-assisted lesson plan with reflection
-
-TIER 3 — AI LEADERSHIP (Optional: Instructional Coaches, Department Heads, Administrators)
-Target: Staff who will lead AI implementation, support colleagues, and contribute to district AI strategy.
-
-Modules (Total: [X] hours):
-• Module 9: AI Governance and Strategy (2 hrs) — Oversight structures, tool approval, policy development
-• Module 10: Coaching Colleagues on AI (2 hrs) — Supporting resistant staff, building AI learning communities
-• Module 11: Evaluating AI Tools (1.5 hrs) — Privacy review, instructional value assessment, piloting protocols
-• Module 12: AI and the Future of Education (1.5 hrs) — Trends, research, preparing students for an AI-integrated world
-
-Completion Requirement: Voluntary; recognized in [DISTRICT RECOGNITION PROGRAM]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 3: DELIVERY FORMATS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-• Self-paced online modules: Available through [LMS PLATFORM]
-• In-person workshops: Offered [X] times per year at each school
-• Peer learning communities: Monthly optional AI learning groups by grade band
-• Embedded PD: 30-minute AI segments in existing staff meeting time
-• Micro-credentials: [X]-hour focused badges for specific tools or skills
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECTION 4: TRACKING AND ACCOUNTABILITY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Completion tracking: [LMS PLATFORM] — principals receive monthly completion reports
-Annual AI PD survey: Staff complete a brief survey each spring on AI use, confidence, and training needs
-Board reporting: Annual AI PD completion rates reported to Board of Education
-Recognition: Staff completing Tier 3 recognized at [RECOGNITION EVENT]`
-  }
 ];
 
+// ─── Color maps ──────────────────────────────────────────────────────────────
 const categoryColors: Record<string, string> = {
-  "Acceptable Use": "bg-blue-100 text-blue-800",
+  "Acceptable Use": "bg-red-100 text-red-800",
   "Staff Guidelines": "bg-teal-100 text-teal-800",
-  "Governance": "bg-indigo-100 text-indigo-800",
+  Governance: "bg-indigo-100 text-indigo-800",
   "Academic Integrity": "bg-amber-100 text-amber-800",
   "Data Privacy": "bg-purple-100 text-purple-800",
   "Family Communication": "bg-green-100 text-green-800",
@@ -670,12 +493,25 @@ const audienceIcons: Record<string, React.ReactNode> = {
   Families: <Users className="w-4 h-4" />,
 };
 
-function PolicyCard({ policy }: { policy: PolicyTemplate }) {
+// ─── PolicyCard ──────────────────────────────────────────────────────────────
+function PolicyCard({
+  policy,
+  unlocked,
+  onRequestUnlock,
+}: {
+  policy: PolicyTemplate;
+  unlocked: boolean;
+  onRequestUnlock: () => void;
+}) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const UrgencyIcon = urgencyConfig[policy.urgency].icon;
 
   const handleCopy = () => {
+    if (!unlocked) {
+      onRequestUnlock();
+      return;
+    }
     navigator.clipboard.writeText(policy.template);
     setCopied(true);
     toast.success("Template copied to clipboard!", {
@@ -685,6 +521,10 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
   };
 
   const handleDownload = () => {
+    if (!unlocked) {
+      onRequestUnlock();
+      return;
+    }
     const blob = new Blob([policy.template], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -697,9 +537,14 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
     });
   };
 
+  // Preview text — first 300 chars for locked, full 1200 for unlocked
+  const previewText = unlocked
+    ? policy.template.slice(0, 1200)
+    : policy.template.slice(0, 300);
+
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-      {/* Top accent bar — coral for Critical, amber for High, blue for Standard */}
+      {/* Top accent bar */}
       <div
         className={`h-1 w-full ${
           policy.urgency === "Critical"
@@ -737,6 +582,11 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
               {policy.title}
             </h3>
           </div>
+          {unlocked ? (
+            <Unlock className="w-4 h-4 text-green-500 shrink-0 mt-1" />
+          ) : (
+            <Lock className="w-4 h-4 text-gray-400 shrink-0 mt-1" />
+          )}
         </div>
 
         <p className="text-sm text-gray-600 leading-relaxed mb-3">{policy.description}</p>
@@ -749,22 +599,47 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
         {/* Template preview */}
         <div className="mb-4">
           <button
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              if (!unlocked) {
+                onRequestUnlock();
+                return;
+              }
+              setExpanded(!expanded);
+            }}
             className="text-sm font-medium text-[#2563EB] hover:text-blue-800 transition-colors flex items-center gap-1"
           >
             <FileText className="w-4 h-4" />
             {expanded ? "Hide template preview" : "Preview template"}
           </button>
-          {expanded && (
+          {expanded && unlocked && (
             <div className="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-64 overflow-y-auto">
               <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
-                {policy.template.slice(0, 1200)}
+                {previewText}
                 {policy.template.length > 1200 && (
                   <span className="text-gray-400">
                     {"\n\n"}[...template continues — copy to see full version]
                   </span>
                 )}
               </pre>
+            </div>
+          )}
+          {/* Locked blurred preview */}
+          {!unlocked && (
+            <div className="mt-3 relative">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-32 overflow-hidden">
+                <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed blur-sm select-none">
+                  {previewText}
+                </pre>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center bg-white/60 rounded-lg">
+                <button
+                  onClick={onRequestUnlock}
+                  className="flex items-center gap-2 bg-[#E8533A] text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-[#d44530] transition-colors shadow-sm"
+                >
+                  <Lock className="w-3 h-3" />
+                  Unlock to preview
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -776,7 +651,9 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
               copied
                 ? "bg-green-600 text-white"
-                : "bg-[#E8533A] text-white hover:bg-[#d44530]"
+                : unlocked
+                ? "bg-[#E8533A] text-white hover:bg-[#d44530]"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
             }`}
           >
             {copied ? (
@@ -784,16 +661,25 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
                 <CheckCircle className="w-4 h-4" />
                 Copied!
               </>
-            ) : (
+            ) : unlocked ? (
               <>
                 <Copy className="w-4 h-4" />
                 Copy Template
+              </>
+            ) : (
+              <>
+                <Lock className="w-4 h-4" />
+                Unlock to Copy
               </>
             )}
           </button>
           <button
             onClick={handleDownload}
-            className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${
+              unlocked
+                ? "border-gray-200 text-gray-700 hover:bg-gray-50"
+                : "border-gray-200 text-gray-400 hover:bg-gray-50"
+            }`}
           >
             <Download className="w-4 h-4" />
             Download
@@ -804,9 +690,144 @@ function PolicyCard({ policy }: { policy: PolicyTemplate }) {
   );
 }
 
+// ─── Email Gate Modal ────────────────────────────────────────────────────────
+function EmailGateModal({
+  open,
+  onUnlocked,
+  onClose,
+}: {
+  open: boolean;
+  onUnlocked: () => void;
+  onClose: () => void;
+}) {
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState<{ firstName?: string; email?: string }>({});
+
+  const subscribeMutation = trpc.newsletter.subscribePolicyTemplates.useMutation({
+    onSuccess: () => {
+      sessionStorage.setItem(SESSION_KEY, "true");
+      toast.success("Templates unlocked!", {
+        description: "All 6 policy templates are now available to copy and download.",
+      });
+      onUnlocked();
+    },
+    onError: (err) => {
+      toast.error("Something went wrong", {
+        description: err.message || "Please try again.",
+      });
+    },
+  });
+
+  const validate = () => {
+    const newErrors: { firstName?: string; email?: string } = {};
+    if (!firstName.trim()) newErrors.firstName = "Please enter your first name.";
+    if (!email.trim()) {
+      newErrors.email = "Please enter your email address.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    subscribeMutation.mutate({ firstName: firstName.trim(), email: email.trim() });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-10 h-10 rounded-lg bg-[#E8533A]/10 flex items-center justify-center">
+              <Mail className="w-5 h-5 text-[#E8533A]" />
+            </div>
+            <DialogTitle className="font-display text-[#0F2A4A] text-xl">
+              Access the Policy Library
+            </DialogTitle>
+          </div>
+          <DialogDescription className="text-gray-600 leading-relaxed">
+            Get free access to all 6 AI policy templates — ready to customize for your school or district. Enter your name and email to unlock.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              First Name
+            </label>
+            <Input
+              placeholder="e.g. Sarah"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className={errors.firstName ? "border-red-400" : ""}
+              disabled={subscribeMutation.isPending}
+            />
+            {errors.firstName && (
+              <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Work Email
+            </label>
+            <Input
+              type="email"
+              placeholder="you@school.edu"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={errors.email ? "border-red-400" : ""}
+              disabled={subscribeMutation.isPending}
+            />
+            {errors.email && (
+              <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          <p className="text-xs text-gray-400 leading-relaxed">
+            By unlocking, you'll also receive occasional updates from the AI Classroom Hub when new templates are added. Unsubscribe anytime.
+          </p>
+
+          <div className="flex gap-3 pt-1">
+            <Button
+              type="submit"
+              disabled={subscribeMutation.isPending}
+              className="flex-1 bg-[#E8533A] hover:bg-[#d44530] text-white font-semibold"
+            >
+              {subscribeMutation.isPending ? "Unlocking…" : "Unlock Free Access →"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={subscribeMutation.isPending}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ─── Main Page ───────────────────────────────────────────────────────────────
 export default function PolicyTemplates() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeAudience, setActiveAudience] = useState("All");
+  const [unlocked, setUnlocked] = useState(false);
+  const [gateOpen, setGateOpen] = useState(false);
+
+  // Check session storage on mount — if the visitor already unlocked this session, skip the gate
+  useEffect(() => {
+    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+      setUnlocked(true);
+    }
+  }, []);
 
   const categories = ["All", ...Array.from(new Set(templates.map((t) => t.category)))];
   const audiences = ["All", ...Array.from(new Set(templates.map((t) => t.audience)))];
@@ -818,6 +839,11 @@ export default function PolicyTemplates() {
   });
 
   const criticalCount = templates.filter((t) => t.urgency === "Critical").length;
+
+  const handleUnlocked = () => {
+    setUnlocked(true);
+    setGateOpen(false);
+  };
 
   return (
     <Layout>
@@ -864,6 +890,38 @@ export default function PolicyTemplates() {
         </div>
       </section>
 
+      {/* Access banner — shown when locked */}
+      {!unlocked && (
+        <section className="py-5 bg-[#0F2A4A] border-b border-blue-900">
+          <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Lock className="w-5 h-5 text-blue-300 shrink-0" />
+              <p className="text-sm text-blue-100">
+                <span className="font-semibold text-white">Free access</span> — enter your name and email to copy or download any template.
+              </p>
+            </div>
+            <button
+              onClick={() => setGateOpen(true)}
+              className="shrink-0 bg-[#E8533A] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#d44530] transition-colors"
+            >
+              Unlock All Templates →
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* Unlocked confirmation banner */}
+      {unlocked && (
+        <section className="py-3 bg-green-50 border-b border-green-200">
+          <div className="container flex items-center gap-2">
+            <Unlock className="w-4 h-4 text-green-600 shrink-0" />
+            <p className="text-sm text-green-800 font-medium">
+              Templates unlocked — copy or download any template below.
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* How to use */}
       <section className="py-8 bg-amber-50 border-b border-amber-100">
         <div className="container">
@@ -872,7 +930,9 @@ export default function PolicyTemplates() {
             <div>
               <p className="text-sm font-semibold text-amber-800 mb-1">How to use these templates</p>
               <p className="text-sm text-amber-700 leading-relaxed">
-                Every template contains bracketed fields like <code className="bg-amber-100 px-1 rounded text-xs">[SCHOOL NAME]</code> and <code className="bg-amber-100 px-1 rounded text-xs">[DATE]</code> that you customize for your context. These are starting points — not final documents. Review with your legal counsel, union representatives, and school board before adoption. All templates are based on 2026 guidance from NYC DOE, California, CoSN, and federal FERPA/COPPA requirements.
+                Every template contains bracketed fields like{" "}
+                <code className="bg-amber-100 px-1 rounded text-xs">[SCHOOL NAME]</code> and{" "}
+                <code className="bg-amber-100 px-1 rounded text-xs">[DATE]</code> that you customize for your context. These are starting points — not final documents. Review with your legal counsel, union representatives, and school board before adoption.
               </p>
             </div>
           </div>
@@ -931,7 +991,12 @@ export default function PolicyTemplates() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {filtered.map((policy) => (
-              <PolicyCard key={policy.id} policy={policy} />
+              <PolicyCard
+                key={policy.id}
+                policy={policy}
+                unlocked={unlocked}
+                onRequestUnlock={() => setGateOpen(true)}
+              />
             ))}
           </div>
 
@@ -940,7 +1005,10 @@ export default function PolicyTemplates() {
               <FileText className="w-10 h-10 mx-auto mb-3 opacity-40" />
               <p className="font-medium">No templates match those filters.</p>
               <button
-                onClick={() => { setActiveCategory("All"); setActiveAudience("All"); }}
+                onClick={() => {
+                  setActiveCategory("All");
+                  setActiveAudience("All");
+                }}
                 className="mt-2 text-sm text-[#2563EB] hover:underline"
               >
                 Clear filters
@@ -970,6 +1038,13 @@ export default function PolicyTemplates() {
           </a>
         </div>
       </section>
+
+      {/* Email Gate Modal */}
+      <EmailGateModal
+        open={gateOpen}
+        onUnlocked={handleUnlocked}
+        onClose={() => setGateOpen(false)}
+      />
     </Layout>
   );
 }

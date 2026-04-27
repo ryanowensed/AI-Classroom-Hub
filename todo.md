@@ -48,3 +48,12 @@
 - [ ] Add search to Policy Template Library
 - [ ] Build individual newsletter issue archive pages
 - [ ] Add Google Analytics / site analytics
+
+## Policy Template Email Gate
+- [ ] Create "Policy Templates" audience in Resend
+- [ ] Add backend tRPC endpoint for policy template email capture
+- [ ] Build email gate modal component (name + email form)
+- [ ] Add blurred/truncated preview to locked templates
+- [ ] Session unlock: once opted in, all templates stay unlocked
+- [ ] Wire gate to new Resend "Policy Templates" audience
+- [ ] Vitest test for policy template subscribe endpoint

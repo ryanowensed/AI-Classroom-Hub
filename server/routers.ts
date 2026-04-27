@@ -7,6 +7,7 @@ import { z } from "zod";
 // Resend audience IDs
 const RESEND_AUDIENCE_OFFICE_HOURS = "1152c5e0-2309-4dd1-a3b1-174ca0f9fda8";
 const RESEND_AUDIENCE_GENERAL = "804dc86a-7cac-4b0c-8848-d7c4dd061f48";
+const RESEND_AUDIENCE_POLICY_TEMPLATES = "9c361cc8-4134-4fe8-b511-11b03b47ae6a";
 
 async function addResendContact(email: string, firstName: string, audienceId: string): Promise<{ success: boolean; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
@@ -92,6 +93,25 @@ export const appRouter = router({
           throw new Error(result.error ?? "Subscription failed");
         }
         return { success: true, message: "You're subscribed!" };
+      }),
+
+    /**
+     * Email gate for Policy Template Library access.
+     * Adds the visitor to the dedicated "Policy Templates" Resend audience.
+     */
+    subscribePolicyTemplates: publicProcedure
+      .input(
+        z.object({
+          email: z.string().email("Please enter a valid email address"),
+          firstName: z.string().min(1, "Please enter your first name"),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const result = await addResendContact(input.email, input.firstName, RESEND_AUDIENCE_POLICY_TEMPLATES);
+        if (!result.success) {
+          throw new Error(result.error ?? "Could not unlock templates — please try again");
+        }
+        return { success: true, message: "Templates unlocked! Welcome to the Policy Library." };
       }),
   }),
 });
