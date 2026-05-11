@@ -344,13 +344,45 @@ export default function Home() {
                 Learn more about the Hub <ArrowRight size={14} />
               </Link>
             </div>
-            <div className="relative rounded-2xl overflow-hidden shadow-xl">
-              <img
-                src="/manus-storage/classroom-hero_aacf1221.png"
-                alt="Modern K-12 classroom with students using technology"
-                className="w-full h-72 lg:h-96 object-cover"
-              />
-              <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3">
+            <div
+              className="relative h-72 lg:h-96 rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-[#EFF6FF] via-white to-[#FFF7F5] border border-white"
+              role="img"
+              aria-label="Modern K-12 classroom with students using AI technology"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(37,99,235,0.16),transparent_30%),radial-gradient(circle_at_86%_18%,rgba(232,83,58,0.16),transparent_26%),radial-gradient(circle_at_50%_84%,rgba(13,148,136,0.12),transparent_34%)]" />
+              <div className="absolute inset-x-10 top-10 h-28 rounded-2xl bg-white/80 border border-[#DBEAFE] shadow-sm backdrop-blur-sm">
+                <div className="absolute left-5 top-4 flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-[#E8533A]" />
+                  <span className="h-3 w-3 rounded-full bg-[#F59E0B]" />
+                  <span className="h-3 w-3 rounded-full bg-[#10B981]" />
+                </div>
+                <div className="absolute left-6 right-6 top-12 grid grid-cols-3 gap-3">
+                  <span className="h-3 rounded-full bg-[#BFDBFE]" />
+                  <span className="h-3 rounded-full bg-[#FECACA]" />
+                  <span className="h-3 rounded-full bg-[#A7F3D0]" />
+                  <span className="col-span-2 h-3 rounded-full bg-[#DBEAFE]" />
+                  <span className="h-3 rounded-full bg-[#FED7AA]" />
+                </div>
+              </div>
+              <div className="absolute bottom-20 left-10 right-10 flex items-end justify-center gap-5">
+                {["#2563EB", "#E8533A", "#0D9488"].map((color, index) => (
+                  <div key={color} className="flex flex-col items-center gap-2">
+                    <div
+                      className="h-12 w-12 rounded-full border-4 border-white shadow-md"
+                      style={{ backgroundColor: color }}
+                    />
+                    <div className="h-14 w-20 rounded-t-2xl bg-white/85 border border-white shadow-sm" />
+                    <div
+                      className={`h-8 rounded-lg bg-[#0F2A4A]/10 ${index === 1 ? "w-28" : "w-24"}`}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="absolute left-8 top-48 hidden lg:flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-xs font-semibold font-display text-[#0F2A4A] shadow-sm border border-white">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#10B981]" />
+                AI planning tools in action
+              </div>
+              <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-sm">
                 <p className="text-xs font-semibold font-display text-[#0F2A4A]">68% of teachers now use AI weekly — up from 29% in January 2025.</p>
                 <p className="text-xs text-gray-500 mt-0.5">RAND Corporation, January 2026 Survey of 4,200 K-12 Teachers</p>
               </div>
