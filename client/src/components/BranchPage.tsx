@@ -8,6 +8,12 @@ import Layout from "@/components/Layout";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
+export interface BranchAction {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
 export interface ResourceItem {
   title: string;
   desc: string;
@@ -15,6 +21,9 @@ export interface ResourceItem {
   tagColor: string;
   tagBg: string;
   icon: string;
+  href?: string;
+  actionLabel?: string;
+  external?: boolean;
 }
 
 export interface BranchConfig {
@@ -29,14 +38,46 @@ export interface BranchConfig {
   resources: ResourceItem[];
   researchNote: string;
   ctaLabel: string;
+  primaryAction?: BranchAction;
+  secondaryAction?: BranchAction;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaHref?: string;
+  ctaExternal?: boolean;
+}
+
+function ActionLink({
+  action,
+  className,
+  style,
+  children,
+}: {
+  action: BranchAction;
+  className: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}) {
+  if (action.external) {
+    return (
+      <a href={action.href} target="_blank" rel="noreferrer" className={className} style={style}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={action.href} className={className} style={style}>
+      {children}
+    </Link>
+  );
 }
 
 function ResourceCard({ resource, color }: { resource: ResourceItem; color: string }) {
-  return (
-    <div
-      className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
-      onClick={() => toast.info("Resource coming soon — check back after our next content release.")}
-    >
+  const cardClassName =
+    "bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group block";
+
+  const cardContent = (
+    <>
       <div className="flex items-start gap-3 mb-3">
         <span className="text-2xl">{resource.icon}</span>
         <div className="flex-1">
@@ -56,13 +97,43 @@ function ResourceCard({ resource, color }: { resource: ResourceItem; color: stri
         className="flex items-center gap-1 text-xs font-semibold font-display opacity-0 group-hover:opacity-100 transition-opacity"
         style={{ color }}
       >
-        Access resource <ArrowRight size={11} />
+        {resource.actionLabel ?? "Access resource"} <ArrowRight size={11} />
       </div>
+    </>
+  );
+
+  if (resource.href) {
+    if (resource.external) {
+      return (
+        <a href={resource.href} target="_blank" rel="noreferrer" className={cardClassName}>
+          {cardContent}
+        </a>
+      );
+    }
+
+    return (
+      <Link href={resource.href} className={cardClassName}>
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={cardClassName} onClick={() => toast.info("Resource coming soon — check back after our next content release.")}>
+      {cardContent}
     </div>
   );
 }
 
 export default function BranchPage({ config }: { config: BranchConfig }) {
+  const primaryAction = config.primaryAction ?? { label: "Prompt Library", href: "/prompt-library" };
+  const secondaryAction = config.secondaryAction ?? { label: "AI Tool Directory", href: "/tool-directory" };
+  const footerAction = {
+    label: config.ctaLabel,
+    href: config.ctaHref ?? "/newsletter",
+    external: config.ctaExternal,
+  };
+
   return (
     <Layout>
       {/* Hero */}
@@ -94,19 +165,19 @@ export default function BranchPage({ config }: { config: BranchConfig }) {
               {config.description}
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/prompt-library"
+              <ActionLink
+                action={primaryAction}
                 className="flex items-center gap-2 text-white font-semibold font-display px-5 py-2.5 rounded-lg text-sm transition-colors"
                 style={{ backgroundColor: config.color }}
               >
-                Prompt Library <ArrowRight size={14} />
-              </Link>
-              <Link
-                href="/tool-directory"
+                {primaryAction.label} <ArrowRight size={14} />
+              </ActionLink>
+              <ActionLink
+                action={secondaryAction}
                 className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 font-semibold font-display px-5 py-2.5 rounded-lg text-sm hover:bg-gray-50 transition-colors"
               >
-                AI Tool Directory <ExternalLink size={13} />
-              </Link>
+                {secondaryAction.label} <ExternalLink size={13} />
+              </ActionLink>
             </div>
           </div>
         </div>
@@ -177,20 +248,24 @@ export default function BranchPage({ config }: { config: BranchConfig }) {
         </div>
       </section>
 
-      {/* Newsletter CTA */}
+      {/* Conversion CTA */}
       <section className="py-12 bg-[#0F2A4A]">
         <div className="container">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl font-bold font-display text-white mb-1">Get the weekly AI classroom digest.</h3>
-              <p className="text-sm text-blue-200">Office Hours /AI — one tip, one tool, one story. Every Sunday. Free.</p>
+              <h3 className="text-xl font-bold font-display text-white mb-1">
+                {config.ctaTitle ?? "Get the weekly AI classroom digest."}
+              </h3>
+              <p className="text-sm text-blue-200">
+                {config.ctaDescription ?? "Office Hours /AI — one tip, one tool, one story. Every Sunday. Free."}
+              </p>
             </div>
-            <Link
-              href="/newsletter"
+            <ActionLink
+              action={footerAction}
               className="shrink-0 flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors"
             >
               {config.ctaLabel} <ArrowRight size={14} />
-            </Link>
+            </ActionLink>
           </div>
         </div>
       </section>
