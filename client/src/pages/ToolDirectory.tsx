@@ -6,105 +6,160 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Link } from "wouter";
-import { ArrowRight, Search, ExternalLink, Star, Shield, Clock } from "lucide-react";
+import { ArrowRight, Search, ExternalLink, Star, Shield, Clock, CheckCircle2 } from "lucide-react";
 
 const gradeFilters = ["All Levels", "Pre-K / Kinder", "Elementary", "Middle School", "High School", "Administrators"];
-const useCaseFilters = ["All Uses", "Lesson Planning", "Differentiation", "Assessment", "IEP / Special Ed", "Writing", "Communication", "Policy"];
+const useCaseFilters = [
+  "All Uses",
+  "Planning & Materials",
+  "Differentiation & Accessibility",
+  "Assessment & Feedback",
+  "Student Practice & Tutoring",
+  "Communication & Operations",
+];
+
+const directoryPrinciples = [
+  "One strong tool can appear in more than one workflow, but every card must solve a specific school problem.",
+  "Thin categories such as stand-alone policy, IEP, and generic writing were consolidated into broader educator workflows.",
+  "General chatbots are included only when they add a meaningful admin, drafting, or district-planning use case.",
+];
 
 const tools = [
   {
     name: "MagicSchool AI",
     url: "https://www.magicschool.ai",
-    grade: ["Elementary", "Middle School", "High School"],
-    useCase: ["Lesson Planning", "Differentiation", "IEP / Special Ed", "Assessment"],
+    grade: ["Elementary", "Middle School", "High School", "Administrators"],
+    useCase: ["Planning & Materials", "Differentiation & Accessibility", "Assessment & Feedback", "Communication & Operations"],
     rating: 5,
     cost: "Free / Premium",
     privacy: "FERPA",
-    desc: "Used by 700,000+ U.S. teachers. Comprehensive suite for lesson planning, differentiation, IEP writing, and more. The most widely adopted AI tool in K-12.",
-    highlight: "Most Widely Used",
+    desc: "A broad K-12 teacher workspace for lesson plans, rubrics, parent emails, accommodations, behavior supports, and multilingual communication. Best as an all-purpose teacher productivity suite rather than a single-task tool.",
+    highlight: "Best Starter Suite",
     highlightColor: "#10B981",
     highlightBg: "#ECFDF5",
     timeSave: "3–5 hrs/week",
   },
   {
-    name: "ChatGPT (Edu)",
-    url: "https://openai.com/chatgpt/education",
-    grade: ["Middle School", "High School", "Administrators"],
-    useCase: ["Lesson Planning", "Writing", "Communication", "Policy"],
-    rating: 4,
-    cost: "Free / Plus",
+    name: "Eduaide.Ai",
+    url: "https://www.eduaide.ai/",
+    grade: ["Elementary", "Middle School", "High School"],
+    useCase: ["Planning & Materials", "Differentiation & Accessibility", "Assessment & Feedback"],
+    rating: 5,
+    cost: "Free / Premium",
     privacy: "Review Required",
-    desc: "The most capable general-purpose AI. Excellent for lesson planning, parent communication, policy drafting, and professional development. Requires district privacy review.",
-    highlight: "Most Capable",
+    desc: "Creates standards-aligned lesson materials, worksheets, graphic organizers, rubrics, questions, and differentiated versions with exports to Google Docs, DOCX, Google Forms, PDF, and text.",
+    highlight: "Classroom Materials",
     highlightColor: "#2563EB",
     highlightBg: "#EFF6FF",
     timeSave: "2–4 hrs/week",
   },
   {
-    name: "Amira Learning",
-    url: "https://www.amiralearning.com",
-    grade: ["Elementary"],
-    useCase: ["Assessment", "Differentiation"],
+    name: "SchoolAI",
+    url: "https://www.schoolai.com/",
+    grade: ["Elementary", "Middle School", "High School", "Administrators"],
+    useCase: ["Planning & Materials", "Student Practice & Tutoring", "Assessment & Feedback", "Communication & Operations"],
     rating: 5,
-    cost: "District License",
-    privacy: "FERPA / COPPA",
-    desc: "AI-powered reading tutor with strong efficacy data for phonics and oral reading fluency. Particularly effective in Title I schools. IES-validated.",
-    highlight: "Research Validated",
-    highlightColor: "#F59E0B",
-    highlightBg: "#FFFBEB",
-    timeSave: "Replaces 1:1 reading time",
+    cost: "Free / District",
+    privacy: "Privacy First",
+    desc: "Teacher-controlled AI spaces for student practice, real-time progress monitoring, productivity tools, and district oversight. Strong choice when leaders want student-facing AI with teacher visibility and guardrails.",
+    highlight: "Teacher-Monitored",
+    highlightColor: "#7C3AED",
+    highlightBg: "#F5F3FF",
+    timeSave: "10+ hrs/week",
   },
   {
-    name: "Khanmigo (Khan Academy)",
-    url: "https://www.khanacademy.org/khan-labs",
+    name: "QuestionWell",
+    url: "https://questionwell.org/",
     grade: ["Elementary", "Middle School", "High School"],
-    useCase: ["Lesson Planning", "Assessment", "Writing"],
+    useCase: ["Planning & Materials", "Assessment & Feedback"],
+    rating: 5,
+    cost: "Free / Premium",
+    privacy: "Data Pledge",
+    desc: "Research-based generator for standards-aligned questions, readings, vocabulary, and interactive videos. Useful for teachers who need quality controls around rigor, cognitive demand, alignment, and export workflows.",
+    highlight: "Research-Based",
+    highlightColor: "#0D9488",
+    highlightBg: "#F0FDFA",
+    timeSave: "2–3 hrs/week",
+  },
+  {
+    name: "Curipod",
+    url: "https://www.curipod.com/",
+    grade: ["Elementary", "Middle School", "High School"],
+    useCase: ["Assessment & Feedback", "Student Practice & Tutoring"],
+    rating: 5,
+    cost: "Free / District",
+    privacy: "FERPA / COPPA",
+    desc: "Interactive writing practice where students write, receive real-time AI feedback, discuss, revise, and generate evidence teachers can use for follow-up. Especially useful for ELA, discussion, and constructed response practice.",
+    highlight: "Writing Feedback",
+    highlightColor: "#F97316",
+    highlightBg: "#FFF7ED",
+    timeSave: "Faster feedback cycles",
+  },
+  {
+    name: "Diffit",
+    url: "https://diffit.me",
+    grade: ["Elementary", "Middle School", "High School"],
+    useCase: ["Differentiation & Accessibility", "Planning & Materials"],
     rating: 4,
-    cost: "Free",
-    privacy: "COPPA / FERPA",
-    desc: "Socratic AI tutor that guides students through problems rather than giving answers. Strong for math and writing. Free for teachers and students.",
-    highlight: "Student-Facing",
-    highlightColor: "#6366F1",
-    highlightBg: "#EEF2FF",
-    timeSave: "Reduces re-teaching time",
+    cost: "Free / Premium",
+    privacy: "FERPA",
+    desc: "Turns topics, articles, videos, or existing text into leveled readings, vocabulary, summaries, and student activities. A practical choice for multilingual learners, reading-level adjustment, and scaffolded access to grade-level topics.",
+    highlight: "Leveled Texts",
+    highlightColor: "#10B981",
+    highlightBg: "#ECFDF5",
+    timeSave: "2–4 hrs/week",
   },
   {
     name: "Brisk Teaching",
     url: "https://www.briskteaching.com",
     grade: ["Elementary", "Middle School", "High School"],
-    useCase: ["Lesson Planning", "Assessment", "Writing"],
+    useCase: ["Planning & Materials", "Assessment & Feedback", "Differentiation & Accessibility"],
     rating: 4,
     cost: "Free / Premium",
     privacy: "FERPA",
-    desc: "Chrome extension that works directly in Google Docs and Slides. Excellent for creating rubrics, giving feedback, and building quizzes from existing materials.",
+    desc: "Chrome extension that works inside Google Docs, Slides, web pages, and classroom workflows. Strong for feedback, rubrics, quizzes, level changes, and turning existing resources into usable instructional materials.",
     highlight: "Google Workspace",
     highlightColor: "#0D9488",
     highlightBg: "#F0FDFA",
     timeSave: "2–3 hrs/week",
   },
   {
-    name: "Diffit",
-    url: "https://diffit.me",
+    name: "Khanmigo (Khan Academy)",
+    url: "https://www.khanacademy.org/khan-labs",
     grade: ["Elementary", "Middle School", "High School"],
-    useCase: ["Differentiation", "Lesson Planning"],
+    useCase: ["Student Practice & Tutoring", "Assessment & Feedback", "Planning & Materials"],
     rating: 4,
-    cost: "Free / Premium",
-    privacy: "FERPA",
-    desc: "Instantly generates differentiated reading materials at multiple Lexile levels from any topic, article, or YouTube video. Exceptional for ELL and special education.",
-    highlight: "Differentiation",
-    highlightColor: "#10B981",
-    highlightBg: "#ECFDF5",
-    timeSave: "2–4 hrs/week",
+    cost: "Free / District",
+    privacy: "COPPA / FERPA",
+    desc: "Socratic AI tutor and teacher assistant designed to guide students through thinking rather than simply giving answers. Best for math, writing, tutoring, and practice tied to Khan Academy content.",
+    highlight: "Student Tutor",
+    highlightColor: "#6366F1",
+    highlightBg: "#EEF2FF",
+    timeSave: "Reduces re-teaching",
+  },
+  {
+    name: "Amira Learning",
+    url: "https://www.amiralearning.com",
+    grade: ["Elementary"],
+    useCase: ["Student Practice & Tutoring", "Assessment & Feedback", "Differentiation & Accessibility"],
+    rating: 5,
+    cost: "District License",
+    privacy: "FERPA / COPPA",
+    desc: "AI-powered reading tutor and oral-reading assessment platform for early literacy. Most relevant for elementary reading intervention, fluency practice, dyslexia screening workflows, and MTSS conversations.",
+    highlight: "Reading Intervention",
+    highlightColor: "#F59E0B",
+    highlightBg: "#FFFBEB",
+    timeSave: "Supports 1:1 reading",
   },
   {
     name: "Canva Magic Studio",
     url: "https://www.canva.com/magic",
     grade: ["Elementary", "Middle School", "High School", "Administrators"],
-    useCase: ["Lesson Planning", "Communication"],
-    rating: 3,
+    useCase: ["Planning & Materials", "Communication & Operations"],
+    rating: 4,
     cost: "Free / Premium",
     privacy: "Review Required",
-    desc: "AI-powered design tools for creating classroom materials, presentations, and parent communications. Magic Write generates text; Magic Design creates layouts.",
+    desc: "AI-assisted design for presentations, newsletters, classroom visuals, family updates, and professional learning materials. Useful when communication quality and fast visual production matter.",
     highlight: "Design + AI",
     highlightColor: "#E8533A",
     highlightBg: "#FFF7F5",
@@ -114,15 +169,29 @@ const tools = [
     name: "Otter.ai",
     url: "https://otter.ai",
     grade: ["Administrators"],
-    useCase: ["Communication", "Policy"],
+    useCase: ["Communication & Operations"],
     rating: 4,
     cost: "Free / Business",
     privacy: "Review Required",
-    desc: "AI transcription and meeting notes for administrators. Excellent for IEP meetings, staff meetings, and professional development sessions. Generates summaries and action items.",
-    highlight: "Admin Efficiency",
+    desc: "AI transcription, meeting notes, summaries, and action items for leadership meetings, professional development, planning sessions, and internal operations. Avoid recording sensitive student meetings without district approval.",
+    highlight: "Meeting Notes",
     highlightColor: "#E8533A",
     highlightBg: "#FFF7F5",
     timeSave: "1–2 hrs/week",
+  },
+  {
+    name: "ChatGPT Edu",
+    url: "https://openai.com/chatgpt/education",
+    grade: ["Middle School", "High School", "Administrators"],
+    useCase: ["Planning & Materials", "Communication & Operations"],
+    rating: 4,
+    cost: "Education Plan",
+    privacy: "District Review",
+    desc: "General-purpose AI for drafting, analysis, policy brainstorming, grant language, PD planning, and complex communication workflows. Best listed as an advanced planning tool, not as the default answer for every classroom category.",
+    highlight: "Advanced Drafting",
+    highlightColor: "#2563EB",
+    highlightBg: "#EFF6FF",
+    timeSave: "2–4 hrs/week",
   },
 ];
 
@@ -146,9 +215,14 @@ export default function ToolDirectory() {
   const [search, setSearch] = useState("");
 
   const filtered = tools.filter((t) => {
+    const query = search.trim().toLowerCase();
     const matchGrade = gradeFilter === "All Levels" || t.grade.includes(gradeFilter);
     const matchUse = useCaseFilter === "All Uses" || t.useCase.includes(useCaseFilter);
-    const matchSearch = search === "" || t.name.toLowerCase().includes(search.toLowerCase()) || t.desc.toLowerCase().includes(search.toLowerCase());
+    const matchSearch =
+      query === "" ||
+      t.name.toLowerCase().includes(query) ||
+      t.desc.toLowerCase().includes(query) ||
+      t.useCase.some((use) => use.toLowerCase().includes(query));
     return matchGrade && matchUse && matchSearch;
   });
 
@@ -160,11 +234,25 @@ export default function ToolDirectory() {
           <div className="max-w-3xl">
             <span className="text-xs font-bold font-display uppercase tracking-widest text-teal-100 mb-3 block">AI Tool Directory</span>
             <h1 className="text-4xl font-extrabold font-display text-white mb-4 leading-tight">
-              Vetted AI tools for K-12 educators. No vendor bias.
+              Vetted AI tools for K-12 educators. No filler categories.
             </h1>
             <p className="text-lg text-teal-100 leading-relaxed">
-              Every tool reviewed for privacy compliance, classroom practicality, and real-world time savings. Organized by grade level and use case.
+              A practical directory of classroom-tested and administrator-relevant AI tools, organized around real educator workflows instead of thin one-tool sections.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Directory Principles */}
+      <section className="py-6 bg-white border-b border-gray-100">
+        <div className="container">
+          <div className="grid md:grid-cols-3 gap-3">
+            {directoryPrinciples.map((principle) => (
+              <div key={principle} className="flex gap-2 rounded-xl border border-teal-100 bg-teal-50/60 p-3">
+                <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#0D9488]" />
+                <p className="text-xs leading-relaxed text-[#0F2A4A]">{principle}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -177,7 +265,7 @@ export default function ToolDirectory() {
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search tools…"
+                placeholder="Search tools or workflows…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-200"
@@ -220,18 +308,18 @@ export default function ToolDirectory() {
       {/* Tools Grid */}
       <section className="py-12 bg-[#F8FAFC]">
         <div className="container">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
             <p className="text-sm text-gray-500 font-display">
               Showing <strong className="text-[#0F2A4A]">{filtered.length}</strong> tools
             </p>
-            <p className="text-xs text-gray-400">All tools reviewed for FERPA/COPPA compliance</p>
+            <p className="text-xs text-gray-400">District privacy review is still recommended before student use.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((tool, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-all">
+            {filtered.map((tool) => (
+              <div key={tool.name} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h3 className="text-base font-bold font-display text-[#0F2A4A]">{tool.name}</h3>
                       <span
                         className="text-xs font-bold font-display px-2 py-0.5 rounded-full"
@@ -247,6 +335,7 @@ export default function ToolDirectory() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="shrink-0 p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-gray-400 hover:text-[#0D9488]"
+                    aria-label={`Visit ${tool.name}`}
                   >
                     <ExternalLink size={14} />
                   </a>
@@ -257,6 +346,12 @@ export default function ToolDirectory() {
                 <div className="flex flex-wrap gap-2 mb-3">
                   {tool.grade.map((g) => (
                     <span key={g} className="text-xs bg-gray-50 text-gray-500 px-2 py-0.5 rounded-full border border-gray-100">{g}</span>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {tool.useCase.map((use) => (
+                    <span key={use} className="text-[11px] bg-blue-50 text-[#2563EB] px-2 py-0.5 rounded-full border border-blue-100">{use}</span>
                   ))}
                 </div>
 
