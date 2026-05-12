@@ -13,11 +13,11 @@ export default function Administrators() {
         label: "Administrators & School Leaders",
         color: "#E8533A",
         bg: "#FFF7F5",
-        tagline: "Governance, policy, data privacy, and operational efficiency for K-12 leaders.",
+        tagline: "AI governance, policy, privacy, and implementation support for K-12 leaders.",
         description:
-          "District leaders need practical AI guidance they can adapt quickly for staff, students, families, and board conversations. Start with ready-to-edit templates powered by K-8 AI, then use this hub for governance, privacy, professional development, and district strategy.",
+          "Use The AI Classroom Hub as your broad K-12 resource center for AI governance, privacy, professional learning, and district strategy. When your leadership team needs a ready-to-use implementation system for K-8 policy rollout, communication, and launch planning, the K-8 AI Blueprint provides the focused next step.",
         primaryAction: {
-          label: "Get Editable AI Policy Templates",
+          label: "View the K-8 AI Blueprint",
           href: `${blueprintUrl}&utm_content=hero_primary`,
           external: true,
         },
@@ -38,13 +38,13 @@ export default function Administrators() {
         resources: [
           {
             icon: "📋",
-            title: "AI Policy Template Library",
-            desc: "Ready-to-edit K-8 AI policy templates for staff, students, families, and school leaders. Built to help you move from concern to clear guidance this week.",
-            tag: "Most Urgent",
+            title: "K-8 AI Blueprint Implementation System",
+            desc: "A focused companion offer from K-8 AI with editable policy templates, stakeholder communication language, and a practical launch plan for school leaders who need implementation-ready guidance.",
+            tag: "Recommended Next Step",
             tagColor: "#E8533A",
             tagBg: "#FFF7F5",
             href: `${blueprintUrl}&utm_content=resource_card`,
-            actionLabel: "View templates",
+            actionLabel: "View Blueprint",
             external: true,
           },
           {
@@ -90,9 +90,9 @@ export default function Administrators() {
         ],
         researchNote:
           "The CoSN AI District Leaders Action Summit in May 2026 drew 29+ district leadership teams, confirming that AI governance is now a C-suite priority. The most successful districts are starting with clearly defined problems rather than available products, and using phased pilots with measurable outcomes rather than district-wide rollouts.",
-        ctaTitle: "Need an AI policy before the next board or staff meeting?",
+        ctaTitle: "Need a school-ready AI implementation system before the next board or staff meeting?",
         ctaDescription:
-          "Get the K-8 AI Blueprint with editable policy templates, communication language, and a practical launch plan.",
+          "The K-8 AI Blueprint turns the guidance from this hub into editable policies, communication language, and a practical launch plan for K-8 school teams.",
         ctaLabel: "View the K-8 AI Blueprint",
         ctaHref: `${blueprintUrl}&utm_content=bottom_cta`,
         ctaExternal: true,
