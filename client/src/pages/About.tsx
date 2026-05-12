@@ -4,7 +4,7 @@
 
 import Layout from "@/components/Layout";
 import { Link } from "wouter";
-import { ArrowRight, Shield, BookOpen, Users, TrendingUp } from "lucide-react";
+import { ArrowRight, Shield, BookOpen, Users, TrendingUp, ClipboardCheck, FileText, LockKeyhole } from "lucide-react";
 
 const values = [
   {
@@ -121,12 +121,50 @@ export default function About() {
       <section className="py-14 bg-white">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative rounded-2xl overflow-hidden shadow-xl order-2 lg:order-1">
-              <img
-                src="/manus-storage/admin-section_05026089.png"
-                alt="School administrator reviewing AI policy documents"
-                className="w-full h-72 lg:h-80 object-cover"
-              />
+            <div
+              className="relative rounded-2xl overflow-hidden shadow-xl order-2 lg:order-1 bg-gradient-to-br from-[#EFF6FF] via-white to-[#FFF7F5] border border-gray-100"
+              aria-label="School administrator reviewing AI policy documents"
+            >
+              <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_20%_20%,#93C5FD_0,transparent_28%),radial-gradient(circle_at_80%_10%,#FDBA74_0,transparent_24%),radial-gradient(circle_at_50%_90%,#5EEAD4_0,transparent_26%)]" />
+              <div className="relative h-72 lg:h-80 p-7 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <div className="inline-flex items-center gap-2 bg-white/90 rounded-full px-3 py-2 shadow-sm border border-blue-100">
+                    <Shield size={16} className="text-[#2563EB]" />
+                    <span className="text-xs font-bold font-display text-[#0F2A4A]">AI Governance</span>
+                  </div>
+                  <div className="inline-flex items-center gap-2 bg-white/90 rounded-full px-3 py-2 shadow-sm border border-orange-100">
+                    <LockKeyhole size={16} className="text-[#E8533A]" />
+                    <span className="text-xs font-bold font-display text-[#0F2A4A]">Privacy Ready</span>
+                  </div>
+                </div>
+
+                <div className="bg-white/95 rounded-2xl shadow-lg border border-gray-100 p-5 max-w-sm mx-auto w-full">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="p-2.5 rounded-xl bg-[#EFF6FF]">
+                      <ClipboardCheck size={24} className="text-[#2563EB]" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-extrabold font-display text-[#0F2A4A]">Leader Implementation Checklist</h3>
+                      <p className="text-xs text-gray-500 mt-1">Policy, communication, rollout, and review</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    {["Clear AI use policy", "Staff guidance", "Family communication"].map((item) => (
+                      <div key={item} className="flex items-center gap-2 text-xs text-gray-600">
+                        <span className="w-5 h-5 rounded-full bg-[#0D9488] text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <div className="inline-flex items-center gap-2 bg-[#0F2A4A] text-white rounded-xl px-4 py-3 shadow-md">
+                    <FileText size={18} />
+                    <span className="text-xs font-bold font-display">K-12 administrator resources</span>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="order-1 lg:order-2">
               <span className="text-xs font-bold font-display uppercase tracking-widest text-[#E8533A] mb-3 block">For Leaders Too</span>
