@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+---
+
+<Base
+  title="Page not found — AI Classroom Hub"
+  description="That page isn't on the AI Classroom Hub. Head back to the resources for K-12 teachers."
+  path="/404"
+>
+  <section class="py-24 bg-[#F8FAFC]">
+    <div class="container">
+      <div class="max-w-lg mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 px-8 py-10 text-center">
+        <div class="flex justify-center mb-6">
+          <div class="rounded-full bg-red-50 p-4">
+            <Icon name="AlertCircle" size={48} class="text-red-500" />
+          </div>
+        </div>
+        <p class="text-4xl font-extrabold font-display text-[#0F2A4A] mb-2">404</p>
+        <h1 class="text-xl font-semibold font-display text-gray-700 mb-4">Page not found</h1>
+        <p class="text-gray-600 mb-8 leading-relaxed">
+          Sorry, the page you are looking for doesn't exist.
+          <br />
+          It may have been moved or deleted.
+        </p>
+        <a href="/" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-all shadow-md">
+          <Icon name="Home" size={16} />
+          Go Home
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

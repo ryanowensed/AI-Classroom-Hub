@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro";
+import BranchPage from "../components/BranchPage.astro";
+import { prek } from "../data/branches";
+---
+
+<Base title={prek.title} description={prek.metaDescription} path={prek.path}>
+  <BranchPage config={prek} />
+</Base>

@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { articleJsonLd } from "../../lib/seo";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => data.draft !== true);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const path = `/posts/${post.id}`;
+---
+
+<Base
+  title={`${post.data.title} — AI Classroom Hub`}
+  description={post.data.description}
+  path={path}
+  ogType="article"
+  jsonLd={articleJsonLd({
+    title: post.data.title,
+    description: post.data.description,
+    path,
+    datePublished: post.data.pubDate,
+    dateModified: post.data.updatedDate,
+  })}
+>
+  <article class="py-14 bg-white">
+    <div class="container">
+      <div class="max-w-3xl mx-auto">
+        <p class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-3">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </time>
+        </p>
+        <h1 class="text-4xl font-extrabold font-display text-[#0F2A4A] mb-6">{post.data.title}</h1>
+        <div class="prose max-w-none text-gray-700">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,62 @@
+---
+interface Props {
+  variant?: "light" | "dark";
+  showTagline?: boolean;
+  size?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const { variant = "light", showTagline = false, size = "sm", class: className = "" } = Astro.props;
+const primaryText = variant === "dark" ? "text-white" : "text-[#0F2A4A]";
+const secondaryText = variant === "dark" ? "text-white/92" : "text-[#10233F]";
+const slashColor = variant === "dark" ? "text-[#F9735B]" : "text-[#E8533A]";
+const taglineColor = variant === "dark" ? "text-white/60" : "text-[#0F2A4A]/55";
+const ruleColor = variant === "dark" ? "border-white/25" : "border-[#0F2A4A]/15";
+
+const sizeConfig = {
+  sm: {
+    wrap: "text-[1.02rem]",
+    slash: "text-[1.08rem] mx-[0.34em]",
+    tagline: "text-[0.54rem] tracking-[0.2em] mt-1.5",
+    rule: "mt-2 mb-1.5",
+  },
+  md: {
+    wrap: "text-[1.42rem]",
+    slash: "text-[1.5rem] mx-[0.38em]",
+    tagline: "text-[0.65rem] tracking-[0.22em] mt-2",
+    rule: "mt-2.5 mb-1.5",
+  },
+  lg: {
+    wrap: "text-[2rem]",
+    slash: "text-[2.1rem] mx-[0.4em]",
+    tagline: "text-[0.75rem] tracking-[0.24em] mt-2.5",
+    rule: "mt-3 mb-2",
+  },
+};
+
+const cfg = sizeConfig[size];
+---
+
+<div class:list={["inline-flex flex-col", className]}>
+  <div
+    class:list={[
+      "flex items-center leading-none font-display tracking-[-0.045em] whitespace-nowrap",
+      cfg.wrap,
+    ]}
+    aria-label="The AI Classroom Hub"
+  >
+    <span class:list={[primaryText, "font-extrabold"]}>The AI Classroom</span>
+    <span class:list={[cfg.slash, slashColor, "font-black leading-none translate-y-[-0.01em]"]} aria-hidden="true">/</span>
+    <span class:list={[secondaryText, "font-extrabold"]}>Hub</span>
+  </div>
+  {
+    showTagline && (
+      <>
+        <div class:list={["border-t", ruleColor, cfg.rule]} />
+        <span class:list={[cfg.tagline, taglineColor, "uppercase font-semibold font-display"]}>
+          K–12 AI Resources for Educators
+        </span>
+      </>
+    )
+  }
+</div>

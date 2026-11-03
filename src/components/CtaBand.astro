@@ -1,0 +1,36 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+  label: string;
+  external?: boolean;
+  centered?: boolean;
+}
+
+const { title, description, href, label, external = false, centered = false } = Astro.props;
+---
+
+<section class="py-12 bg-[#0F2A4A]">
+  <div class="container">
+    <div class:list={[centered ? "max-w-xl mx-auto text-center" : "flex flex-col sm:flex-row items-center justify-between gap-6"]}>
+      <div>
+        <h2 class:list={["font-bold font-display text-white mb-1", centered ? "text-2xl mb-3" : "text-xl"]}>{title}</h2>
+        <p class:list={["text-sm text-blue-200", centered && "mb-6"]}>{description}</p>
+      </div>
+      <a
+        href={href}
+        class:list={[
+          "shrink-0 inline-flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors",
+          centered && "inline-flex",
+        ]}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noreferrer" : undefined}
+      >
+        {label} <Icon name="ArrowRight" size={14} />
+      </a>
+    </div>
+  </div>
+</section>

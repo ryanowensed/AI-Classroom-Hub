@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro";
+import BranchPage from "../components/BranchPage.astro";
+import { administrators } from "../data/branches";
+---
+
+<Base title={administrators.title} description={administrators.metaDescription} path={administrators.path}>
+  <BranchPage config={administrators} />
+</Base>

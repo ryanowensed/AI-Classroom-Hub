@@ -1,0 +1,100 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import type { icons } from "lucide";
+
+const soon = "This resource is coming soon.";
+
+const resources: {
+  icon: keyof typeof icons;
+  color: string;
+  bg: string;
+  label: string;
+  desc: string;
+  href?: string;
+  tag: string;
+  comingSoon?: boolean;
+}[] = [
+  { icon: "Wrench", color: "#0D9488", bg: "#F0FDFA", label: "AI Tool Directory", desc: "Searchable, filterable database of vetted AI tools organized by grade level, subject, and use case. No vendor bias.", href: "/tool-directory", tag: "Tier 1" },
+  { icon: "FileText", color: "#2563EB", bg: "#EFF6FF", label: "Prompt Library", desc: "Grade-level and subject-specific prompt templates for ChatGPT, Gemini, and Claude. The #1 time-saving resource.", href: "/prompt-library", tag: "Most Requested" },
+  { icon: "BookOpen", color: "#6366F1", bg: "#EEF2FF", label: "AI Glossary for Educators", desc: "Plain-language definitions of key AI terms. Reduces intimidation and builds foundational literacy for all staff.", tag: "Coming Soon", comingSoon: true },
+  { icon: "GraduationCap", color: "#10B981", bg: "#ECFDF5", label: "PD Pathways", desc: "Self-paced learning modules for beginner, intermediate, and advanced AI users. Structured for individual or department use.", tag: "Coming Soon", comingSoon: true },
+  { icon: "BarChart2", color: "#F59E0B", bg: "#FFFBEB", label: "Research & Reports Library", desc: "Curated library of credible AI in education research from RAND, Stanford HAI, Brookings, and others.", tag: "Coming Soon", comingSoon: true },
+  { icon: "Globe", color: "#E8533A", bg: "#FFF7F5", label: "News & Trends Feed", desc: "Regularly updated digest of AI in education news, policy changes, and tool updates. Curated for K-12 relevance.", tag: "Coming Soon", comingSoon: true },
+  { icon: "Users", color: "#0F2A4A", bg: "#F1F5F9", label: "Community Forum", desc: "Peer-to-peer space for educators to share experiences, exchange resources, and ask questions. Moderated by practitioners.", tag: "Coming Soon", comingSoon: true },
+  { icon: "Download", color: "#6366F1", bg: "#EEF2FF", label: "Free Downloads", desc: "High-value, low-barrier entry point for new visitors. Templates, checklists, and quick-start guides.", tag: "Coming Soon", comingSoon: true },
+  { icon: "Shield", color: "#E8533A", bg: "#FFF7F5", label: "AI Ethics & Safety Center", desc: "Foundational guidance on responsible AI use for all levels. Covers bias, privacy, equity, and age-appropriate use.", tag: "Coming Soon", comingSoon: true },
+];
+---
+
+<Base
+  title="Hub Resources — AI Classroom Hub"
+  description="Cross-cutting resources for every K-12 educator. The AI tool directory, prompt library, and the rest of the Hub, accessible from every grade-level branch."
+  path="/hub-resources"
+>
+  <section class="py-16 bg-[#0F2A4A]">
+    <div class="container">
+      <div class="max-w-3xl">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-blue-300 mb-3 block">Hub Resources</span>
+        <h1 class="text-4xl font-extrabold font-display text-white mb-4 leading-tight">Cross-cutting resources for every K-12 educator.</h1>
+        <p class="text-lg text-blue-200 leading-relaxed">
+          These resources exist at the Hub level and are accessible from every branch page. Built to serve teachers and administrators across all grade levels and subject areas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 bg-[#F8FAFC]">
+    <div class="container">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {
+          resources.map((resource) => (
+            <article class:list={["group bg-white rounded-xl border border-gray-100 p-6 shadow-sm transition-all", resource.comingSoon ? "opacity-80" : "hover:shadow-md hover:-translate-y-1"]}>
+              {resource.href ? (
+                <a href={resource.href} class="block">
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="p-2.5 rounded-lg" style={`background-color: ${resource.bg}`}>
+                      <Icon name={resource.icon} size={20} style={`color: ${resource.color}`} />
+                    </div>
+                    <span class="text-xs font-bold font-display px-2 py-0.5 rounded-full" style={`background-color: ${resource.bg}; color: ${resource.color}`}>{resource.tag}</span>
+                  </div>
+                  <h2 class="text-base font-bold font-display text-[#0F2A4A] mb-2">{resource.label}</h2>
+                  <p class="text-sm text-gray-500 leading-relaxed mb-4">{resource.desc}</p>
+                  <div class="flex items-center gap-1 text-sm font-semibold font-display opacity-0 group-hover:opacity-100 transition-opacity" style={`color: ${resource.color}`}>
+                    Explore <Icon name="ArrowRight" size={13} />
+                  </div>
+                </a>
+              ) : (
+                <div>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="p-2.5 rounded-lg" style={`background-color: ${resource.bg}`}>
+                      <Icon name={resource.icon} size={20} style={`color: ${resource.color}`} />
+                    </div>
+                    <span class="text-xs font-bold font-display px-2 py-0.5 rounded-full bg-gray-100 text-gray-400">{resource.tag}</span>
+                  </div>
+                  <h2 class="text-base font-bold font-display text-[#0F2A4A] mb-2">{resource.label}</h2>
+                  <p class="text-sm text-gray-400 leading-relaxed">{resource.desc}</p>
+                  <p class="mt-3 text-xs text-gray-500">{soon}</p>
+                </div>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 bg-[#0F2A4A]">
+    <div class="container">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <h2 class="text-xl font-bold font-display text-white mb-1">New resources added every week.</h2>
+          <p class="text-sm text-blue-200">New Hub Resources show up in Office Hours /AI.</p>
+        </div>
+        <a href="/newsletter" class="shrink-0 flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors">
+          Office Hours /AI <Icon name="ArrowRight" size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

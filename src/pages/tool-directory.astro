@@ -1,0 +1,162 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { directoryPrinciples, gradeFilters, tools, useCaseFilters } from "../data/tools";
+---
+
+<Base
+  title="AI Tool Directory — AI Classroom Hub"
+  description="A practical directory of classroom-tested and administrator-relevant AI tools, organized around real educator workflows. Vetted for K-12. No filler categories."
+  path="/tool-directory"
+>
+  <section class="py-14 bg-[#0D9488]">
+    <div class="container">
+      <div class="max-w-3xl">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-teal-100 mb-3 block">AI Tool Directory</span>
+        <h1 class="text-4xl font-extrabold font-display text-white mb-4 leading-tight">Vetted AI tools for K-12 educators. No filler categories.</h1>
+        <p class="text-lg text-teal-100 leading-relaxed">
+          A practical directory of classroom-tested and administrator-relevant AI tools, organized around real educator workflows instead of thin one-tool sections.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-6 bg-white border-b border-gray-100">
+    <div class="container">
+      <div class="grid md:grid-cols-3 gap-3">
+        {
+          directoryPrinciples.map((principle) => (
+            <div class="flex gap-2 rounded-xl border border-teal-100 bg-teal-50/60 p-3">
+              <Icon name="CheckCircle2" size={16} class="mt-0.5 shrink-0 text-[#0D9488]" />
+              <p class="text-xs leading-relaxed text-[#0F2A4A]">{principle}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div data-directory>
+    <section class="py-5 bg-white border-b border-gray-100 sticky top-16 z-30">
+      <div class="container">
+        <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-2">
+          <div class="relative flex-1 max-w-xs">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><Icon name="Search" size={14} /></span>
+            <label class="sr-only" for="tool-search">Search tools</label>
+            <input id="tool-search" data-search type="search" placeholder="Search tools or workflows…" class="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-200" />
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-2">
+          {
+            gradeFilters.map((filter, index) => (
+              <button type="button" data-filter-group="grade" data-tone="teal" data-value={filter} aria-pressed={index === 0 ? "true" : "false"} class="text-xs font-semibold font-display px-3 py-1.5 rounded-full border transition-colors bg-white text-gray-600 border-gray-200 hover:border-[#0D9488] hover:text-[#0D9488]">
+                {filter}
+              </button>
+            ))
+          }
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {
+            useCaseFilters.map((filter, index) => (
+              <button type="button" data-filter-group="use" data-tone="blue" data-value={filter} aria-pressed={index === 0 ? "true" : "false"} class="text-xs font-semibold font-display px-3 py-1.5 rounded-full border transition-colors bg-white text-gray-500 border-gray-200 hover:border-[#2563EB] hover:text-[#2563EB]">
+                {filter}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-[#F8FAFC]">
+      <div class="container">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+          <p class="text-sm text-gray-500 font-display">
+            Showing <strong class="text-[#0F2A4A]" data-count>{tools.length}</strong> tools
+          </p>
+          <p class="text-xs text-gray-400">District privacy review is still recommended before student use.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {
+            tools.map((tool) => (
+              <article
+                class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-all"
+                data-item
+                data-grade={tool.grade.join("|")}
+                data-use={tool.useCase.join("|")}
+                data-text={`${tool.name} ${tool.desc} ${tool.useCase.join(" ")}`}
+              >
+                <div class="flex items-start justify-between gap-2 mb-3">
+                  <div>
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                      <h2 class="text-base font-bold font-display text-[#0F2A4A]">{tool.name}</h2>
+                      <span class="text-xs font-bold font-display px-2 py-0.5 rounded-full" style={`background-color: ${tool.highlightBg}; color: ${tool.highlightColor}`}>{tool.highlight}</span>
+                    </div>
+                    <div class="flex gap-0.5" aria-label={`${tool.rating} out of 5`}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Icon name="Star" size={12} filled={star <= tool.rating} class={star <= tool.rating ? "text-amber-400" : "text-gray-200"} />
+                      ))}
+                    </div>
+                  </div>
+                  <a href={tool.url} target="_blank" rel="noopener noreferrer" class="shrink-0 p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors text-gray-400 hover:text-[#0D9488]" aria-label={`Visit ${tool.name}`}>
+                    <Icon name="ExternalLink" size={14} />
+                  </a>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed mb-4">{tool.desc}</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  {tool.grade.map((grade) => (
+                    <span class="text-xs bg-gray-50 text-gray-500 px-2 py-0.5 rounded-full border border-gray-100">{grade}</span>
+                  ))}
+                </div>
+                <div class="flex flex-wrap gap-1.5 mb-3">
+                  {tool.useCase.map((use) => (
+                    <span class="text-[11px] bg-blue-50 text-[#2563EB] px-2 py-0.5 rounded-full border border-blue-100">{use}</span>
+                  ))}
+                </div>
+                <div class="grid grid-cols-3 gap-2 pt-3 border-t border-gray-50">
+                  <div class="text-center">
+                    <div class="text-xs text-gray-400 mb-0.5">Cost</div>
+                    <div class="text-xs font-semibold font-display text-[#0F2A4A]">{tool.cost}</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="flex items-center justify-center gap-0.5 text-xs text-gray-400 mb-0.5">
+                      <Icon name="Shield" size={10} /> Privacy
+                    </div>
+                    <div class="text-xs font-semibold font-display text-[#0D9488]">{tool.privacy}</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="flex items-center justify-center gap-0.5 text-xs text-gray-400 mb-0.5">
+                      <Icon name="Clock" size={10} /> Saves
+                    </div>
+                    <div class="text-xs font-semibold font-display text-[#2563EB]">{tool.timeSave}</div>
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+        <div data-empty hidden class="text-center py-16">
+          <p class="text-gray-400 font-display mb-2">No tools match your filters.</p>
+          <button type="button" data-clear class="text-sm text-[#0D9488] hover:underline">Clear all filters</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="py-12 bg-[#0F2A4A]">
+    <div class="container">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <h2 class="text-xl font-bold font-display text-white mb-1">New tools reviewed every week.</h2>
+          <p class="text-sm text-blue-200">The Tool of the Week is in Office Hours /AI — every Sunday, free.</p>
+        </div>
+        <a href="/newsletter" class="shrink-0 flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors">
+          Office Hours /AI <Icon name="ArrowRight" size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import "../scripts/directory.ts";
+</script>
