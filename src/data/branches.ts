@@ -117,7 +117,7 @@ export const prek: BranchConfig = {
   ],
   researchNote:
     "Research from Boston Children's Digital Wellness Lab has found that the youngest children are most likely to attribute human-like emotions to technology, raising developmental concerns that educators must address proactively. The primary concern at this level is developmental appropriateness, not productivity.",
-  ctaLabel: "Subscribe to Office Hours /AI",
+  ctaLabel: "Office Hours /AI",
 };
 
 export const elementary: BranchConfig = {

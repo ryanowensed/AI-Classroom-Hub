@@ -6,20 +6,20 @@ import { gradeFilters, prompts, subjectFilters } from "../data/prompts";
 
 <Base
   title="Prompt Library — AI Classroom Hub"
-  description="25 grade-level mega-prompts for ChatGPT, Claude, and Gemini. Each one uses the RCTF structure — Role, Context, Task, Format — for classroom-ready output."
+  description={`${prompts.length} grade-level mega-prompts for ChatGPT, Claude, and Gemini. Each one uses the RCTF structure — Role, Context, Task, Format — for classroom-ready output.`}
   path="/prompt-library"
 >
   <section class="py-14 bg-[#2563EB] relative overflow-hidden">
     <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, white 0, white 1px, transparent 0, transparent 50%); background-size: 20px 20px;"></div>
     <div class="container relative">
       <div class="max-w-3xl">
-        <span class="text-xs font-bold font-display uppercase tracking-widest text-blue-200 mb-3 block">Prompt Library — 25 Mega-Prompts</span>
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-blue-200 mb-3 block">Prompt Library — {prompts.length} Mega-Prompts</span>
         <h1 class="text-4xl font-extrabold font-display text-white mb-4 leading-tight">Grade-level mega-prompts that save real time.</h1>
         <p class="text-lg text-blue-100 leading-relaxed mb-4">
           Teachers using AI across multiple categories save an average of 10–14 hours per week. Every prompt here uses the 2026 RCTF structure — Role, Context, Task, Format — for maximum depth and accuracy.
         </p>
         <div class="flex flex-wrap gap-3 text-sm text-blue-200">
-          <span class="flex items-center gap-1.5"><Icon name="Check" size={14} /> 25 mega-prompts</span>
+          <span class="flex items-center gap-1.5"><Icon name="Check" size={14} /> {prompts.length} mega-prompts</span>
           <span class="flex items-center gap-1.5"><Icon name="Check" size={14} /> Pre-K through Administrators</span>
           <span class="flex items-center gap-1.5"><Icon name="Check" size={14} /> Works with ChatGPT, Claude, Gemini</span>
           <span class="flex items-center gap-1.5"><Icon name="Check" size={14} /> Copy with one click</span>
@@ -138,10 +138,10 @@ import { gradeFilters, prompts, subjectFilters } from "../data/prompts";
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <h2 class="text-xl font-bold font-display text-white mb-1">New prompts added every Sunday.</h2>
-          <p class="text-sm text-blue-200">Subscribe to Office Hours /AI — one prompt, one tool, one story. Free.</p>
+          <p class="text-sm text-blue-200">Office Hours /AI — one prompt, one tool, one story. Free.</p>
         </div>
         <a href="/newsletter" class="shrink-0 flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors">
-          Subscribe Free <Icon name="ArrowRight" size={14} />
+          Office Hours /AI <Icon name="ArrowRight" size={14} />
         </a>
       </div>
     </div>

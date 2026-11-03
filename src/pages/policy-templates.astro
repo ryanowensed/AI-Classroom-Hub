@@ -69,27 +69,6 @@ const accent = {
     </div>
   </section>
 
-  <section data-locked-banner class="py-5 bg-[#0F2A4A] border-b border-blue-900">
-    <div class="container flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <Icon name="Lock" size={20} class="text-blue-300 shrink-0" />
-        <p class="text-sm text-blue-100">
-          <span class="font-semibold text-white">Free access</span> — enter your name and email to copy or download any template.
-        </p>
-      </div>
-      <button type="button" data-open-gate class="shrink-0 bg-[#E8533A] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#d44530] transition-colors">
-        Unlock All Templates →
-      </button>
-    </div>
-  </section>
-
-  <section data-unlocked-banner class="py-3 bg-green-50 border-b border-green-200">
-    <div class="container flex items-center gap-2">
-      <Icon name="Unlock" size={16} class="text-green-600 shrink-0" />
-      <p class="text-sm text-green-800 font-medium">Templates unlocked — copy or download any template below.</p>
-    </div>
-  </section>
-
   <section class="py-8 bg-amber-50 border-b border-amber-100">
     <div class="container">
       <div class="flex items-start gap-3">
@@ -168,34 +147,17 @@ const accent = {
                       </div>
                       <h2 class="font-display font-bold text-[#0F2A4A] text-lg leading-snug">{policy.title}</h2>
                     </div>
-                    <span data-locked><Icon name="Lock" size={16} class="text-gray-400 shrink-0 mt-1" /></span>
-                    <span data-unlocked><Icon name="Unlock" size={16} class="text-green-500 shrink-0 mt-1" /></span>
                   </div>
                   <p class="text-sm text-gray-600 leading-relaxed mb-3">{policy.description}</p>
                   <div class="text-xs text-gray-400 mb-4">
                     <span class="font-medium text-gray-500">Updated:</span> {policy.lastUpdated} · <span class="font-medium text-gray-500">Based on:</span> {policy.basedOn}
                   </div>
-                  <div class="mb-4">
-                    <button type="button" data-unlocked data-expand class="text-sm font-medium text-[#2563EB] hover:text-blue-800 transition-colors">
-                      Preview template
-                    </button>
-                    <div class="mt-3 relative">
-                      <pre data-policy-text data-policy-preview hidden class="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-64 overflow-y-auto">{policy.template}</pre>
-                      <div data-locked class="bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-32 overflow-hidden relative">
-                        <pre class="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed blur-sm select-none">{policy.template.slice(0, 300)}</pre>
-                        <div class="absolute inset-0 flex items-center justify-center bg-white/60 rounded-lg">
-                          <button type="button" data-open-gate class="flex items-center gap-2 bg-[#E8533A] text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-[#d44530] shadow-sm">
-                            <Icon name="Lock" size={12} />
-                            Unlock to preview
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <pre data-policy-text class="text-xs text-gray-700 whitespace-pre-wrap font-mono leading-relaxed bg-gray-50 border border-gray-200 rounded-lg p-4 max-h-64 overflow-y-auto mb-4">{policy.template}</pre>
+                  <p data-copy-status class="text-xs text-red-600 mb-2" role="status"></p>
                   <div class="flex gap-2">
-                    <button type="button" data-policy-copy class="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">
+                    <button type="button" data-policy-copy class="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-[#E8533A] text-white hover:bg-[#d44530]">
                       <Icon name="Copy" size={16} />
-                      <span data-label>Unlock to Copy</span>
+                      <span data-label>Copy</span>
                     </button>
                     <button type="button" data-policy-download class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50">
                       <Icon name="Download" size={16} />
@@ -219,82 +181,14 @@ const accent = {
     <div class="container text-center">
       <p class="text-xs font-bold uppercase tracking-widest text-blue-300 mb-3 font-display">STAY CURRENT</p>
       <h2 class="font-display font-bold text-3xl text-white mb-4">New templates added monthly.</h2>
-      <p class="text-blue-200 mb-6 max-w-xl mx-auto">
-        AI policy is evolving faster than any district can track alone. Subscribe to Office Hours /AI and get policy updates, new templates, and governance guidance every Sunday.
-      </p>
-      <a href="/newsletter" class="inline-flex items-center gap-2 bg-[#E8533A] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#d44530] transition-colors">
-        Subscribe Free →
-      </a>
-    </div>
-  </section>
-
-  <dialog data-policy-dialog class="rounded-xl p-0 max-w-md w-[calc(100%-2rem)] backdrop:bg-black/40">
-    <div class="p-6">
-      <div data-gate-form>
-        <div class="flex items-center gap-3 mb-1">
-          <div class="w-10 h-10 rounded-lg bg-[#E8533A]/10 flex items-center justify-center">
-            <Icon name="Mail" size={20} class="text-[#E8533A]" />
-          </div>
-          <h2 class="font-display text-[#0F2A4A] text-xl">Access the Policy Library</h2>
-        </div>
-        <p class="text-gray-600 leading-relaxed text-sm mb-4">
-          <span data-gate-specific hidden>
-            You're one step away from <span class="font-semibold text-[#0F2A4A]" data-template-title></span>. Enter your name and email for free access to all 6 templates.
-          </span>
-          <span data-gate-generic>Get free access to all 6 AI policy templates — ready to customize for your school or district.</span>
-        </p>
-        <form data-policy-form data-subscribe-custom class="space-y-4" method="post" action="/api/subscribe">
-          <input type="hidden" name="source" value="policy-templates" />
-          <div class="hp" aria-hidden="true">
-            <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
-          </div>
-          <div>
-            <label class="text-sm font-medium text-gray-700 mb-1 block" for="policy-first-name">First Name</label>
-            <input id="policy-first-name" name="firstName" autocomplete="given-name" placeholder="e.g. Sarah" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
-            <p data-error-name class="text-xs text-red-500 mt-1"></p>
-          </div>
-          <div>
-            <label class="text-sm font-medium text-gray-700 mb-1 block" for="policy-email">Work Email</label>
-            <input id="policy-email" name="email" type="email" autocomplete="email" placeholder="you@school.edu" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
-            <p data-error-email class="text-xs text-red-500 mt-1"></p>
-          </div>
-          <p class="text-xs text-gray-400 leading-relaxed">
-            By unlocking, you'll also receive occasional updates from the AI Classroom Hub when new templates are added. Unsubscribe anytime.
+<p class="text-blue-200 max-w-xl mx-auto">
+            AI policy is evolving faster than any district can track alone.
           </p>
-          <p data-gate-status class="text-sm text-red-600" role="status"></p>
-          <div class="flex gap-3 pt-1">
-            <button type="submit" class="flex-1 bg-[#E8533A] hover:bg-[#d44530] text-white font-semibold px-4 py-2 rounded-lg">Unlock Free Access →</button>
-            <button type="button" data-close-gate class="border border-gray-200 px-4 py-2 rounded-lg text-sm font-semibold">Cancel</button>
-          </div>
-        </form>
-      </div>
-      <div data-gate-confirmed hidden class="text-center py-2">
-        <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-          <Icon name="CheckCircle" size={28} class="text-green-600" />
         </div>
-        <h2 class="font-display text-[#0F2A4A] text-xl mb-2">You're in, <span data-confirmed-name></span>!</h2>
-        <p class="text-gray-600 text-sm leading-relaxed mb-1">All 6 policy templates are now unlocked for this session.</p>
-        <div data-gate-specific hidden class="mt-5 mb-5 text-left bg-gray-50 border border-gray-200 rounded-xl p-4">
-          <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">Your requested template</p>
-          <p class="font-semibold text-[#0F2A4A] text-sm mb-3 leading-snug" data-template-title></p>
-          <div class="flex gap-2">
-            <button type="button" data-confirm-download class="flex-1 inline-flex items-center justify-center gap-1.5 bg-[#2563EB] hover:bg-blue-700 text-white text-sm font-semibold px-3 py-2 rounded-lg">
-              <Icon name="Download" size={16} />
-              <span data-label>Download .txt</span>
-            </button>
-            <button type="button" data-confirm-copy class="flex-1 inline-flex items-center justify-center gap-1.5 border border-gray-200 text-sm font-semibold px-3 py-2 rounded-lg">
-              <Icon name="Copy" size={16} />
-              <span data-label>Copy Text</span>
-            </button>
-          </div>
-        </div>
-        <button type="button" data-close-gate class="text-sm text-[#2563EB] hover:text-blue-800 hover:underline font-medium">View all 6 templates →</button>
-      </div>
-    </div>
-  </dialog>
-</Base>
+      </section>
+    </Base>
 
-<script>
-  import "../scripts/directory.ts";
-  import "../scripts/policy.ts";
-</script>
+    <script>
+      import "../scripts/directory.ts";
+      import "../scripts/policy.ts";
+    </script>

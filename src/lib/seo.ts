@@ -15,7 +15,7 @@ export function organizationJsonLd() {
       "The trusted compass for AI in K-12 education. Practical tools, vetted resources, and honest guidance for teachers and administrators.",
     founder: {
       "@type": "Person",
-      name: "Ryan David",
+      name: "Ryan Owens",
     },
   };
 }
@@ -53,7 +53,7 @@ export function articleJsonLd(input: {
     dateModified: (input.dateModified ?? input.datePublished).toISOString(),
     author: {
       "@type": "Person",
-      name: "Ryan David",
+      name: "Ryan Owens",
     },
     publisher: {
       "@type": "Organization",

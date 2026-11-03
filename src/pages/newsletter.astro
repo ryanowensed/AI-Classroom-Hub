@@ -1,7 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
-import SubscribeForm from "../components/SubscribeForm.astro";
 import type { icons } from "lucide";
 
 const issues = [
@@ -20,7 +19,7 @@ const whatIsInside: { icon: keyof typeof icons; color: string; label: string; de
 
 <Base
   title="Office Hours /AI Newsletter — AI Classroom Hub"
-  description="The Sunday read for teachers who teach with AI. One practical tip, one tool, one real classroom story — every Sunday morning. Written by Ryan David. Free."
+  description="The Sunday read for teachers who teach with AI. One practical tip, one tool, one real classroom story — every Sunday morning. Written by Ryan Owens. Free."
   path="/newsletter"
 >
   <section class="py-20 relative overflow-hidden bg-[#C0392B]">
@@ -35,18 +34,11 @@ const whatIsInside: { icon: keyof typeof icons; color: string; label: string; de
           The Sunday read for teachers who teach with AI.
         </h1>
         <p class="text-lg text-white/85 leading-relaxed mb-8">
-          One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday. Written by Ryan David. 20+ years in K-12 classrooms.
+          One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday. Written by Ryan Owens. 20+ years in K-12 classrooms.
         </p>
-        <div class="max-w-md mx-auto">
-          <SubscribeForm
-            source="office-hours"
-            placeholder="your@school.edu"
-            buttonText="Subscribe Free"
-            inputClass="bg-white text-gray-800 placeholder-gray-400 border-0 focus:ring-white/50 py-3"
-            buttonClass="bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white whitespace-nowrap"
-          />
-        </div>
-        <p class="text-white/50 text-xs mt-3">Free every Sunday. Unsubscribe any time.</p>
+        <p class="text-sm text-white/90">
+          For updates, <a href="https://www.linkedin.com/in/ryanowensed" class="font-semibold underline">Ryan Owens on LinkedIn</a>.
+        </p>
       </div>
     </div>
   </section>
@@ -119,7 +111,7 @@ const whatIsInside: { icon: keyof typeof icons; color: string; label: string; de
         <span class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-3 block">Who Made This</span>
         <h2 class="text-2xl font-extrabold font-display text-[#0F2A4A] mb-4">Written by a teacher, for teachers.</h2>
         <p class="text-gray-600 leading-relaxed mb-4">
-          Ryan David has spent 20+ years in K-12 classrooms and currently serves as Director of Operations and Director of Technology for a K-8 school. He writes Office Hours /AI, a free Sunday publication for teachers who teach with AI.
+          Ryan Owens has spent 20+ years in K-12 classrooms and currently serves as Director of Operations and Director of Technology for a K-8 school. He writes Office Hours /AI, a free Sunday publication for teachers who teach with AI.
         </p>
         <p class="text-gray-500 text-sm leading-relaxed">
           He is not selling a course. He is not selling a certification. He is writing to the teachers he used to be.

@@ -1,7 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
-import SubscribeForm from "../components/SubscribeForm.astro";
 import { organizationJsonLd, websiteJsonLd } from "../lib/seo";
 
 const description =
@@ -56,7 +55,7 @@ const testimonials = [
           </p>
           <div class="flex flex-wrap gap-3 mb-10">
             <a href="/newsletter" class="flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg transition-colors text-sm">
-              Subscribe to Office Hours /AI <Icon name="ArrowRight" size={15} />
+              Office Hours /AI <Icon name="ArrowRight" size={15} />
             </a>
             <a href="/hub-resources" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold font-display px-6 py-3 rounded-lg transition-colors text-sm">
               Explore Resources
@@ -222,7 +221,7 @@ const testimonials = [
             AI won't replace great teachers. But teachers who use AI well will have a significant advantage.
           </h2>
           <p class="text-gray-600 leading-relaxed mb-5">
-            The AI Classroom Hub was built by Ryan David — 20+ years in K-12 classrooms, currently Director of Operations and Technology for a K-8 school. Not a course vendor. Not a certification seller. A practitioner writing to the teachers he used to be.
+            The AI Classroom Hub was built by Ryan Owens — 20+ years in K-12 classrooms, currently Director of Operations and Technology for a K-8 school. Not a course vendor. Not a certification seller. A practitioner writing to the teachers he used to be.
           </p>
           <p class="text-gray-600 leading-relaxed mb-7">
             The site exists because 52% of teachers are learning about AI through personal exploration and social media. That's not a system working. That's a gap the Hub is here to fill — with vetted, practical, grade-level guidance that changes what happens on Monday.
@@ -307,18 +306,9 @@ const testimonials = [
         <span class="text-xs font-bold font-display uppercase tracking-widest text-white/70 mb-3 block">Office Hours /AI</span>
         <h2 class="text-3xl font-extrabold font-display text-white mb-4">The Sunday read for teachers who teach with AI.</h2>
         <p class="text-white/85 leading-relaxed mb-8">
-          One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday. Written by Ryan David. Free every week.
+          One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday. Written by Ryan Owens. Free every week.
         </p>
-        <div class="max-w-md mx-auto">
-          <SubscribeForm
-            source="office-hours"
-            placeholder="your@school.edu"
-            buttonText="Subscribe Free"
-            inputClass="bg-white/95 text-gray-800 placeholder-gray-400 border-0 py-3"
-            buttonClass="bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white whitespace-nowrap"
-          />
-        </div>
-        <p class="text-white/50 text-xs mt-3">Free every Sunday. Unsubscribe any time.</p>
+        <a href="/newsletter" class="inline-flex items-center gap-2 text-sm font-semibold font-display text-white underline">Office Hours /AI</a>
       </div>
     </div>
   </section>

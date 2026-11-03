@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import type { icons } from "lucide";
 
-const soon = "This resource is coming soon. Subscribe to Office Hours /AI to be notified.";
+const soon = "This resource is coming soon.";
 
 const resources: {
   icon: keyof typeof icons;
@@ -74,10 +74,7 @@ const resources: {
                   </div>
                   <h2 class="text-base font-bold font-display text-[#0F2A4A] mb-2">{resource.label}</h2>
                   <p class="text-sm text-gray-400 leading-relaxed">{resource.desc}</p>
-                  <button type="button" data-soon class="mt-4 text-xs font-semibold font-display text-[#2563EB]">
-                    Notify me
-                  </button>
-                  <p hidden data-soon-note class="mt-2 text-xs text-gray-600">{soon}</p>
+                  <p class="mt-3 text-xs text-gray-500">{soon}</p>
                 </div>
               )}
             </article>
@@ -92,21 +89,12 @@ const resources: {
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <h2 class="text-xl font-bold font-display text-white mb-1">New resources added every week.</h2>
-          <p class="text-sm text-blue-200">Subscribe to Office Hours /AI to be notified when new Hub Resources go live.</p>
+          <p class="text-sm text-blue-200">New Hub Resources show up in Office Hours /AI.</p>
         </div>
         <a href="/newsletter" class="shrink-0 flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg text-sm transition-colors">
-          Subscribe Free <Icon name="ArrowRight" size={14} />
+          Office Hours /AI <Icon name="ArrowRight" size={14} />
         </a>
       </div>
     </div>
   </section>
 </Base>
-
-<script>
-  document.querySelectorAll("[data-soon]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const note = button.parentElement?.querySelector("[data-soon-note]");
-      if (note instanceof HTMLElement) note.hidden = false;
-    });
-  });
-</script>
