@@ -1,0 +1,325 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import SubscribeForm from "../components/SubscribeForm.astro";
+import { organizationJsonLd, websiteJsonLd } from "../lib/seo";
+
+const description =
+  "The AI Classroom Hub is the trusted compass for K-12 educators navigating AI in the classroom. Vetted tools, prompt libraries, policy templates, and professional development for teachers and administrators.";
+
+const branches = [
+  { label: "Pre-K / Kinder", href: "/prek-kinder", color: "#F59E0B", icon: "🌱", tagline: "Safety-first AI for early learners" },
+  { label: "Elementary", href: "/elementary", color: "#10B981", icon: "📚", tagline: "Differentiation & literacy tools" },
+  { label: "Middle School", href: "/middle-school", color: "#0D9488", icon: "🔬", tagline: "Integrity & engagement resources" },
+  { label: "High School", href: "/high-school", color: "#6366F1", icon: "🎓", tagline: "College & career readiness" },
+  { label: "Administrators", href: "/administrators", color: "#E8533A", icon: "🏫", tagline: "Policy, governance & PD" },
+];
+
+const stats = [
+  { value: "68%", label: "of teachers use AI weekly", sub: "Up from 29% in Jan. 2025", icon: "TrendingUp" as const, color: "#2563EB" },
+  { value: "34%", label: "received formal AI training", sub: "Only 1 in 3 teachers trained", icon: "Users" as const, color: "#E8533A" },
+  { value: "6%", label: "say their AI policy is clear", sub: "Policy clarity is the #1 gap", icon: "Shield" as const, color: "#0D9488" },
+  { value: "10–14", label: "hours saved per week", sub: "For teachers using AI actively", icon: "Clock" as const, color: "#6366F1" },
+];
+
+const tier1 = [
+  { icon: "FileText" as const, color: "#2563EB", bg: "#EFF6FF", label: "Prompt Library", desc: "Grade-level and subject-specific prompt templates for ChatGPT, Gemini, and Claude.", href: "/prompt-library", tag: "Most Requested" },
+  { icon: "Wrench" as const, color: "#0D9488", bg: "#F0FDFA", label: "AI Tool Directory", desc: "Searchable, filterable database of vetted AI tools organized by grade level and use case.", href: "/tool-directory", tag: "Tier 1 Resource" },
+  { icon: "Shield" as const, color: "#E8533A", bg: "#FFF7F5", label: "Policy Templates", desc: "Customizable AI policies for students, teachers, and staff. Ready to adapt for your district.", href: "/administrators", tag: "Urgently Needed" },
+  { icon: "BookOpen" as const, color: "#6366F1", bg: "#EEF2FF", label: "Hub Resources", desc: "Research library, AI glossary, PD pathways, and community forum for K-12 educators.", href: "/hub-resources", tag: "Cross-Cutting" },
+];
+
+const testimonials = [
+  { quote: "The only AI newsletter I actually read top to bottom. Every issue has something I can use the same week.", name: "Rose Prust", role: "Special Ed Teacher, WA" },
+  { quote: "Finally an AI resource written for classroom teachers — not tech people trying to sound like teachers.", name: "J. Dean", role: "Primary Teacher, Manchester UK" },
+  { quote: "I shared it with my whole department. Three of us now use the prompt templates every single week.", name: "Al Rabanera", role: "Math Teacher, Fullerton CA" },
+];
+---
+
+<Base
+  title="AI Classroom Hub — The Trusted Resource for AI in K-12 Education"
+  description={description}
+  path="/"
+  jsonLd={[organizationJsonLd(), websiteJsonLd()]}
+>
+  <section class="relative min-h-[92vh] flex items-center overflow-hidden bg-[#0F2A4A]">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.45),transparent_42%),radial-gradient(circle_at_12%_80%,rgba(232,83,58,0.28),transparent_38%)]"></div>
+    <div class="absolute inset-0 bg-[#0F2A4A]/75"></div>
+    <div class="container relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center py-16">
+        <div>
+          <h1 class="text-4xl lg:text-5xl xl:text-6xl font-extrabold font-display text-white leading-[1.1] mb-5">
+            The trusted compass for AI in K-12 education.
+          </h1>
+          <p class="text-lg text-blue-100 leading-relaxed mb-8 max-w-lg">
+            Vetted tools, prompt libraries, policy templates, and professional development — organized by grade level, built for the classroom.
+          </p>
+          <div class="flex flex-wrap gap-3 mb-10">
+            <a href="/newsletter" class="flex items-center gap-2 bg-[#E8533A] hover:bg-[#d4432a] text-white font-semibold font-display px-6 py-3 rounded-lg transition-colors text-sm">
+              Subscribe to Office Hours /AI <Icon name="ArrowRight" size={15} />
+            </a>
+            <a href="/hub-resources" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold font-display px-6 py-3 rounded-lg transition-colors text-sm">
+              Explore Resources
+            </a>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {
+              branches.map((branch) => (
+                <a href={branch.href} class="group bg-white/8 hover:bg-white/15 border border-white/15 hover:border-white/30 rounded-lg p-3 transition-all">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-base">{branch.icon}</span>
+                    <span class="text-xs font-bold font-display text-white leading-tight">{branch.label}</span>
+                  </div>
+                  <p class="text-xs text-blue-200/80 leading-snug">{branch.tagline}</p>
+                  <div class="mt-2 text-xs font-semibold font-display flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity" style={`color: ${branch.color}`}>
+                    Go <Icon name="ArrowRight" size={10} />
+                  </div>
+                </a>
+              ))
+            }
+            <a href="/hub-resources" class="group bg-white/8 hover:bg-white/15 border border-white/15 hover:border-white/30 rounded-lg p-3 transition-all">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-base">🗂️</span>
+                <span class="text-xs font-bold font-display text-white leading-tight">Hub Resources</span>
+              </div>
+              <p class="text-xs text-blue-200/80 leading-snug">Tools, prompts & PD for all levels</p>
+              <div class="mt-2 text-xs font-semibold font-display flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity text-blue-300">
+                Go <Icon name="ArrowRight" size={10} />
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="hidden lg:block">
+          <div class="bg-white/8 border border-white/15 rounded-2xl p-6 backdrop-blur-sm">
+            <div class="flex items-center gap-2 mb-5">
+              <Icon name="TrendingUp" size={16} class="text-blue-300" />
+              <span class="text-xs font-bold font-display uppercase tracking-widest text-blue-300">2026 Research Data</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5">
+              {
+                stats.map((stat) => (
+                  <div class="bg-white/8 rounded-xl p-4 border border-white/10">
+                    <div class="text-3xl font-extrabold font-display mb-1" style={`color: ${stat.color}`}>{stat.value}</div>
+                    <div class="text-xs font-semibold text-white leading-tight mb-1">{stat.label}</div>
+                    <div class="text-xs text-blue-300/70">{stat.sub}</div>
+                  </div>
+                ))
+              }
+            </div>
+            <div class="bg-[#E8533A]/20 border border-[#E8533A]/30 rounded-lg p-4">
+              <div class="flex items-start gap-2">
+                <Icon name="AlertTriangle" size={15} class="text-[#E8533A] mt-0.5 shrink-0" />
+                <div>
+                  <div class="text-xs font-bold font-display text-white mb-1">The Gap Is Real</div>
+                  <p class="text-xs text-blue-200 leading-relaxed">
+                    52% of teachers learn about AI through personal exploration and social media. The AI Classroom Hub exists to fill this vacuum with trusted, practical guidance.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-blue-400 mt-3 text-center">Sources: RAND 2026, Stanford HAI 2026, TPT State of the Classroom</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#F8FAFC]">
+    <div class="container">
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-2 block">Start Here</span>
+        <h2 class="text-3xl font-extrabold font-display text-[#0F2A4A] mb-3">The resources teachers need most.</h2>
+        <p class="text-gray-500 max-w-xl mx-auto text-sm leading-relaxed">
+          Based on 2026 research data, these four resources address the most acute and broadly-felt needs across K-12 education.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {
+          tier1.map((item) => (
+            <a href={item.href} class="group bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all">
+              <div class="flex items-center justify-between mb-4">
+                <div class="p-2.5 rounded-lg" style={`background-color: ${item.bg}`}>
+                  <Icon name={item.icon} size={20} style={`color: ${item.color}`} />
+                </div>
+                <span class="text-xs font-bold font-display px-2 py-0.5 rounded-full" style={`background-color: ${item.bg}; color: ${item.color}`}>{item.tag}</span>
+              </div>
+              <h3 class="text-base font-bold font-display text-[#0F2A4A] mb-2">{item.label}</h3>
+              <p class="text-sm text-gray-500 leading-relaxed mb-4">{item.desc}</p>
+              <div class="flex items-center gap-1 text-sm font-semibold font-display opacity-0 group-hover:opacity-100 transition-opacity" style={`color: ${item.color}`}>
+                Explore <Icon name="ArrowRight" size={13} />
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 bg-white lg:hidden">
+    <div class="container">
+      <div class="text-center mb-8">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-2 block">Why This Matters</span>
+        <h2 class="text-2xl font-extrabold font-display text-[#0F2A4A]">The state of AI in K-12, 2026.</h2>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        {
+          stats.map((stat) => (
+            <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+              <div class="flex items-start gap-3">
+                <div class="p-2 rounded-lg" style={`background-color: ${stat.color}15`}>
+                  <Icon name={stat.icon} size={18} style={`color: ${stat.color}`} />
+                </div>
+                <div>
+                  <div class="text-2xl font-extrabold font-display" style={`color: ${stat.color}`}>{stat.value}</div>
+                  <div class="text-sm font-semibold text-gray-800 leading-tight">{stat.label}</div>
+                  <div class="text-xs text-gray-400 mt-0.5">{stat.sub}</div>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="container">
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-2 block">Choose Your Path</span>
+        <h2 class="text-3xl font-extrabold font-display text-[#0F2A4A] mb-3">Resources built for your level.</h2>
+        <p class="text-gray-500 max-w-xl mx-auto text-sm leading-relaxed">
+          Every educator's AI challenge is different. Select your grade level or role for resources tailored to your specific needs.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {
+          branches.map((branch) => (
+            <a href={branch.href} class="group relative bg-white rounded-xl border-t-4 border border-gray-100 p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all overflow-hidden" style={`border-top-color: ${branch.color}`}>
+              <div class="flex items-start gap-4">
+                <span class="text-3xl">{branch.icon}</span>
+                <div>
+                  <h3 class="text-lg font-bold font-display text-[#0F2A4A] mb-1">{branch.label}</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">{branch.tagline}</p>
+                </div>
+              </div>
+              <div class="mt-4 flex items-center gap-1 text-sm font-semibold font-display opacity-0 group-hover:opacity-100 transition-opacity" style={`color: ${branch.color}`}>
+                Explore resources <Icon name="ArrowRight" size={13} />
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#F8FAFC]">
+    <div class="container">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-3 block">The Mission</span>
+          <h2 class="text-3xl font-extrabold font-display text-[#0F2A4A] mb-5 leading-tight">
+            AI won't replace great teachers. But teachers who use AI well will have a significant advantage.
+          </h2>
+          <p class="text-gray-600 leading-relaxed mb-5">
+            The AI Classroom Hub was built by Ryan David — 20+ years in K-12 classrooms, currently Director of Operations and Technology for a K-8 school. Not a course vendor. Not a certification seller. A practitioner writing to the teachers he used to be.
+          </p>
+          <p class="text-gray-600 leading-relaxed mb-7">
+            The site exists because 52% of teachers are learning about AI through personal exploration and social media. That's not a system working. That's a gap the Hub is here to fill — with vetted, practical, grade-level guidance that changes what happens on Monday.
+          </p>
+          <a href="/about" class="inline-flex items-center gap-2 text-[#2563EB] font-semibold font-display text-sm hover:gap-3 transition-all">
+            Learn more about the Hub <Icon name="ArrowRight" size={14} />
+          </a>
+        </div>
+        <div class="relative h-72 lg:h-96 rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-[#EFF6FF] via-white to-[#FFF7F5] border border-white" role="img" aria-label="Modern K-12 classroom with students using AI technology">
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(37,99,235,0.16),transparent_30%),radial-gradient(circle_at_86%_18%,rgba(232,83,58,0.16),transparent_26%),radial-gradient(circle_at_50%_84%,rgba(13,148,136,0.12),transparent_34%)]"></div>
+          <div class="absolute inset-x-10 top-10 h-28 rounded-2xl bg-white/80 border border-[#DBEAFE] shadow-sm backdrop-blur-sm">
+            <div class="absolute left-5 top-4 flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-[#E8533A]"></span>
+              <span class="h-3 w-3 rounded-full bg-[#F59E0B]"></span>
+              <span class="h-3 w-3 rounded-full bg-[#10B981]"></span>
+            </div>
+            <div class="absolute left-6 right-6 top-12 grid grid-cols-3 gap-3">
+              <span class="h-3 rounded-full bg-[#BFDBFE]"></span>
+              <span class="h-3 rounded-full bg-[#FECACA]"></span>
+              <span class="h-3 rounded-full bg-[#A7F3D0]"></span>
+              <span class="col-span-2 h-3 rounded-full bg-[#DBEAFE]"></span>
+              <span class="h-3 rounded-full bg-[#FED7AA]"></span>
+            </div>
+          </div>
+          <div class="absolute bottom-20 left-10 right-10 flex items-end justify-center gap-5">
+            <div class="flex flex-col items-center gap-2">
+              <div class="h-12 w-12 rounded-full border-4 border-white shadow-md bg-[#2563EB]"></div>
+              <div class="h-14 w-20 rounded-t-2xl bg-white/85 border border-white shadow-sm"></div>
+              <div class="h-8 w-24 rounded-lg bg-[#0F2A4A]/10"></div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="h-12 w-12 rounded-full border-4 border-white shadow-md bg-[#E8533A]"></div>
+              <div class="h-14 w-20 rounded-t-2xl bg-white/85 border border-white shadow-sm"></div>
+              <div class="h-8 w-28 rounded-lg bg-[#0F2A4A]/10"></div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <div class="h-12 w-12 rounded-full border-4 border-white shadow-md bg-[#0D9488]"></div>
+              <div class="h-14 w-20 rounded-t-2xl bg-white/85 border border-white shadow-sm"></div>
+              <div class="h-8 w-24 rounded-lg bg-[#0F2A4A]/10"></div>
+            </div>
+          </div>
+          <div class="absolute left-8 top-48 hidden lg:flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 text-xs font-semibold font-display text-[#0F2A4A] shadow-sm border border-white">
+            <span class="h-2.5 w-2.5 rounded-full bg-[#10B981]"></span>
+            AI planning tools in action
+          </div>
+          <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-sm">
+            <p class="text-xs font-semibold font-display text-[#0F2A4A]">68% of teachers now use AI weekly — up from 29% in January 2025.</p>
+            <p class="text-xs text-gray-500 mt-0.5">RAND Corporation, January 2026 Survey of 4,200 K-12 Teachers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 bg-white">
+    <div class="container">
+      <div class="text-center mb-10">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-[#2563EB] mb-2 block">What Readers Say</span>
+        <h2 class="text-2xl font-extrabold font-display text-[#0F2A4A]">From teachers who teach with AI.</h2>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-6">
+        {
+          testimonials.map((item) => (
+            <figure class="bg-[#F8FAFC] rounded-xl p-6 border border-gray-100">
+              <div class="text-3xl text-[#2563EB]/20 font-display font-black leading-none mb-3">"</div>
+              <blockquote class="text-sm text-gray-700 leading-relaxed mb-4 italic">"{item.quote}"</blockquote>
+              <figcaption>
+                <div class="text-sm font-bold font-display text-[#0F2A4A]">{item.name}</div>
+                <div class="text-xs text-gray-400">{item.role}</div>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 relative overflow-hidden bg-[#C0392B]">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.16),transparent_35%)]"></div>
+    <div class="container relative z-10">
+      <div class="max-w-2xl mx-auto text-center">
+        <span class="text-xs font-bold font-display uppercase tracking-widest text-white/70 mb-3 block">Office Hours /AI</span>
+        <h2 class="text-3xl font-extrabold font-display text-white mb-4">The Sunday read for teachers who teach with AI.</h2>
+        <p class="text-white/85 leading-relaxed mb-8">
+          One practical tip, one tool, one real classroom story — every Sunday morning. No jargon. No hype. Just what works on Monday. Written by Ryan David. Free every week.
+        </p>
+        <div class="max-w-md mx-auto">
+          <SubscribeForm
+            source="office-hours"
+            placeholder="your@school.edu"
+            buttonText="Subscribe Free"
+            inputClass="bg-white/95 text-gray-800 placeholder-gray-400 border-0 py-3"
+            buttonClass="bg-[#0F2A4A] hover:bg-[#1a3a5c] text-white whitespace-nowrap"
+          />
+        </div>
+        <p class="text-white/50 text-xs mt-3">Free every Sunday. Unsubscribe any time.</p>
+      </div>
+    </div>
+  </section>
+</Base>

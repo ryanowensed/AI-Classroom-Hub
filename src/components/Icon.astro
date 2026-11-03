@@ -1,0 +1,36 @@
+---
+import { icons } from "lucide";
+
+interface Props {
+  name: keyof typeof icons;
+  size?: number;
+  class?: string;
+  filled?: boolean;
+  style?: string;
+}
+
+const { name, size = 16, class: className = "", filled = false, style } = Astro.props;
+const node = icons[name];
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill={filled ? "currentColor" : "none"}
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  style={style}
+  aria-hidden="true"
+>
+  {
+    node.map(([tag, attrs]) => {
+      const Tag = tag;
+      return <Tag {...attrs} />;
+    })
+  }
+</svg>

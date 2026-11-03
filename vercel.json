@@ -1,12 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "vite",
-  "buildCommand": "pnpm run build:client",
-  "outputDirectory": "dist/public",
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.theaiclassroomhub.com"
+        }
+      ],
+      "destination": "https://theaiclassroomhub.com/:path*",
+      "permanent": true
     }
   ]
 }

@@ -1,0 +1,9 @@
+---
+import Base from "../layouts/Base.astro";
+import BranchPage from "../components/BranchPage.astro";
+import { highSchool } from "../data/branches";
+---
+
+<Base title={highSchool.title} description={highSchool.metaDescription} path={highSchool.path}>
+  <BranchPage config={highSchool} />
+</Base>
